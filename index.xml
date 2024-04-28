@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>https://lbzzyz.github.io/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 29 Apr 2024 00:07:02 +0800</lastBuildDate>
+    <atom:link href="https://lbzzyz.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PostTest</title>
+      <link>https://lbzzyz.github.io/post/post/</link>
+      <pubDate>Mon, 29 Apr 2024 00:07:02 +0800</pubDate>
+      <guid>https://lbzzyz.github.io/post/post/</guid>
+      <description>Hugo 是最流行的静态站点生成器之一。&#xA;安装 我这里使用的是 Windows 平台，安装版本为 hugo_0.125.4_windows-amd64.zip。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到环境变量。&#xA;执行 hugo version，看到类似的输出则代表安装成功。&#xA;PS C:\&amp;gt; hugo version hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate=2024-04-25T13:27:26Z VendorInfo=gohugoio 创建网站 hugo new site myblog 生成的 myblog 目录结构如下：&#xA;Mode LastWriteTime Length Name ---- ------------- ------ ---- d----- 2024/4/28 23:43 archetypes d----- 2024/4/28 23:43 assets d----- 2024/4/28 23:43 content d----- 2024/4/28 23:43 data d----- 2024/4/28 23:43 i18n d----- 2024/4/28 23:43 layouts d----- 2024/4/28 23:43 static d----- 2024/4/28 23:43 themes -a---- 2024/4/28 23:43 83 hugo.</description>
+    </item>
+  </channel>
+</rss>
