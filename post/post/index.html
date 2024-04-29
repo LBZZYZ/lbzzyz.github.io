@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Hugo安装与配置指南 - 欣菜团</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Hugo 是最流行的静态站点生成器之一。
+安装 我这里使用的是 Windows 平台，安装版本为 hugo_0.125.4_windows-amd64.zip。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到环境变量。
+执行 hugo version，看到类似的输出则代表安装成功。
+PS C:\&gt; hugo version hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate=2024-04-25T13:27:26Z VendorInfo=gohugoio 创建网站 hugo new site myblog 生成的 myblog 目录结构如下：
+Mode LastWriteTime Length Name ---- ------------- ------ ---- d----- 2024/4/28 23:43 archetypes d----- 2024/4/28 23:43 assets d----- 2024/4/28 23:43 content d----- 2024/4/28 23:43 data d----- 2024/4/28 23:43 i18n d----- 2024/4/28 23:43 layouts d----- 2024/4/28 23:43 static d----- 2024/4/28 23:43 themes -a---- 2024/4/28 23:43 83 hugo." />
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content="https://lbzzyz.github.io/post/post/">
+  <meta property="og:site_name" content="欣菜团">
+  <meta property="og:title" content="Hugo安装与配置指南">
+  <meta property="og:description" content="Hugo 是最流行的静态站点生成器之一。
+安装 我这里使用的是 Windows 平台，安装版本为 hugo_0.125.4_windows-amd64.zip。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到环境变量。
+执行 hugo version，看到类似的输出则代表安装成功。
+PS C:\&gt; hugo version hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate=2024-04-25T13:27:26Z VendorInfo=gohugoio 创建网站 hugo new site myblog 生成的 myblog 目录结构如下：
+Mode LastWriteTime Length Name ---- ------------- ------ ---- d----- 2024/4/28 23:43 archetypes d----- 2024/4/28 23:43 assets d----- 2024/4/28 23:43 content d----- 2024/4/28 23:43 data d----- 2024/4/28 23:43 i18n d----- 2024/4/28 23:43 layouts d----- 2024/4/28 23:43 static d----- 2024/4/28 23:43 themes -a---- 2024/4/28 23:43 83 hugo.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-04-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-04-28T00:00:00+00:00">
+    <meta property="article:tag" content="部署">
+    <meta property="article:tag" content="博客框架">
+    <meta property="article:tag" content="Hugo">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Hugo安装与配置指南">
+<meta name="twitter:description" content="Hugo 是最流行的静态站点生成器之一。
+安装 我这里使用的是 Windows 平台，安装版本为 hugo_0.125.4_windows-amd64.zip。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到环境变量。
+执行 hugo version，看到类似的输出则代表安装成功。
+PS C:\&gt; hugo version hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate=2024-04-25T13:27:26Z VendorInfo=gohugoio 创建网站 hugo new site myblog 生成的 myblog 目录结构如下：
+Mode LastWriteTime Length Name ---- ------------- ------ ---- d----- 2024/4/28 23:43 archetypes d----- 2024/4/28 23:43 assets d----- 2024/4/28 23:43 content d----- 2024/4/28 23:43 data d----- 2024/4/28 23:43 i18n d----- 2024/4/28 23:43 layouts d----- 2024/4/28 23:43 static d----- 2024/4/28 23:43 themes -a---- 2024/4/28 23:43 83 hugo.">
+
+	
+        <link href="https://lbzzyz.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://lbzzyz.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://lbzzyz.github.io/">欣菜团</a>
+	</div>
+	<nav>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Hugo安装与配置指南</h1>
+			<div class="meta">Posted on Apr 28, 2024</div>
+		</div>
+		
+
+		<section class="body">
+			<p><a href="https://gohugo.io/">Hugo</a> 是最流行的静态站点生成器之一。</p>
+<h1 id="安装">安装</h1>
+<p>我这里使用的是 Windows 平台，安装版本为 <a href="https://github.com/gohugoio/hugo/releases/tag/v0.125.4">hugo_0.125.4_windows-amd64.zip</a>。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到<strong>环境变量</strong>。</p>
+<p>执行 <code>hugo version</code>，看到类似的输出则代表安装成功。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PS C:<span style="color:#ae81ff">\&gt;</span> hugo version
+</span></span><span style="display:flex;"><span>hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate<span style="color:#f92672">=</span>2024-04-25T13:27:26Z VendorInfo<span style="color:#f92672">=</span>gohugoio
+</span></span></code></pre></div><h1 id="创建网站">创建网站</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new site myblog
+</span></span></code></pre></div><p>生成的 myblog 目录结构如下：</p>
+<pre tabindex="0"><code>Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         2024/4/28     23:43                archetypes
+d-----         2024/4/28     23:43                assets
+d-----         2024/4/28     23:43                content
+d-----         2024/4/28     23:43                data
+d-----         2024/4/28     23:43                i18n
+d-----         2024/4/28     23:43                layouts
+d-----         2024/4/28     23:43                static
+d-----         2024/4/28     23:43                themes
+-a----         2024/4/28     23:43             83 hugo.toml
+</code></pre><h1 id="安装主题">安装主题</h1>
+<p>可以到 Hugo 官方的<a href="https://themes.gohugo.io/">主题商店</a>选择自己心仪的主题。这里以<a href="https://themes.gohugo.io/themes/archie/">Archie - Hugo theme</a>为例演示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir themes 
+</span></span><span style="display:flex;"><span>cd themes 
+</span></span><span style="display:flex;"><span>git clone https://github.com/athul/archie.git
+</span></span></code></pre></div><p>然后在网站根目录的 <code>hugo.toml</code> 中增加 <code>theme=&quot;archie&quot;</code>。</p>
+<h1 id="启动博客">启动博客</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo server --buildDrafts
+</span></span></code></pre></div><p>如果没有在 <code>hugo.toml</code> 中配置主题，也可以在启动时用 <code>-t</code> 指定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo server -t archie --buildDrafts
+</span></span></code></pre></div><h1 id="新建文章">新建文章</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new post/post.md
+</span></span></code></pre></div><p>执行后，<code>content/post</code> 目录会生成 <code>post.md</code>。在<code>post.md</code>中填写内容后，再次执行 <code>hugo server --buildDrafts</code>，即可看到文章已经成功生成。</p>
+<h1 id="部署到-github">部署到 Github</h1>
+<p>首先创建一个新仓库，仓库名一定要是<code>你的Github用户名.github.io</code>。</p>
+<p>仓库创建完成后，再使用下面的命令生成网站。我这里用的 <code>baseURL</code> 是自己的项目地址，大家在部署时需要替换成自己的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo --theme<span style="color:#f92672">=</span>archie --baseURL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://lbzzyz.github.io/&#34;</span> --buildDrafts
+</span></span></code></pre></div><p>上述命令执行完成后，会在网站根目录生成一个 <code>public</code> 文件夹，这就是网站的最终产物。</p>
+<p>接下来，我们需要把 public 文件夹上传到 Github 仓库，以便用 Github 访问。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd public
+</span></span><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Hugo init&#34;</span>
+</span></span><span style="display:flex;"><span>git remote add origin https://github.com/LBZZYZ/lbzzyz.github.io.git
+</span></span><span style="display:flex;"><span>git push -u origin master
+</span></span></code></pre></div><p>网站产物已经推送到刚才创建的 Github 仓库，此时我们访问 <a href="https://lbzzyz.github.io">https://lbzzyz.github.io</a>，即可看到看到网站内容了。</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/%E9%83%A8%E7%BD%B2">部署</a></li>
+					
+					<li><a href="/tags/%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6">博客框架</a></li>
+					
+					<li><a href="/tags/hugo">Hugo</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"></div>
+  <div class="footer-info">
+    2024  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+  
+
+
+</div>
+    </body>
+</html>

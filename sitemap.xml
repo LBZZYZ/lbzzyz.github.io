@@ -2,14 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://lbzzyz.github.io/</loc>
-    <lastmod>8383-12-09T11:45:32+08:00</lastmod>
+    <loc>https://lbzzyz.github.io/tags/hugo/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://lbzzyz.github.io/posts/</loc>
-    <lastmod>8383-12-09T11:45:32+08:00</lastmod>
+    <loc>https://lbzzyz.github.io/post/post/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://lbzzyz.github.io/categories/</loc>
+    <loc>https://lbzzyz.github.io/post/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://lbzzyz.github.io/tags/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://lbzzyz.github.io/tags/%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://lbzzyz.github.io/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://lbzzyz.github.io/tags/%E9%83%A8%E7%BD%B2/</loc>
+    <lastmod>2024-04-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://lbzzyz.github.io/categories/</loc>
   </url>
 </urlset>

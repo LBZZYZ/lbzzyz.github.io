@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>欣菜团</title>
-    <link>https://lbzzyz.github.io/</link>
-    <description>Recent content on 欣菜团</description>
+    <title>博客框架 on 欣菜团</title>
+    <link>https://lbzzyz.github.io/tags/%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6/</link>
+    <description>Recent content in 博客框架 on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 28 Apr 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://lbzzyz.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/tags/%E5%8D%9A%E5%AE%A2%E6%A1%86%E6%9E%B6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hugo安装与配置指南</title>
       <link>https://lbzzyz.github.io/post/post/</link>
