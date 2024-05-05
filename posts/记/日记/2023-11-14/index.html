@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>2023-11-14 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">2023-11-14</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>#随笔
+如果拧巴是一种罪，我已被枪毙无数次了。</p>
+<p><strong>Pixel</strong>：像素。一个不确定的物理量，没有实际大小，代表显示器的最小显示单元。
+<strong>PPI</strong>：Pixels per inch，<a href="https://zh.wikipedia.org/zh-cn/%E6%AF%8F%E8%8B%B1%E5%AF%B8%E5%83%8F%E7%B4%A0">每英寸像素</a>。用于表示图像或显示器单位长度（一英寸，即 2.54cm）中有多少个<strong>像素</strong>（并非单位面积的像素量）。
+PPI 计算公式：
+${PPI=\frac{d_p}{d_i}=\frac{\sqrt{w_p^2+h_p^2}}{d_i}}$
+其中：</p>
+<ul>
+<li>$d_p$ 为屏幕对角线的分辨率</li>
+<li>$w_p$ 为屏幕横向分辨率</li>
+<li>$h_p$ 为屏幕纵向分辨率</li>
+<li>$d_i$ 为屏幕对角线长度（单位为英寸）</li>
+</ul>
+<p><strong>Dot</strong>：点。
+<strong>DPI</strong>：Dots per inch，<a href="https://en.wikipedia.org/wiki/Dots_per_inch">每英寸点数</a>。代表每英寸长度中可显示的点数。用于点阵图像，多用于打印设备。</p>
+<p><a href="https://www.sony.com/electronics/support/articles/00027623">PPI 与 DPI 容易混淆的原因</a>：</p>
+<ol>
+<li>虽然 PPI 代表数字图像的分辨率，但也会对打印效果产生影响。</li>
+<li>打印设备要求图片达到一定的 DPI 才能够打印，这里要求的实际上是 PPI，不是 DPI。</li>
+</ol>
+<p>屏幕尺寸是对角线长度。如 15 英寸的显示器代表显示器的对角线长度为 15 英寸。</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

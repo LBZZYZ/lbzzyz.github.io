@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>hexo-如何更换主题 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">hexo-如何更换主题</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-01-16T01:17:35&#43;00:00">January 16, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="使用git下载主题">使用GIT下载主题</h2>
+<p>本次选用的主题是NextT，下载方法：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/theme-next/hexo-theme-next themes/next
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<hr>
+<h2 id="更改配置文件">更改配置文件</h2>
+<p>找到博客根目录下的<code>_config.yml</code>，将<code>theme</code>修改为<code>next</code>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>theme: next <span style="color:#888;font-style:italic">#注意，冒号后面要加一个空格</span>
+</span></span></code></pre></div><hr>
+<h2 id="测试">测试</h2>
+<p>在<code>git bash</code>中输入<code>&lt;hexo s&gt;</code>测试主题功能是否正常</p>
+<hr>
+<h2 id="生成上传">生成&amp;上传</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hexo clean <span style="color:#888;font-style:italic">#清理</span>
+</span></span><span style="display:flex;"><span>hexo g <span style="color:#888;font-style:italic">#重新生成</span>
+</span></span><span style="display:flex;"><span>hexo d <span style="color:#888;font-style:italic">#推送至远端</span>
+</span></span></code></pre></div><hr>
+<h2 id="参考链接">参考链接</h2>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000012805627">https://segmentfault.com/a/1190000012805627</a></li>
+</ol>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

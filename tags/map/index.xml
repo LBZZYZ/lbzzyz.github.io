@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Map on 欣菜团</title>
+    <link>http://localhost:1313/tags/map/</link>
+    <description>Recent content in Map on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tags/map/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>10. Map</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/10.-map/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/10.-map/</guid>
+      <description>HashMap 散列表，根据键的 HashCode 存储数据。 最多允许存在一个 null 值。 不支持多线程。 无序插入。 Java HashMap </description>
+    </item>
+  </channel>
+</rss>

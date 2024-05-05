@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>SocialCaption | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">SocialCaption</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="产品简介">产品简介</h1>
+<p>一个根据用户上传的图片自动生成社交平台文案的工具。</p>
+<h1 id="作者">作者</h1>
+<p><a href="https://www.indiehackers.com/lucasrantzau">Lucas Rantzau</a></p>
+<h1 id="技术实现">技术实现</h1>
+<p>基于 GPT-4 Vision APIs</p>
+<h1 id="实现过程">实现过程</h1>
+<p>首先设计 logo、landing page 和基本的应用交互流程，然后开始着手编码。设计过程中没有使用任何<strong>模板代码</strong>，但是复用了一些作者本人其他项目中的代码。整个开发过程完全在 X 上公开，也即公开构建。</p>
+<h1 id="流量与转换">流量与转换</h1>
+<p>截止到 2023 年 11 月 19 日，作者发布的产品推文共获得 17.4k 的浏览量。为网站带来了 1600 位独立用户，2700 次页面访问。1600 位独立用户中有 220 位注册了账号，共生成了 1970 条文案。220 位注册用户中有 2 位成为了 39 美元的终身付费用户。</p>
+<h1 id="教训">教训</h1>
+<p>作者一开始的付费模式是每月 7 美元，他认为这种付费模式扼杀了用户的转换率，随后将付费模式改为终身制，定价 39 美元。但由于产品热度已经褪去，这个改变为时已晚。</p>
+<h1 id="经验">经验</h1>
+<p>原创创意 + 杠杆炒作 + 令人印象深刻的速度 = 病毒式传播</p>
+<h1 id="参考">参考</h1>
+<p><a href="https://socialcaption.com/">https://socialcaption.com/</a>
+<a href="https://www.indiehackers.com/post/how-i-went-viral-by-launching-an-ai-app-in-24-hours-1fe549fa32">How I went viral by launching an AI app in 24 hours</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

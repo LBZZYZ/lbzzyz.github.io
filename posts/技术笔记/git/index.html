@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Git | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">Git</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-05-23T00:20:13&#43;00:00">May 23, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="安装更新">安装/更新</h2>
+<h3 id="centos-7">CentOS 7</h3>
+<p>CentOS 7 内置了 <code>Git 1.8.3</code>，首先将其卸载。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum remove git
+</span></span></code></pre></div><p>由于官方源没有最新版本的 Git，所以需要增加第三方源，这里采用 <a href="https://ius.io/">ius</a></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum install <span style="color:#666;font-style:italic">\
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic"></span>https://repo.ius.io/ius-release-el7.rpm <span style="color:#666;font-style:italic">\
+</span></span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic"></span>https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+</span></span></code></pre></div><p>在仓库列表中看到名为 <code>git236</code> 的库，因此使用 yum 安装。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum install git236
+</span></span></code></pre></div><p>安装完成后确认版本</p>
+<pre tabindex="0"><code>git version
+
+console:/ # git version 2.36.6
+</code></pre><h3 id="ubuntu-1804">Ubuntu 18.04</h3>
+<pre tabindex="0"><code>apt install git
+</code></pre><h2 id="创建空仓库">创建空仓库</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git init --bare repo.git
+</span></span></code></pre></div><h2 id="添加远端仓库">添加远端仓库</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote add origin &lt;url&gt;
+</span></span></code></pre></div><h2 id="拉取代码到指定目录">拉取代码到指定目录</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone project-url /path/to/dir
+</span></span></code></pre></div><h2 id="分支">分支</h2>
+<h3 id="创建分支">创建分支</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git branch &lt;branch-name&gt;
+</span></span></code></pre></div><h3 id="切换分支不存在则自动创建">切换分支(不存在则自动创建)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git branch -b &lt;branch-name&gt;
+</span></span></code></pre></div><h3 id="修改分支名称">修改分支名称</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git branch -m &lt;old-name&gt; &lt;new-name&gt;
+</span></span><span style="display:flex;"><span>git branch -m &lt;new-name&gt; <span style="color:#888;font-style:italic"># 修改当前分支名称</span>
+</span></span></code></pre></div><h3 id="拉取指定分支">拉取指定分支</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone -b &lt;branch-name&gt; 你的远端地址
+</span></span></code></pre></div><h3 id="推送分支到远端">推送分支到远端</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push origin &lt;<span style="font-weight:bold;font-style:italic">local</span> branch&gt;:&lt;remote branch&gt; <span style="color:#888;font-style:italic">#remote branch不存在则自动创建</span>
+</span></span></code></pre></div><h3 id="删除本地分支">删除本地分支</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> git branch -d &lt;branch-name&gt;
+</span></span></code></pre></div><h3 id="删除远端分支">删除远端分支</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push origin --delete &lt;branch-name&gt;
+</span></span></code></pre></div><h3 id="更新远程分支">更新远程分支</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote update origin --prune
+</span></span><span style="display:flex;"><span>or
+</span></span><span style="display:flex;"><span>git remote update origin -p
+</span></span></code></pre></div><h3 id="分支命名规范">分支命名规范</h3>
+<ul>
+<li>master（主分支，永远是可用的、稳定的、可直接发布的版本，不能直接在该分支上开发）</li>
+<li>develop（开发主分支，代码永远是最新，所有新功能以这个分支来创建自己的开发分支，该分支只做只合并操作，不能直接在该分支上开发）</li>
+<li>feature-xxx（功能开发分支，在develop上创建分支，以自己开发功能模块命名，功能测试正常后合并到develop分支）。如 feature/add-new-feature-20240119</li>
+<li>release（预发布分支，在合并好feature分支的develop分支上创建，主要是用来提测的分支，修改好bug并确定稳定之后合并到develop和master分支，然后发布master分支）</li>
+<li>release-fix（功能bug修复分支，在release上创建分支修复，修复好提测的bug之后合并回release分支。）</li>
+<li>hotfix-xxx（紧急bug修改分支，项目上线之后可以会遇到一些环境问题需要紧急修复，在对应版本的release分支上创建，流程跟release分支相似，修复完成后合并release分支，根据情况判断需不需要再合并到develop和master分支）</li>
+</ul>
+<h3 id="fast-forward">fast-forward</h3>
+<p>快进（Fast-forward）是指将当前分支直接移动到远程追踪分支的最新提交的操作。它是一种合并（merge）策略，不会创建新的提交。</p>
+<h3 id="there-is-no-tracking-information-for-the-current-branch">There is no tracking information for the current branch.</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git branch --set-upstream-to=origin/&lt;branch&gt; main
+</span></span></code></pre></div><h3 id="将-dev-对齐到-master">将 dev 对齐到 master</h3>
+<ol>
+<li>将工作区切换到 dev 分支</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git checkout dev
+</span></span></code></pre></div><ol start="2">
+<li>把 origin/master 的修改 rebase 到 dev，然后把 dev 上特有的修改跟到后面，解完冲突后可以执行步骤3(<a href="https://blog.csdn.net/weixin_42310154/article/details/119004977">参考</a>)</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git rebase origin/master
+</span></span></code></pre></div><ol start="3">
+<li><code>-f</code> 代表强行推送，需要有相关权限</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -f origin HEAD:refs/heads/dev-branch
+</span></span></code></pre></div><h2 id="代理">代理</h2>
+<h3 id="设置全局代理">设置全局代理</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git config --global http.proxy http://127.0.0.1:12333
+</span></span><span style="display:flex;"><span>git config --global https.proxy http://127.0.0.1:12333
+</span></span></code></pre></div><h3 id="设置-ssh-的-https-代理">设置 SSH 的 https 代理</h3>
+<p>修改 <code>~/.ssh/config</code> 文件</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Host github.com
+</span></span><span style="display:flex;"><span>Hostname ssh.github.com
+</span></span><span style="display:flex;"><span>Port 443
+</span></span><span style="display:flex;"><span>User git
+</span></span></code></pre></div><p><a href="https://gist.github.com/chenshengzhi/07e5177b1d97587d5ca0acc0487ad677">git_ssh_proxy.md</a></p>
+<h2 id="管理公钥">管理公钥</h2>
+<p>公钥收集起来放到服务器的<code>/home/git/.ssh/authorized_keys</code></p>
+<h2 id="hooks">Hooks</h2>
+<p>监听某个操作，然后触发自定义逻辑。脚本位于 <code>.git/hooks/</code>。
+注：<code>.git</code> 文件夹不会上传到远端仓库，因此只会在本地生效。
+附：<a href="https://blog.csdn.net/sinat_34014668/article/details/131038787">共用 hooks</a> 。</p>
+<h3 id="git-hooks-for-hexo">git hooks for hexo</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic">#hooks/post-update</span>
+</span></span><span style="display:flex;"><span>git --work-tree=<span style="color:#666;font-style:italic">&#34;/var/www/html&#34;</span> --git-dir=<span style="color:#666;font-style:italic">&#34;/root/blog.git&#34;</span> checkout -f
+</span></span></code></pre></div><h2 id="统计代码行数">统计代码行数</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git log  --author=<span style="color:#666;font-style:italic">&#34;simon.li&#34;</span> --pretty=tformat: --numstat | awk <span style="color:#666;font-style:italic">&#39;{ add += $1; subs += $2; loc += $1 - $2 } END { printf &#34;added lines: %s, removed lines: %s, total lines: %s\n&#34;, add, subs, loc }&#39;</span>
+</span></span></code></pre></div><h2 id="git-pull-时避免出现-merge-branch-master-of-">git pull 时避免出现 &ldquo;Merge branch &lsquo;master&rsquo; of &hellip;&rdquo;]</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git pull --rebase
+</span></span></code></pre></div><p><a href="https://blog.csdn.net/Toy_IHere/article/details/103064044?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param">参考</a></p>
+<h2 id="修改-commit-信息">修改 commit 信息</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git commit --amend
+</span></span></code></pre></div><h2 id="git-commit-的七条规则">Git commit 的七条规则</h2>
+<ol>
+<li>Separate subject from body with a blank line（将主题与正文用空行分隔开来）</li>
+<li>Limit the subject line to 50 characters（将主题行限制在50个字符以内）</li>
+<li>Capitalize the subject line（将主题行的首字母大写）</li>
+<li>Do not end the subject line with a period（不要在主题行末尾加句号）</li>
+<li>Use the imperative mood in the subject line（在主题行中使用祈使语气）</li>
+<li>Wrap the body at 72 characters（在每行正文中达到 72 个字符进行换行）</li>
+<li>Use the body to explain <em>what</em> and <em>why</em> vs. <em>how</em>（在正文中解释“什么”和“为什么”，而不是“如何”）</li>
+</ol>
+<p><a href="https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit?pli=1#heading=h.uyo6cb12dt6w">AngularJS 的 commit 规范</a></p>
+<h2 id="处理中文乱码">处理中文乱码</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git config --global core.quotepath <span style="font-weight:bold;font-style:italic">false</span> <span style="color:#888;font-style:italic">#禁止路径转义</span>
+</span></span></code></pre></div><h2 id="查看清空stash">查看/清空stash</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git stash list
+</span></span><span style="display:flex;"><span>git stash clear
+</span></span></code></pre></div><h2 id="stash-文件时指定信息">stash 文件时指定信息</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git stash push -m <span style="color:#666;font-style:italic">&#34;message&#34;</span>
+</span></span></code></pre></div><h2 id="增加-gitignore-时有一些不想追踪的文件已经被添加到缓存区">增加 .gitignore 时，有一些不想追踪的文件已经被添加到缓存区</h2>
+<pre tabindex="0"><code>如果是文件夹：git rm -r --cached 文件夹名
+如果是文件：git rm --cached 文件名
+</code></pre><h2 id="patch">patch</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git format-patch HEAD^ <span style="color:#888;font-style:italic">#生成最近一次commit的patch</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git am xxx.patch <span style="color:#888;font-style:italic">#直接将patch的所有信息打上去，无需重新git add和git commit，author也是patch的author而不是打patch的人。</span>
+</span></span><span style="display:flex;"><span>git apply xxx.patch <span style="color:#888;font-style:italic">#与git am的区别是：git apply并不会将commit message等打上去，打完patch后需要重新git add和git commit。</span>
+</span></span></code></pre></div><h3 id="解决-git-am-时-patch-does-not-applyhttpswwwcnblogscomgalesaur-wcyp15751576html"><a href="https://www.cnblogs.com/Galesaur-wcy/p/15751576.html">解决 git am 时 patch does not apply</a></h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 1. 强制合并不冲突的部分，冲突部分会生成 .rej 文件</span>
+</span></span><span style="display:flex;"><span>git apply --reject patch-name 
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 2. 手动合并 .rej 文件中的冲突，合并完成后删除 .rej文件</span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 3. 添加合并完的文件到暂存区</span>
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 4. 继续 apply patch</span>
+</span></span><span style="display:flex;"><span>git am --continue
+</span></span></code></pre></div><h2 id="git-log-单行显示">git log 单行显示</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git log --oneline
+</span></span></code></pre></div><h2 id="git-add">git add</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add -u . <span style="color:#888;font-style:italic">#添加到暂存区，不包括untracked files</span>
+</span></span><span style="display:flex;"><span>git add . <span style="color:#888;font-style:italic">#添加到暂存区，包括untracked files</span>
+</span></span></code></pre></div><h2 id="tag">Tag</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 列出所有 tag</span>
+</span></span><span style="display:flex;"><span>git tag
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 列出指定版本 tag，* 位通配符</span>
+</span></span><span style="display:flex;"><span>git tag -l <span style="color:#666;font-style:italic">&#34;v1.8.5*&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 创建 tag</span>
+</span></span><span style="display:flex;"><span>git tag -a v1.4 -m <span style="color:#666;font-style:italic">&#34;my version 1.4&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 查看 tag</span>
+</span></span><span style="display:flex;"><span>git show v1.4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 创建轻量 tag</span>
+</span></span><span style="display:flex;"><span>git tag v1.4-lw
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 推送 tag</span>
+</span></span><span style="display:flex;"><span>git push origin v1.5
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 删除本地 tag</span>
+</span></span><span style="display:flex;"><span>git tag -d v1.4-lw
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 删除远端 tag</span>
+</span></span><span style="display:flex;"><span>git push origin --delete &lt;tagname&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 切换至 tag 指定版本</span>
+</span></span><span style="display:flex;"><span>git checkout 2.0.0
+</span></span></code></pre></div><hr>
+<ul>
+<li><a href="https://sliu.vip/git/team-dev/">Git 多人协作开发</a></li>
+<li><a href="https://blog.gitee.com/2020/12/15/pull-request-change-request/">浅谈 Pull Request 与 Change Request 研发协作模式</a></li>
+<li><a href="https://www.cnblogs.com/chenny7/p/7644318.html">rebase</a></li>
+<li><a href="https://www.dianyuan.com/eestar/article-5068.html">Git合并到底使用Merge，还是Rebase？</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/896043488029600">手册</a></li>
+<li><a href="https://learngitbranching.js.org/">学习网站</a></li>
+<li><a href="https://www.cnblogs.com/haiku/p/6414067.html">如何让 Git 忽略掉文件中的特定行内容？</a></li>
+</ul>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

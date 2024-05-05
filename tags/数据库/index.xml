@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据库 on 欣菜团</title>
+    <link>http://localhost:1313/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+    <description>Recent content in 数据库 on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Mar 2021 00:25:54 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis 安装与配置指南</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/redis-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Mon, 08 Mar 2021 00:25:54 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/redis-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+      <description>Ubuntu安装 sudo apt update sudo apt install redis-server 实际会有三个instance被安装：&#xA;libjemalloc1 redis-server redis-tools 检查安装是否成功 $ redis-cli 127.0.0.1:6379&amp;gt; 输入ping,有下方回显说明连接成功&#xA;127.0.0.1:6379&amp;gt; ping PONG </description>
+    </item>
+    <item>
+      <title>MySQL 安装与配置指南</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Sun, 21 Feb 2021 12:27:22 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+      <description>安装 MySQL 系统版本：Ubuntu 18.04.6 LTS&#xA;a. 本地环境安装 sudo apt update sudo apt install mysql-server b. 使用 Docker 安装 docker run -itd --name mysql-container -p 9636:3306 --restart=always -e MYSQL_ROOT_PASSWORD={set-your-password} -v /path/to/mysql:/var/lib/mysql mysql:latest 查看运行状态 systemctl status mysql 运行安全向导 MySQL 提供了一个脚本使数据库更加安全，建议首次安装完成后执行一次该脚本。&#xA;$ mysql_secure_installation 运行 mysql_secure_installation 会执行几个设置：&#xA;为 root 用户设置密码 删除匿名账号 取消 root 用户远程登录 删除 test 库和对 test 库的访问权限 刷新授权表使修改生效 root@iZwz928lti88uknt38usc5Z:~# mysql_secure_installation Securing the MySQL server deployment. Connecting to MySQL using a blank password. The &amp;#39;validate_password&amp;#39; plugin is installed on the server.</description>
+    </item>
+    <item>
+      <title>数据库表设计</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E8%AE%BE%E8%AE%A1/</guid>
+      <description>多对多表，额外字段存储： https://stackoverflow.com/questions/63887061/android-room-many-to-many-junction-table-getting-more-than-relation-of-2-tables&#xA;逻辑主键与业务主键 https://juejin.cn/post/6844903921069064206&#xA;唯一索引 https://stackoverflow.com/questions/51927861/unique-columns-pair-constraint-in-sqlite-with-conflict-strategy&#xA;Foreign Key 和 insert(Replace策略)的问题 https://stackoverflow.com/questions/56003734/android-room-with-deferred-foreign-key https://stackoverflow.com/questions/9874028/insert-or-replace-foreign-key-on-delete-cascade-working-too-good</description>
+    </item>
+  </channel>
+</rss>

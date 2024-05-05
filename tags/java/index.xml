@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 欣菜团</title>
+    <link>http://localhost:1313/tags/java/</link>
+    <description>Recent content in Java on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>0. 学习路线</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/0.-%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/0.-%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</guid>
+      <description>Java学习路线</description>
+    </item>
+    <item>
+      <title>1. 多线程</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/1.-%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/1.-%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+      <description>设计一个线程安全的类 [1] 找出构成对象状态的所有变量 [2] 找出约束状态变量的不变性条件 [3] 建立对象状态的并发访问管理策略&#xA;ReentrantReadWriteLock 官方文档&#xA;参考链接 [1] https://blog.csdn.net/qing_gee/article/details/102927908</description>
+    </item>
+    <item>
+      <title>10. Map</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/10.-map/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/10.-map/</guid>
+      <description>HashMap 散列表，根据键的 HashCode 存储数据。 最多允许存在一个 null 值。 不支持多线程。 无序插入。 Java HashMap </description>
+    </item>
+    <item>
+      <title>2. 链表</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/2.-%E9%93%BE%E8%A1%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/2.-%E9%93%BE%E8%A1%A8/</guid>
+      <description>遍历链表前是否要判断isEmpty() Is there any difference between doing isEmpty() before loop or directly using loop in case of list(for -each) Is calling isEmpty() before iterating redundant?</description>
+    </item>
+    <item>
+      <title>3. 错误处理</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/3.-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/3.-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</guid>
+      <description>try-catch-finally 官方文档&#xA;try-catch-finally与返回值 如果finally没有写返回值，则try和catch必须写返回值。 如果finally写了返回值，则try和catch写不写返回值均可。 如果在finally中写了return，则该函数的返回值一定是finally中写的值。 </description>
+    </item>
+    <item>
+      <title>4. 循环</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/4.-%E5%BE%AA%E7%8E%AF/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/4.-%E5%BE%AA%E7%8E%AF/</guid>
+      <description>for循环性能对比 https://blog.csdn.net/MR_Peach07/article/details/121698678</description>
+    </item>
+    <item>
+      <title>5. synchronized</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/5.-synchronized/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/5.-synchronized/</guid>
+      <description>关键字: synchronized详解</description>
+    </item>
+    <item>
+      <title>6. 注解</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/6.-%E6%B3%A8%E8%A7%A3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/6.-%E6%B3%A8%E8%A7%A3/</guid>
+      <description>自定义Java注解处理器 Java注解&#xA;1&#xA;classpath &amp;#39;com.neenbedankt.gradle.plugins:android-apt:1.8&amp;#39; 2&#xA;apply plugin: &amp;#39;java-library&amp;#39; dependencies { implementation fileTree(include: [&amp;#39;*.jar&amp;#39;], dir: &amp;#39;libs&amp;#39;) implementation project(&amp;#39;:annotation&amp;#39;) //用于自动为 JAVA Processor 生成 META-INF 信息。 implementation &amp;#39;com.google.auto.service:auto-service:1.0-rc3&amp;#39; //快速生成.java文件的库 implementation &amp;#39;com.squareup:javapoet:1.8.0&amp;#39; } 3&#xA;Element代表程序的一个元素，可以是package、class,、interface、 method、field，只在编译期存在。&#xA;具体来说，可以按如下分类：&#xA;PackageElement 一般代表Package&#xA;TypeElement 一般代表代表类&#xA;VariableElement 一般代表成员变量&#xA;ExecutableElement 一般代表类中的方法&#xA;4 javapoet&#xA;APT即为Annotation Processing Tool&#xA;参考 Android编译时注解&amp;ndash;入门篇（AbstractProcessor、APT）&#xA;Java进阶&amp;ndash;编译时注解处理器（APT）详解</description>
+    </item>
+    <item>
+      <title>7. 定时任务</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/7.-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/7.-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</guid>
+      <description>参考链接 Java中定时任务的6种实现方式，你知道几种？ ScheduledExecutorService使用之——重复创建停止周期性任务 ScheduledExecutorService JavaDoc Android 倒计时的五种实现方式 </description>
+    </item>
+    <item>
+      <title>8. 修饰符</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/8.-%E4%BF%AE%E9%A5%B0%E7%AC%A6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/8.-%E4%BF%AE%E9%A5%B0%E7%AC%A6/</guid>
+      <description>前言 修饰符，主要分为以下两类：&#xA;访问修饰符 非访问修饰符 访问控制修饰符 Java 中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持4种不同的访问权限。&#xA;default 默认的，在同一包内可见，不使用任何修饰符。 private 私有的，在同一类内可见。 public 公有的，对所有类可见。 protected 受保护的，对同一包内的类和所有子类可见。 非访问修饰符 为了实现一些其他的功能，Java 也提供了许多非访问修饰符。&#xA;static 修饰符，用来创建类方法和类变量。 final 修饰符，用来修饰类、方法和变量，final 修饰的类不能够被继承，修饰的方法不能被继承类重新定义，修饰的变量为常量，是不可修改的。 abstract 修饰符，用来创建抽象类和抽象方法。 synchronized 和 volatile 修饰符，主要用于线程的编程。 static修饰符 静态变量 static 关键字用来声明独立于对象的静态变量，无论一个类实例化多少对象，它的静态变量只有一份拷贝。静态变量也被称为类变量。局部变量不能被声明为static变量。&#xA;静态方法 static 关键字用来声明独立于对象的静态方法。静态方法不能使用类的非静态变量。静态方法从参数列表得到数据，然后计算这些数据。 对类变量和方法的访问可以直接使用​classname.variablename​ 和 ​classname.methodname​ 的方式访问。&#xA;参考链接 Java基础 (三) 修饰符</description>
+    </item>
+    <item>
+      <title>9. 回调函数</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/9.-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/java/9.-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/</guid>
+      <description>回调函数内部引用外部对象，需要把外部对象声明为final，因为内部匿名类会转换成一个单独的类，而引用的这个外部对象会作为这个匿名类的成员变量，但这个变量只是原始变量的拷贝，所以如果外部对象不是final的，就会造成数据不一致的问题。&#xA;参考链接 https://blog.csdn.net/cuipengfei1/article/details/9153481 https://www.jianshu.com/p/a4738d980283</description>
+    </item>
+    <item>
+      <title>第一章 初识java</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%88%9D%E8%AF%86java/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%88%9D%E8%AF%86java/</guid>
+      <description>1.1 java简介 1.1.1 什么是java语言 1995年由sun公司推出的一款面向对象设计语言。 特点：1.面向对象；2.通过解释方式来执行的语言；3.跨平台 适用场景：非常适用于企业网络和internet环境&#xA;Java语言编写的程序即是编译型的，又是解释型的。 代码在编译之后生成一种中间语言，称为Java字节码。Java虚拟机（JVM）对字节码进行解释和运行。 编译只进行一次，而解释在每次程序运行时都会进行。&#xA;1.1.2 Java的应用领域 桌面应用系统开发 嵌入式系统开发 电子商务应用 企业级系统开发 交互式系统开发 多媒体系统开发 分布式系统开发 Web应用系统开发&#xA;1.1.3 Java的版本&#xA;Java发展过程，按应用范围可以划分为三个版本&#xA;JAVA SE Java EE Java ME 这三个版本都属于SUN ONE(Open Net Environment）体系。 详细介绍一下： JAVA SE, Java标准版本，主要用于桌面应用程序开发。包含基础语法，JDBC(Java数据库连接性)操作，I/O操作，网络通信，多线程等。 Java EE,企业版Java,主要开发企业级分布式的网络程序，如电商网站和ERP(企业资源规划系统),核心内容：EJB(企业Java组件模型) Java ME, for嵌入式，如掌上电脑，手机等移动通信设备。 1.1.4 怎样学好Java 这是个佛学问题，用心领会就好。 着重提一点：设计模式。&#xA;1.1.5 Java API 文档 网站：java.sun.com https://docs.oracle.com/en/java/javase/16/docs/api/index.html&#xA;1.2 Java语言的特性 1.2.1 简单：与C++ &amp;amp; C语言语法类似 使用接口取代了多重继承，取消了指针。垃圾自动收集。 丰富的类库，API文档和第三方开发包。JDK开源，便于学习&#xA;1.2.2&#xA;面向对象。万物皆对象，语法中不能在类外面定义单独的数据和函数。&#xA;1。2.3分布性&#xA;Java可以通过URL对象访问网络对象，访问方式与访问本地系统相同。&#xA;1.2.4 可移植性&#xA;1.2.5 解释型&#xA;1.2.6安全性 删除了指针和内存释放等语法</description>
+    </item>
+    <item>
+      <title>第三章 Java语言基础</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%B8%89%E7%AB%A0-java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%B8%89%E7%AB%A0-java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</guid>
+      <description>3.1 Java主类结构 3.1.1 包声明 package为声明包的关键字。&#xA;3.1.2 声明成员变量和局部变量 通常将类的属性称为类的全局变量（成员变量），将方法中的属性称之为局部变量。&#xA;3.1.3 编写主方法 Java中的main函数必须声明为public static void String[] args是main方法的参数，是一个字符串类型的数组&#xA;3.2 基本数据类型 数值型：整数型（byte, short int long) 浮点型（float double） 字符型 布尔型 3.2.1 Java浮点类型的问题 JAVA问题分析——浮点型为什么会存在误差 浮点数0.7在Java中是无法精确存储的，却为何能精确输出0.7 为什么 JAVA 中有时能够精确表示浮点数&#xA;3.2.2 float除0 1.0f / 0 = Infinity </description>
+    </item>
+    <item>
+      <title>第二章 熟悉Eclipse开发工具</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%86%9F%E6%82%89eclipse%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/java%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%86%9F%E6%82%89eclipse%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</guid>
+      <description>2.1 熟悉Eclipse&#xA;2.1.1 Eclipse简介 4000多万美元，由IBM公司开发。 他的平台体系结构是在插件的基础上构建的。&#xA;2.1.2 下载Eclipse www.eclipse.org&#xA;2.1.3 安装Eclipse中文语言包 https://www.eclipse.org/babel/ 方法 https://blog.csdn.net/weixin_41791279/article/details/86141195&#xA;2.1.4 配置与启动&#xA;2.1.5 Eclipse工作台&#xA;2.1.6 透视图与视图&#xA;2.1.7 菜单栏&#xA;2.1.8 工具栏&#xA;2.1.9 “包资源管理器” 视图&#xA;2.1.10 “控制台”视图&#xA;2.2 使用Eclipse 2.2.1 创建Java项目 在Eclipse中编写程序，必须先创建项目。&#xA;2.2.2 创建Java类文件&#xA;2.2.3 使用编辑器编写程序代码 System.out.println()方法在Java编辑器中可以通过输入“syso”和按Alt + /快捷键完成快速输入。&#xA;2.2.4 运行java程序&#xA;2.3 程序调试&#xA;2.5题目 https://github.com/LBZZYZ/Java-Self-Study/blob/main/02/HelloEclipse/src/HelloEclipse.java</description>
+    </item>
+  </channel>
+</rss>

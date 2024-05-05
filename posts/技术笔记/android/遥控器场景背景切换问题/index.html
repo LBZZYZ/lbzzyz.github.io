@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>遥控器场景背景切换问题 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">遥控器场景背景切换问题</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="1room-crash">1.Room crash</h2>
+<p>可能原因:https://github.com/android/architecture-components-samples/issues/289</p>
+<p>crash log</p>
+<pre tabindex="0"><code>--------- beginning of crash
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime: FATAL EXCEPTION: arch_disk_io_0
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime: Process: com.intellyva.liveplayer, PID: 1101
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime: android.database.CursorWindowAllocationException: Could not allocate CursorWindow &#39;/data/user/0/com.intellyva.liveplayer/databases/ivaLive.db&#39; of size 2097152 due to error -12.
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.CursorWindow.nativeCreate(Native Method)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.CursorWindow.&lt;init&gt;(CursorWindow.java:139)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.CursorWindow.&lt;init&gt;(CursorWindow.java:120)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.AbstractWindowedCursor.clearOrCreateWindow(AbstractWindowedCursor.java:202)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.sqlite.SQLiteCursor.fillWindow(SQLiteCursor.java:147)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.sqlite.SQLiteCursor.getCount(SQLiteCursor.java:140)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.AbstractCursor.moveToPosition(AbstractCursor.java:231)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at android.database.AbstractCursor.moveToNext(AbstractCursor.java:280)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at androidx.room.InvalidationTracker$1.checkUpdatedTable(InvalidationTracker.java:464)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at androidx.room.InvalidationTracker$1.run(InvalidationTracker.java:431)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+02-19 07:05:33.370  1000  1101  2051 E AndroidRuntime:     at java.lang.Thread.run(Thread.java:923)
+02-19 07:05:33.371  1000  1101  3668 E AndroidRuntime: FATAL EXCEPTION: arch_disk_io_1
+02-19 07:05:33.371  1000  1101  3668 E AndroidRuntime: Process: com.intellyva.liveplayer, PID: 1101
+</code></pre><h2 id="shadow-size-与-retained-size">shadow size 与 retained size</h2>
+<p><a href="https://www.jianshu.com/p/851b5bb0a4d4">https://www.jianshu.com/p/851b5bb0a4d4</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

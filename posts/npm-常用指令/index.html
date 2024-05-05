@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>npm 常用指令 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">npm 常用指令</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="获取全局安装包">获取全局安装包</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm ls -g
+</span></span></code></pre></div><h1 id="查看全局包位置">查看全局包位置</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm config get prefix
+</span></span></code></pre></div><h1 id="更换源">更换源</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 设置</span>
+</span></span><span style="display:flex;"><span>npm config <span style="font-weight:bold;font-style:italic">set</span> registry https://registry.npmjs.org/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 读取</span>
+</span></span><span style="display:flex;"><span>npm config get registry
+</span></span></code></pre></div><h1 id="全局安装删除">全局安装/删除</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 安装</span>
+</span></span><span style="display:flex;"><span>npm install -g &lt;pkg-name&gt;
+</span></span><span style="display:flex;"><span>npm i -g &lt;pkg-name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 删除</span>
+</span></span><span style="display:flex;"><span>npm uninstall -g &lt;pkg-name&gt;
+</span></span><span style="display:flex;"><span>npm r -g &lt;pkg-name&gt; <span style="color:#888;font-style:italic"># r 代表 remove</span>
+</span></span></code></pre></div><h1 id="查看包最新版本">查看包最新版本</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npm view &lt;pkg-name&gt; version
+</span></span></code></pre></div><h1 id="--save---dev---save-dev">&ndash;save &ndash;dev &ndash;save-dev</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>--save = -S <span style="color:#888;font-style:italic"># 保存配置信息到 package.json 的 dependencies 节点</span>
+</span></span><span style="display:flex;"><span>-dev <span style="color:#888;font-style:italic"># 保存配置信息到 devDependencies 节点</span>
+</span></span><span style="display:flex;"><span>--save-dev = -D <span style="color:#888;font-style:italic"># 保存配置信息到 package.json 的 devDependencies 节点</span>
+</span></span></code></pre></div><p>节点说明：
+<code>dependencies</code>：运行时依赖，用于生产环境；
+<code>devDependencies</code>：开发时依赖，测试环境使用，生产环境不需要。</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

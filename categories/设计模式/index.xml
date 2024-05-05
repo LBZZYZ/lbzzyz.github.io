@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>设计模式 on 欣菜团</title>
+    <link>http://localhost:1313/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+    <description>Recent content in 设计模式 on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Jun 2021 13:26:43 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式-工厂模式</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sat, 19 Jun 2021 13:26:43 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</guid>
+      <description>简单工厂和工厂方法都集中封装了对象的创建过程，使得要更改对象时，不需做大的改动就能实现，降低了客户程序与产品对象的耦合。&#xA;//不使用工厂进行对象创建 class Computer { public: virtual void show() = 0; }; class DellComputer : public Computer { public: void show() { std::cout &amp;lt;&amp;lt; &amp;#34;This is Dell computer!&amp;#34; &amp;lt;&amp;lt; endl; } }; class HaseeComputer: public Computer { public: void show() { std::cout &amp;lt;&amp;lt; &amp;#34;This is Haseecomputer!&amp;#34; &amp;lt;&amp;lt; endl; } }; int main() { Computer *pComputer = NULL; if(客户端需要HaseeComputer) pComputer = new HaseeComputer; else if(客户端需要DellComputer) pComputer = new DellComputer; else ......&#x9;//当有其他电脑品牌的类时就需要修改main函数中的代码，违背了对扩展开放，对修改关闭的原则 pComputer-&amp;gt;show(); return 0; } 使用简单工厂，增加新类SimpleFactory</description>
+    </item>
+    <item>
+      <title>设计模式-单例模式</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Fri, 26 Mar 2021 23:40:33 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <description>一种创建型设计模式， 让你能够保证一个类只有一个实例， 并提供一个访问该实例的全局节点。&#xA;如何让一个类无法定义对象? 接口类或抽象类无法定义对象。&#xA;class A&#x9;//接口类 { public: virtual void AA() = 0; }; 如何定义一个整形变量，让他只能是10的倍数 如果想要规定别人必须怎么做，就要使用接口&#xA;class CNum { private: int num; CNum() { num = 0; } void Set(int n) { num = n*10; cout &amp;lt;&amp;lt; &amp;#34;附加应用&amp;#34; &amp;lt;&amp;lt; endl;&#x9;//唯一操作num的方式,如果想用num,那在这个函数内写的其他内容都被捆绑执行 } }; 封装过程 1：把int num隐藏起来不让别人用。 2：提供一个调用int num的接口并且这个接口的方法是固定的。&#xA;什么是单例模式? 1.先不让一个类定义对象 2.再提供一个接口，产生一个对象&#xA;A *pA = NULL; class A { private: A(){}&#x9;//第一步:把构造函数设置为私有方法 public: static A *GetObject()&#x9;//静态函数无需对象即可调用 { if(pA == NULL) { pA = new A;&#x9;//第二步：如果没有对象，就创建一个对象，如果有，就不定义了。 } return pA; } }; int main() { A *pA = A::GetObject(); return 0; } 为什么要用单例模式 单例模式应用场景 打印机的任务队列 任务管理器</description>
+    </item>
+  </channel>
+</rss>

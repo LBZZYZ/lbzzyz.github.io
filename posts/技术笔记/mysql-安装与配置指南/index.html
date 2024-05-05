@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>MySQL 安装与配置指南 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">MySQL 安装与配置指南</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-02-21T12:27:22&#43;00:00">February 21, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="安装-mysql">安装 MySQL</h1>
+<p>系统版本：<code>Ubuntu 18.04.6 LTS</code></p>
+<h2 id="a-本地环境安装">a. 本地环境安装</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt update
+</span></span><span style="display:flex;"><span>sudo apt install mysql-server
+</span></span></code></pre></div><h2 id="b-使用-docker-安装">b. 使用 Docker 安装</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -itd --name mysql-container -p 9636:3306 --restart=always -e <span style="color:#666;font-weight:bold;font-style:italic">MYSQL_ROOT_PASSWORD</span>={set-your-password} -v /path/to/mysql:/var/lib/mysql mysql:latest
+</span></span></code></pre></div><h1 id="查看运行状态">查看运行状态</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl status mysql
+</span></span></code></pre></div><p>
+
+
+
+<figure   >
+    <img loading="lazy" alt="MySQL运行状态" src=" https://cdn.statically.io/gh/LBZZYZ/PicX@master/Blog/mysqlState.1v1675w98uf4.webp">
+</figure></p>
+<h1 id="运行安全向导">运行安全向导</h1>
+<p>MySQL 提供了一个脚本使数据库更加安全，建议首次安装完成后执行一次该脚本。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ mysql_secure_installation
+</span></span></code></pre></div><p>运行 <code>mysql_secure_installation</code> 会执行几个设置：</p>
+<ul>
+<li>为 root 用户设置密码</li>
+<li>删除匿名账号</li>
+<li>取消 root 用户远程登录</li>
+<li>删除 test 库和对 test 库的访问权限</li>
+<li>刷新授权表使修改生效</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@iZwz928lti88uknt38usc5Z:~# mysql_secure_installation
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Securing the MySQL server deployment.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connecting to MySQL using a blank password.
+</span></span><span style="display:flex;"><span>The <span style="color:#666;font-style:italic">&#39;validate_password&#39;</span> plugin is installed on the server.
+</span></span><span style="display:flex;"><span>The subsequent steps will run with the existing configuration
+</span></span><span style="display:flex;"><span>of the plugin.
+</span></span><span style="display:flex;"><span>Please <span style="font-weight:bold;font-style:italic">set</span> the password <span style="font-weight:bold;text-decoration:underline">for</span> root here.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>New password:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Re-enter new password:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Estimated strength of the password: 100
+</span></span><span style="display:flex;"><span>Do you wish to <span style="font-weight:bold;text-decoration:underline">continue</span> with the password provided?(Press y|Y <span style="font-weight:bold;text-decoration:underline">for</span> Yes, any other key <span style="font-weight:bold;text-decoration:underline">for</span> No) : y
+</span></span><span style="display:flex;"><span>By default, a MySQL installation has an anonymous user,
+</span></span><span style="display:flex;"><span>allowing anyone to log into MySQL without having to have
+</span></span><span style="display:flex;"><span>a user account created <span style="font-weight:bold;text-decoration:underline">for</span> them. This is intended only <span style="font-weight:bold;text-decoration:underline">for</span>
+</span></span><span style="display:flex;"><span>testing, and to make the installation go a bit smoother.
+</span></span><span style="display:flex;"><span>You should remove them before moving into a production
+</span></span><span style="display:flex;"><span>environment.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Remove anonymous users? (Press y|Y <span style="font-weight:bold;text-decoration:underline">for</span> Yes, any other key <span style="font-weight:bold;text-decoration:underline">for</span> No) : y
+</span></span><span style="display:flex;"><span>Success.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Normally, root should only be allowed to connect from
+</span></span><span style="display:flex;"><span><span style="color:#666;font-style:italic">&#39;localhost&#39;</span>. This ensures that someone cannot guess at
+</span></span><span style="display:flex;"><span>the root password from the network.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Disallow root login remotely? (Press y|Y <span style="font-weight:bold;text-decoration:underline">for</span> Yes, any other key <span style="font-weight:bold;text-decoration:underline">for</span> No) : y
+</span></span><span style="display:flex;"><span>Success.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>By default, MySQL comes with a database named <span style="color:#666;font-style:italic">&#39;test&#39;</span> that
+</span></span><span style="display:flex;"><span>anyone can access. This is also intended only <span style="font-weight:bold;text-decoration:underline">for</span> testing,
+</span></span><span style="display:flex;"><span>and should be removed before moving into a production
+</span></span><span style="display:flex;"><span>environment.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Remove <span style="font-weight:bold;font-style:italic">test</span> database and access to it? (Press y|Y <span style="font-weight:bold;text-decoration:underline">for</span> Yes, any other key <span style="font-weight:bold;text-decoration:underline">for</span> No) : y
+</span></span><span style="display:flex;"><span> - Dropping <span style="font-weight:bold;font-style:italic">test</span> database...
+</span></span><span style="display:flex;"><span>Success.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> - Removing privileges on <span style="font-weight:bold;font-style:italic">test</span> database...
+</span></span><span style="display:flex;"><span>Success.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Reloading the privilege tables will ensure that all changes
+</span></span><span style="display:flex;"><span>made so far will take effect immediately.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Reload privilege tables now? (Press y|Y <span style="font-weight:bold;text-decoration:underline">for</span> Yes, any other key <span style="font-weight:bold;text-decoration:underline">for</span> No) : y
+</span></span><span style="display:flex;"><span>Success.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>All <span style="font-weight:bold;text-decoration:underline">done</span>!
+</span></span></code></pre></div><p>运行完安全向导后，root 用户<strong>也许依然可以无密码登录</strong>。这是因为 root 用户的密码验证方式为 <code>auth_socket</code>，可以用以下命令查看。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql&gt; <span style="font-weight:bold;text-decoration:underline">select</span> <span style="font-weight:bold;text-decoration:underline">user</span>, plugin <span style="font-weight:bold;text-decoration:underline">from</span> mysql.<span style="font-weight:bold;text-decoration:underline">user</span>;
+</span></span><span style="display:flex;"><span>+<span style="color:#888;font-style:italic">------------------+-----------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>| <span style="font-weight:bold;text-decoration:underline">user</span>             | plugin                |
+</span></span><span style="display:flex;"><span>+<span style="color:#888;font-style:italic">------------------+-----------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>| root             | auth_socket           |
+</span></span><span style="display:flex;"><span>| mysql.<span style="font-weight:bold;text-decoration:underline">session</span>    | mysql_native_password |
+</span></span><span style="display:flex;"><span>| mysql.sys        | mysql_native_password |
+</span></span><span style="display:flex;"><span>| debian-sys-maint | mysql_native_password |
+</span></span><span style="display:flex;"><span>| gitea            | mysql_native_password |
+</span></span><span style="display:flex;"><span>| cpl              | mysql_native_password |
+</span></span><span style="display:flex;"><span>+<span style="color:#888;font-style:italic">------------------+-----------------------+
+</span></span></span></code></pre></div><p><code>auth_socket</code> 方式无需验证密码，它只允许本地同名账户登录，因此安全性要优于<code>mysql_native_password</code>。不过仍可以通过以下命令修改 root 用户的校验方式，同时设置密码。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">update</span> mysql.<span style="font-weight:bold;text-decoration:underline">user</span> <span style="font-weight:bold;text-decoration:underline">set</span> authentication_string = password(<span style="color:#666;font-style:italic">&#39;password&#39;</span>), plugin = <span style="color:#666;font-style:italic">&#39;mysql_native_password&#39;</span> <span style="font-weight:bold;text-decoration:underline">where</span> <span style="font-weight:bold;text-decoration:underline">user</span> = <span style="color:#666;font-style:italic">&#39;root&#39;</span>;
+</span></span><span style="display:flex;"><span>flush <span style="font-weight:bold;text-decoration:underline">privileges</span>;
+</span></span></code></pre></div><h1 id="配置远程访问">配置远程访问</h1>
+<p>编辑 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 配置文件，注释掉<code>bind-address = 127.0.0.1</code>，保存退出，然后进入 MySQL 数据库，执行授权命令。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mysql -u root -p
+</span></span><span style="display:flex;"><span>mysql&gt; grant all on *.* to root@<span style="color:#666;font-style:italic">&#39;%&#39;</span> identified by <span style="color:#666;font-style:italic">&#39;password&#39;</span> with grant option;
+</span></span><span style="display:flex;"><span>mysql&gt; flush privileges; <span style="color:#888;font-style:italic"># 刷新权限</span>
+</span></span><span style="display:flex;"><span>mysql&gt; <span style="font-weight:bold;font-style:italic">exit</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>systemctl restart mysql <span style="color:#888;font-style:italic"># 重启 MySQL</span>
+</span></span></code></pre></div><h1 id="登录">登录</h1>
+<p>使用在[[MySQL 安装与配置指南#运行安全向导]]中为 root 用户设置的密码登录 MySQL，看到如下界面则代表登录成功。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@iZwz928lti88uknt38usc5Z:~# mysql -u root -p
+</span></span><span style="display:flex;"><span>Enter password:
+</span></span><span style="display:flex;"><span>Welcome to the MySQL monitor.  Commands end with ; or <span style="color:#666;font-style:italic">\g</span>.
+</span></span><span style="display:flex;"><span>Your MySQL connection id is 31
+</span></span><span style="display:flex;"><span>Server version: 5.7.33-0ubuntu0.18.04.1 (Ubuntu)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Oracle is a registered trademark of Oracle Corporation and/or its
+</span></span><span style="display:flex;"><span>affiliates. Other names may be trademarks of their respective
+</span></span><span style="display:flex;"><span>owners.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Type <span style="color:#666;font-style:italic">&#39;help;&#39;</span> or <span style="color:#666;font-style:italic">&#39;\h&#39;</span> <span style="font-weight:bold;text-decoration:underline">for</span> help. Type <span style="color:#666;font-style:italic">&#39;\c&#39;</span> to clear the current input statement.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt;
+</span></span></code></pre></div><h1 id="新建用户">新建用户</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">create</span> <span style="font-weight:bold;text-decoration:underline">user</span> <span style="color:#666;font-style:italic">&#39;username&#39;</span>@<span style="color:#666;font-style:italic">&#39;host&#39;</span> identified <span style="font-weight:bold;text-decoration:underline">by</span> <span style="color:#666;font-style:italic">&#39;password&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>username：你将创建的用户名</li>
+<li>host：指定该用户在哪个主机上可以登陆，如果是本地用户可用 <code>localhost</code>，如果想让该用户可以<strong>从任意远程主机登陆</strong>，可以使用通配符<code>%</code></li>
+<li>password：该用户的登陆密码，密码可以为空，如果为空则该用户可以不需要密码登陆服务器</li>
+</ul>
+<h1 id="查看所有用户">查看所有用户</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SELECT User, Host, Password FROM mysql.user;(mysql version &gt; 5.7)
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">select</span> host,user,authentication_string from mysql.user;(mysql version &lt;= 5.7&gt;)
+</span></span><span style="display:flex;"><span>SELECT DISTINCT User FROM mysql.user;
+</span></span></code></pre></div><h1 id="查看所有数据库">查看所有数据库</h1>
+<pre tabindex="0"><code>show databases;
+</code></pre><h1 id="选择数据库">选择数据库</h1>
+<pre tabindex="0"><code>use db-name;
+</code></pre><h1 id="退出数据库">退出数据库</h1>
+<pre tabindex="0"><code>\q
+</code></pre><h1 id="参考链接">参考链接</h1>
+<p><a href="https://www.cnblogs.com/opsprobe/p/9126864.html">https://www.cnblogs.com/opsprobe/p/9126864.html</a></p>
+<p><a href="https://blog.csdn.net/qq_32786873/article/details/78846008">https://blog.csdn.net/qq_32786873/article/details/78846008</a></p>
+<p><a href="https://www.cnblogs.com/xiaozi/p/10552100.html">https://www.cnblogs.com/xiaozi/p/10552100.html</a></p>
+<p><a href="https://developer.aliyun.com/article/415339">https://developer.aliyun.com/article/415339</a></p>
+<p><a href="https://blog.csdn.net/tcliuwenwen/article/details/105453599">https://blog.csdn.net/tcliuwenwen/article/details/105453599</a></p>
+<p><a href="https://www.cnblogs.com/sos-blue/p/6852945.html">https://www.cnblogs.com/sos-blue/p/6852945.html</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

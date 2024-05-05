@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>命令大全 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">命令大全</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="压缩-zip">压缩 zip</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>zip -q -r file.zip file/
+</span></span></code></pre></div><h2 id="解压-zip">解压 zip</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>unzip xxx.zip -d /a/b/
+</span></span></code></pre></div><h2 id="压缩-tar">压缩 tar</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tar -cvf target.tar /path/to/folder
+</span></span></code></pre></div><p>其中，<code>-c</code> 表示创建一个新的归档文件，<code>-v</code> 表示输出详细的打包过程信息，而 <code>-f</code> 则是指定归档文件的文件名。<code>/path/to/folder</code> 是要打包的文件夹的路径，<code>target.tar</code> 是要创建的归档文件名。</p>
+<p>这个命令会将在当前目录下创建一个名为 <code>target.tar</code> 的文件，该文件包含了被打包的文件夹及其内容。</p>
+<h2 id="解压-tar">解压 tar</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tar -xvf target.tar
+</span></span></code></pre></div><h2 id="获取公网ip">获取公网IP</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl http://members.3322.org/dyndns/getip
+</span></span></code></pre></div><h2 id="查看系统架构">查看系统架构</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>uname -m
+</span></span></code></pre></div><h2 id="查看系统发行版本">查看系统发行版本</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 方案1</span>
+</span></span><span style="display:flex;"><span>cat /etc/os-release
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 方案2：可能看不到，CentOs 7 看到的是 Red Hat 4.8.5-44</span>
+</span></span><span style="display:flex;"><span>cat /proc/version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">#方案3：命令查看</span>
+</span></span><span style="display:flex;"><span>lsb_release -a
+</span></span></code></pre></div><h2 id="yum-常用命令">yum 常用命令</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 查询包名为 example 的包依赖</span>
+</span></span><span style="display:flex;"><span>yum deplist example
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">#列出所有可更新的软件清单</span>
+</span></span><span style="display:flex;"><span>yum check-update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 更新所有软件</span>
+</span></span><span style="display:flex;"><span>yum update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 仅安装指定的软件</span>
+</span></span><span style="display:flex;"><span>yum install &lt;package_name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 仅更新指定的软件</span>
+</span></span><span style="display:flex;"><span>yum update &lt;package_name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 列出所有可安裝的软件清单</span>
+</span></span><span style="display:flex;"><span>yum list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 删除软件包</span>
+</span></span><span style="display:flex;"><span>yum remove &lt;package_name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 查找软件包</span>
+</span></span><span style="display:flex;"><span>yum search &lt;keyword&gt;
+</span></span></code></pre></div><h2 id="查看防火墙开放端口">查看防火墙开放端口</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>firewall-cmd --list-ports
+</span></span><span style="display:flex;"><span>iptables -vnL
+</span></span></code></pre></div><h2 id="查看并检测-nginx-配置文件">查看并检测 nginx 配置文件</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nginx -t
+</span></span></code></pre></div><h2 id="查看文件行数">查看文件行数</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wc -l &lt;file-name&gt;
+</span></span></code></pre></div><h2 id="查看所有用户">查看所有用户</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>awk -F<span style="color:#666;font-style:italic">&#39;:&#39;</span> <span style="color:#666;font-style:italic">&#39;{ print $1}&#39;</span> /etc/passwd
+</span></span></code></pre></div><h2 id="修改用户密码">修改用户密码</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 切换到 root 账户</span>
+</span></span><span style="display:flex;"><span>sudo su
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 为 user1 重新设置密码</span>
+</span></span><span style="display:flex;"><span>passwd user1
+</span></span></code></pre></div><h2 id="etcgroup-格式">/etc/group 格式</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>group_name:passwd:GID:user_list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 如root:x:0:root,admin</span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"># 用户组root；x是密码段，表示没有设置密码；GID是0；root用户组下包括root、admin以及GID为0的其它用户</span>
+</span></span></code></pre></div><h2 id="查看用户名">查看用户名</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>whoami
+</span></span></code></pre></div><h2 id="修改用户名">修改用户名</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo usermod -l new_username -d /home/new_username -m old_username
+</span></span></code></pre></div><h2 id="查看所有登录用户">查看所有登录用户</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>w
+</span></span><span style="display:flex;"><span>who
+</span></span><span style="display:flex;"><span>users
+</span></span></code></pre></div><h2 id="强制用户下线">强制用户下线</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>skill -KILL -u username
+</span></span></code></pre></div><h2 id="为用户配置-sudo">为用户配置 sudo</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>usermod -a -G sudo username
+</span></span></code></pre></div><h2 id="add-apt-repository-command-not-found">add-apt-repository: command not found</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-get install software-properties-common
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span></code></pre></div><h2 id="dpkg-error-processing-package-docker-ce">dpkg: error processing package docker-ce</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm /var/lib/dpkg/docker-ce*
+</span></span></code></pre></div><h2 id="在linux操作系统中s文件通常指的是套接字文件socket">在Linux操作系统中，&ldquo;s&quot;文件通常指的是套接字文件(socket)</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srw-rw----  1 root    docker     0 Mar 20 10:59 docker.sock
+</span></span></code></pre></div><h2 id="apt-get-与-apt-的区别">apt-get 与 apt 的区别?</h2>
+<ol>
+<li>apt 是 apt-get 的新版本；</li>
+<li>apt 的使用方式比 apt-get 更用户友好。
+<a href="https://aws.amazon.com/cn/compare/the-difference-between-apt-and-apt-get/">https://aws.amazon.com/cn/compare/the-difference-between-apt-and-apt-get/</a></li>
+</ol>
+<h2 id="修改组名">修改组名</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>groupmod -n newname oldname
+</span></span></code></pre></div><h2 id="修改文件夹属组">修改文件（夹）属组</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chgrp group file
+</span></span></code></pre></div><h2 id="修改文件夹属主">修改文件（夹）属主</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chown owner file
+</span></span></code></pre></div>
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

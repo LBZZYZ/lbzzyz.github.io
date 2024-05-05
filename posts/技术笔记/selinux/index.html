@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>SELinux | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">SELinux</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-01-09T19:46:25&#43;00:00">January 9, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="一背景介绍">一、背景介绍</h2>
+<p>由于最近工作中要向Android中合入一个新的功能，需要配置selinux相关策略让相关进程有权限访问资源，但是对SELinux的概念以及配置方法完全陌生，因此写下此文整理一下学习过程。</p>
+<hr>
+<h2 id="二前言">二、前言</h2>
+<p>Security-Enhanced Linux，简称SELinux，他是Linux中的一个子模块</p>
+<p>SElinux for Android <a href="https://source.android.com/security/selinux/images/SELinux_Treble.pdf">官方文档</a></p>
+<hr>
+<h2 id="三基础概念">三、基础概念</h2>
+<hr>
+<h3 id="1-两种模式">1. 两种模式</h3>
+<h4 id="11-dac">1.1 DAC</h4>
+<p>Discretionary Access Control，自主访问控制。在该模式下，用户拥有其登录身份下对文件、套接字等的所有访问权限。</p>
+<hr>
+<h4 id="12-mac">1.2 MAC</h4>
+<p>Mandatory Access Control，强制访问控制。此模式下没有超级用户的概念，一切进程除了要受其自身能访问资源的限制，还要经过MAC对资源进一步控制，保证了资源的最小化访问原则。这样即使存在获得了超级权限的恶意软件，也只能对少部分资源造成破坏。</p>
+<hr>
+<h3 id="2-四个基本概念">2. 四个基本概念</h3>
+<p>Subject &mdash; 主体<br>
+Object &mdash; 客体<br>
+Policy &mdash; 策略<br>
+Mode &mdash; 模式</p>
+<p>主体可以理解为进程/服务，客体的形式有很多，文件、文件夹、套接字等都可以成为客体。策略是用来描述主体/客体能访问内容的规则。对于模式来说，他并非上文提到的两种访问控制模式，而是针对selinux对主体/客体访问的态度，在意义上更像是一种开关。在linux系统中有三种可以设置的Mode：1.宽容模式（Permissive Mode);2.强制模式(Enforcing Mode);3.关闭(Disabled)</p>
+<h4 id="设置mode的方法">设置Mode的方法</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>setenforce 0 <span style="color:#888;font-style:italic">#0表示Permissive Mode；1表示Enforcing Mode</span>
+</span></span></code></pre></div><hr>
+<h2 id="四语法规则">四、语法规则</h2>
+<hr>
+<h2 id="五参考文献">五、参考文献</h2>
+<ol>
+<li><a href="https://www.phpyuan.com/235739.html">https://www.phpyuan.com/235739.html</a></li>
+<li><a href="https://www.linuxprobe.com/selinux-introduction.html">https://www.linuxprobe.com/selinux-introduction.html</a></li>
+<li><a href="https://blog.csdn.net/qq_19923217/article/details/81240027">https://blog.csdn.net/qq_19923217/article/details/81240027</a></li>
+</ol>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

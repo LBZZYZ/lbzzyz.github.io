@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>第二章 内存寻址 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">第二章 内存寻址</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="硬件中的分页">硬件中的分页</h2>
+<p>分页单元(paging unit)
+把线性地址转换成物理地址。
+分页单元的一个关键任务：把所请求的访问类型与线性地址的访问权限相比较，如果这次内存访问是无效的，就产生一个缺页异常。(link to 第四章 &amp; 第八章)</p>
+<p>页(page)
+线性地址被分成的以固定长度为单位的组，称为页。
+页内部连续的线性地址被映射到连续的物理地址中。因此内核可以指定某一页的存取权限而不用指定这一页中包含的所有线性地址的存取权限。</p>
+<p>页框(page frame)
+分页单元把所有的RAM分为固定长度的页框（有时叫做物理页）。
+每个页框包含一个页，即一个页框的长度=一个页的长度。</p>
+<p>页框和页的区别
+页框是主存的一部分，因此也是一个存储区域。
+页是一个数据块，可存放任何页框(RAM)或磁盘中。</p>
+<p>页表(page table)
+把线性地址映射到物理地址的数据结构。
+页表存放在主存中，应在启动分页单元之前必须由内核对页表进行适当的初始化。</p>
+<p>从80386开始，所有的80x86处理器都支持分页，它通过设置cr0寄存器的PG标志启用。当PG=0时，线性地址就被解释成物理地址。</p>
+<h2 id="常规分页">常规分页</h2>
+<p>从80386起，Intel处理器的分页单元处理4KB的页。</p>
+<p>32位的线性地址被分成3个域：
+Directory(目录)：最高十位
+Table（页表）：中间十位
+Offset（偏移量）：最低12位</p>
+<table>
+<thead>
+<tr>
+<th>31~22</th>
+<th>21~12</th>
+<th>11~0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directory</td>
+<td>Table</td>
+<td>Offset</td>
+</tr>
+</tbody>
+</table>
+<p>线性地址的转换分两步完成，每一步都基于一种转换表
+第一种转换表称为页目录表（page directory）</p>
+<p>第二中转换表称为页表（page table）</p>
+<h2 id="使用二级模式的意义">使用二级模式的意义</h2>
+<p>减少每个进程表所需的RAM的数量。
+如果使用一级页表，假设一个进程使用全部的4GB线性地址空间，那么想要表示全部的页需要2的20次方个表项（一个页的大小为4K，页表地址以4K为间隔)。
+每个表项为4个字节时，一共需要2^20 * 4 = 4MB RAM来表示一个进程的页表。</p>
+<h2 id="二级模式">二级模式</h2>
+<p>二级模式通过只为进程实际使用的那些虚拟内存区请求页表来减少内存容量。
+二级模式下，每个进程都会持有一个页目录表，但是不会马上为页表分配RAM，只有当进程实际需要一个页表时才给该页表分配RAM。</p>
+<p>正在使用的页目录的物理地址存放在控制寄存器cr3中。
+线性地址中的Directory字段决定页目录中的目录项。目录项指向相应的页表。线性地址中的Table字段决定页表中的表项。表项又指向页框的物理地址。Offset项决定实际的物理单元，也即页框中的相对位置。
+Offset字段决定每页的大小。</p>
+<p>P52. 图2-7 ：80x86处理器的分页</p>
+<p>这时我们考虑一个问题，二级模式相对于一级模式节省了多少空间？
+我们知道二级模式下存在两个寻页所用的表：页目录表和页表。从线性地址的分段可以看出，页目录表和页表的表项最多为1024个，按照每个表项为4字节计算，一个表的尺寸为1024 * 4B = 4KB
+我们知道页目录表是提前分配，而页表是按需分配，因此页表占用的RAM范围是0 ~ 4KB * 1024 = 4MB
+可以看出，使用二级寻页的方式，每个进程所占用的RAM从4MB变成了在4KB ~ 4MB + 4KB间波动。但由于按需分配的存在，所以其实每个进程所占用的内存倾向于大大下降。</p>
+<h2 id="二级模式的寻址个数">二级模式的寻址个数</h2>
+<p>1024(页表的个数) * 1024(页框的个数) * 4KB(一页的大小) = 4GB</p>
+<h2 id="-页目录页表结构">## 页目录&amp;页表结构</h2>
+<p>页目录项和页表项有相同的结构，具体结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>Present标志</th>
+<th>如果被置1，所指向的页（或页表）就在主存中；如果该标志为0，则这一页不在主存中，此时这个表项剩余的位可由操作系统用于自己的目的。如果执行一个地址转换所需的页表项或页目录项中的Present标志被清零，那么分页单元就把该线性地址存放在控制寄存器cr2中，并产生14号异常：缺页异常。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>包含页框物理地址最高20位的字段</td>
+<td>由于每一个页框有4KB的容量，它的物理地址必须是4096（4K）的倍数，因此物理地址的最低12位总是0。如果这个字段指向一个页目录，相应的页框就含有一个页表；如果它指向一个页表，相应的页框就含有一页数据。</td>
+</tr>
+<tr>
+<td>Accessed标志</td>
+<td>每当分页单元对相应页框进行寻址时就设置这个标志。当选中的页被交换出去时，这一标志就可以由操作系统使用。分页单元从来不重置这个标志，而是必须由操作系统去做。</td>
+</tr>
+<tr>
+<td>Dirty标志</td>
+<td>只应用于页表项中。每当对一个页框进行写操作时就设置这个标志。与Accessed标志一样，当选中的页被交换出去时，这一标志就可以由操作系统使用。分页单元从来不重置这个标志，而是必须由操作系统去做。</td>
+</tr>
+<tr>
+<td>Read/Write标志</td>
+<td>含有页或页表的存取权限（Read/Write或Read)。</td>
+</tr>
+<tr>
+<td>User/Supervisor标志</td>
+<td>含有访问页或页表所需的特权级。</td>
+</tr>
+<tr>
+<td>PCD和PWT标志</td>
+<td>控制硬件高速缓存处理页或页表的方式。</td>
+</tr>
+<tr>
+<td>Page Size标志</td>
+<td>只应用于页目录项。如果设置为1，则页目录项指的是2MB或4MB的页框。</td>
+</tr>
+<tr>
+<td>Global标志</td>
+<td>只应用于页表项。这个标志在Pentium Pro中引入，用来防止常用页从TLB高速缓存中刷新出去。只有在cr4寄存器的页全局启用(Page Global Enable，PGE）标志置位时这个标志才起作用。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="硬件保护方案">硬件保护方案</h2>
+<p>与页和页表有关的特权级只有两个：User/Supervisor。
+当该标志位置0时，只有当CPL小于3（内核态）时才能对页寻址；若该标志为1，则总能对页寻址。</p>
+<p>页的存取权限只有两种：读，写。
+当页目录项或页表项的Read/Write标志为0时，说明相应的页或页表是只读的；标志为1时则是可读写的。</p>
+<h2 id="64位系统中的分页">64位系统中的分页</h2>
+<p>64位系统不适用于两级分页，会导致进程持有的页表或页目录项过大，因此64位处理器的硬件分页系统都使用了额外的分页级别。具体分页方式见下表。</p>
+<table>
+<thead>
+<tr>
+<th>平台名称</th>
+<th>页大小</th>
+<th>寻址使用的位数</th>
+<th>分页级别数</th>
+<th>线性地址分级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>8KB</td>
+<td>43</td>
+<td>3</td>
+<td>10+10+10+13</td>
+</tr>
+<tr>
+<td>Ia64</td>
+<td>4KB</td>
+<td>39</td>
+<td>3</td>
+<td>9+9+9+12</td>
+</tr>
+<tr>
+<td>ppc64</td>
+<td>4KB</td>
+<td>41</td>
+<td>3</td>
+<td>10+10+9+12</td>
+</tr>
+<tr>
+<td>Sh64</td>
+<td>4KB</td>
+<td>41</td>
+<td>3</td>
+<td>10+10+9+12</td>
+</tr>
+<tr>
+<td>X86_64</td>
+<td>4KB</td>
+<td>48</td>
+<td>4</td>
+<td>9+9+9+9+12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="linux中的分页">Linux中的分页</h2>
+<p>Linux采用了一种同时适用于32位和64位系统的普通分页模型。
+2.6.10&mdash;三级分页模型
+2.6.11及以后&mdash;四级分页模型
+A.页全局目录(Page Global Directory)</p>
+<p>B.页上级目录(Page Upper Directory)</p>
+<p>C.页中间目录(Page Middle Directory)</p>
+<p>D.页表(Page Table)</p>
+<p>Linux把页上级目录和页中间目录的全部位置0，从而启用不适用物理地址扩展的32位系统。
+启动了物理地址扩展的32位系统使用三级页表。Linux的页全局目录对应80x86的页目录指针表（PDPT），取消了页上级目录，页中间目录对应80x86的页目录，Linux的页表对应80x86的页表。</p>
+<p>每个进程有他自己的页全局目录和自己的页表集。
+发生进程切换时，Linux把cr3控制寄存器的值保存在前一个执行进程的描述符中，然后把下一个要执行的进程描述符的值装入cr3寄存器中。因此，当新进程重新开始在CPU上执行时，分页单元指向一组正确的页表。
+在</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

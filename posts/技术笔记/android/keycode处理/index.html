@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>KeyCode处理 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">KeyCode处理</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="android-keycode">Android KeyCode</h1>
+<pre tabindex="0"><code>./frameworks/base/core/res/res/xml/global_keys.xml
+./vendor/amlogic/common/apps/VendorOverlay/DroidOverlay/res/xml/global_keys.xml
+</code></pre><h2 id="keycode定义位置">KEYCODE定义位置</h2>
+<p>frameworks/base/core/java/android/view/KeyEvent.java</p>
+<h2 id="intellyva-keycode-mapping">Intellyva KeyCode Mapping</h2>
+<pre tabindex="0"><code>1           KEYCODE_F10(140)         下个场景
+28          KEYCODE_ENTER(66)        确认
+39          KEYCODE_SEMICOLON(74)    Fn1
+40          KEYCODE_APOSTROPHE(75)   Fn2
+41          KEYCODE_GRAVE(68)        返回
+43          KEYCODE_BACKSLASH(73)    mute
+62          KEYCODE_F4(134)          变声
+87          KEYCODE_F11(141)         相机
+102         KEYCODE_F5(135)          提词
+103         KEYCODE_DPAD_UP(19)      上
+105         KEYCODE_DPAD_LEFT(21)    左
+106         KEYCODE_DPAD_RIGHT(22)   右
+108         KEYCODE_DPAD_DOWN(20)    下
+114         KEYCODE_F9(139)          背景右
+115         KEYCODE_F7(137)          背景左
+125         KEYCODE_F3(133)          上个场景
+183         KEYCODE_POWER(26)        待机
+</code></pre><h2 id="linux-keycode映射位置">Linux Keycode映射位置</h2>
+<p>/vendor/usr/keylayout
+Vendor_0417_Product_0033.kl             Vendor_0417_Product_0035.kl</p>
+<h2 id="0125状态">0125状态</h2>
+<p>除下面两个KeyCode外均已注册
+43          KEYCODE_BACKSLASH(73)    mute
+183         KEYCODE_POWER(26)        待机</p>
+<h2 id="参考链接">参考链接</h2>
+<ol>
+<li><a href="https://blog.csdn.net/wangguidong520/article/details/106288591">Android 全局键处理之GlobalKeyManager</a></li>
+<li><a href="https://www.cnblogs.com/larack/p/4223465.html">KEYCODE列表</a></li>
+<li><a href="https://blog.csdn.net/xct841990555/article/details/81067727?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1.pc_relevant_paycolumn_v2&amp;spm=1001.2101.3001.4242.2&amp;utm_relevant_index=4">接收GlobalKey Broadcast并获取键值的方法</a></li>
+</ol>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

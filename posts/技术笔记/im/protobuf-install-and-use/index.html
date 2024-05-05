@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>protobuf-Install and Use | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">protobuf-Install and Use</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-05-31T23:43:16&#43;00:00">May 31, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="前言">前言</h1>
+<p>我们知道，如果想要开发一款通讯软件，则需要对各个终端传输的数据设计合适的数据协议。将数据按照拟定协议进行装载，再对其进行序列化操作后，发送端即可借助网络模块将数据发送至接收端；接收端再进行反序列化操作后，即可拿到所需数据。</p>
+<p>而本文所介绍的protobuf就是一种序列化与反序列化的协议。下面给出Google官方的定义：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Protocol buffers are Google<span style="">&#39;</span>s language-neutral, platform-neutral, extensible mechanism <span style="font-weight:bold;text-decoration:underline">for</span> serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, <span style="font-weight:bold;text-decoration:underline">then</span> you can use special generated <span style="font-weight:bold;font-style:italic">source</span> code to easily write and <span style="font-weight:bold;font-style:italic">read</span> your structured data to and from a variety of data streams and using a variety of languages.
+</span></span></code></pre></div><p><a href="https://github.com/protocolbuffers/protobuf">github项目地址</a></p>
+<p><a href="https://developers.google.com/protocol-buffers/">开发文档</a></p>
+<p>Protobuf支持多种语言进行序列化，本文仅以 C++ 介绍如何安装并使用protobuf，系统为Mac OS。</p>
+<h1 id="安装">安装</h1>
+<p>这边介绍两种安装方式，分别是binary安装以及source code编译安装。</p>
+<h2 id="binary-安装">binary 安装</h2>
+<p>这种安装方式有一个非常大的优点就是安装过程十分简单，如果你不需要对protobuf进行客设化修改，只是想再项目中使用的话，推荐这种安装方式。</p>
+<p><a href="https://github.com/protocolbuffers/protobuf/releases">包下载地址</a></p>
+<p>在上面的地址中下载名字中带有protoc的包就可以获取到protobuf的编译器了，这种方式虽然简便，但是没办法获取到运行时库，因此如果想要在项目中使用protobuf，推荐直接使用下面的源代码安装方式进行安装。</p>
+<h2 id="源码编译安装">源码编译安装</h2>
+<p>我这边使用的版本为：protobuf-cpp-3.17.1.tar.gz，你也可以按需下载自己想要的安装包版本。</p>
+<p>下载完成后可以在终端使用<code>tar -zxvf protobuf-cpp-3.17.1.tar.gz</code>进行解压。</p>
+<p>解压完成后：</p>
+<ol>
+<li>cd protobuf-cpp-3.17.1</li>
+<li>./autogen.sh</li>
+<li>./configure &ndash;prefix=/usr/local/protobuf(这里制定你希望安装到的路径)</li>
+<li>make 源码编译，这一步大概需要十分钟。</li>
+<li>make check</li>
+<li>make install</li>
+</ol>
+<p>source code编译安装完成后，会在&ndash;prefix所制定的路径下生成一个bin:protoc，我们需要把这个bin链接到/usr/local/bin下才可以在终端正常使用，链接操作可以使用下方指令：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ln -s /usr/local/protobuf/bin/protoc /usr/local/bin/protoc
+</span></span></code></pre></div><p>链接成功后可以在终端下查看是否安装成功：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>protoc --version
+</span></span></code></pre></div><h1 id="protobuf的使用">protobuf的使用</h1>
+<p>安装完成后，我们就可以开始书写.proto文件，并利用生成的编译器做相关操作了。本文以官方文档给出的“address book”的例子简单介绍一下protobuf for c++的简单使用。</p>
+<h2 id="地址簿程序">地址簿程序</h2>
+<p>这是一个可以从文件中读取和像文件中写入人们的联系方式的应用程序。地址簿中的每个人都有姓名，ID，e-mail以及电话号码。</p>
+<p>我们可以使用三种方法序列化这些数据：</p>
+<ol>
+<li>二进制，长期来看不便于维护，程序将变得脆弱。</li>
+<li>自定义协议，对大数据量稍显无力。</li>
+<li>XML，这种方法可读性很好，但序列化与反序列化性能损失较大。</li>
+</ol>
+<p>使用protobuf可以解决上述三种方式存在的缺陷。</p>
+<h2 id="proto定义">.proto定义</h2>
+<p>将数据结构序列化的第一步就是书写.proto文件。首先，为每个想要序列化的数据结构定义一个<code>message</code>字段，然后为这个字段的每一项制定<code>name</code>和<code>type</code>。</p>
+<p>下面就是地址簿程序所使用的.proto文件。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">syntax</span> = <span style="color:#666;font-style:italic">&#34;proto2&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>package tutorial;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>message Person {
+</span></span><span style="display:flex;"><span>  optional string <span style="color:#666;font-weight:bold;font-style:italic">name</span> = 1;
+</span></span><span style="display:flex;"><span>  optional int32 <span style="color:#666;font-weight:bold;font-style:italic">id</span> = 2;
+</span></span><span style="display:flex;"><span>  optional string <span style="color:#666;font-weight:bold;font-style:italic">email</span> = 3;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  enum PhoneType {
+</span></span><span style="display:flex;"><span>    <span style="color:#666;font-weight:bold;font-style:italic">MOBILE</span> = 0;
+</span></span><span style="display:flex;"><span>    <span style="color:#666;font-weight:bold;font-style:italic">HOME</span> = 1;
+</span></span><span style="display:flex;"><span>    <span style="color:#666;font-weight:bold;font-style:italic">WORK</span> = 2;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  message PhoneNumber {
+</span></span><span style="display:flex;"><span>    optional string <span style="color:#666;font-weight:bold;font-style:italic">number</span> = 1;
+</span></span><span style="display:flex;"><span>    optional PhoneType <span style="font-weight:bold;font-style:italic">type</span> = 2 [<span style="color:#666;font-weight:bold;font-style:italic">default</span> = HOME];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  repeated PhoneNumber <span style="color:#666;font-weight:bold;font-style:italic">phones</span> = 4;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>message AddressBook {
+</span></span><span style="display:flex;"><span>  repeated Person <span style="color:#666;font-weight:bold;font-style:italic">people</span> = 1;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们一步一步来看这个proto文件。首先，在文件中的第三行有<code>package tutorial</code>。对于这句话，你需要明确两件事情，第一，package名称是唯一的，这就避免了在同一项目中的不同proto文件产生冲突；第二，在C++中，package名同样代表编译生成的类所在的命名空间。</p>
+<p>接下来就是消息的定义部分。我们看到上文中定义了三个message，其中<code>Person</code>包含了<code>PhoneNumber</code>，<code>AddressBook</code>又包含了<code>Person</code>。</p>
+<p>有很多基础类型都可以作为一个消息中的字段类型，如bool,int32,float,double和string。已经定义的message也可以作为其他message的一个字段值。</p>
+<p>enum可以在指定的取值中选取一个。</p>
+<p>也可以在message中定义另一个message，如在Person中定义的PhoneNumber。</p>
+<h3 id="消息编号">消息编号</h3>
+<p>编号必须指定且不能重复，如Person中e-mail字段的编号为3。</p>
+<p>每个字段必须使用以下修饰符之一进行注释：</p>
+<p>optional: 该字段可以设置0次或1次。如果未设置可选字段值，则使用默认值。对于简单类型，您可以指定自己的默认值，就像我们type在示例中为电话号码所做的那样。否则，使用系统默认值：数字类型为零，字符串为空字符串，布尔值为 false。对于嵌入的消息，默认值始终是消息的“默认实例”或“原型”，它没有设置任何字段。调用访问器以获取尚未显式设置的可选（或必需）字段的值始终返回该字段的默认值。</p>
+<p>repeated：该字段可以重复任意次数（包括零次）。重复值的顺序将保留在协议缓冲区中。将重复字段视为动态大小的数组。</p>
+<p>required：必须提供该字段的值，否则消息将被视为“未初始化”。如果libprotobuf在调试模式下编译，序列化未初始化的消息将导致断言失败。在优化的构建中，会跳过检查，无论如何都会写入消息。但是，解析未初始化的消息总是会失败（通过false从 parse 方法返回）。除此之外，必填字段的行为与可选字段完全相同。<code>proto3中此字段已经被删除。</code></p>
+<h2 id="编译proto">编译.proto</h2>
+<p>.proto文件书写完成后，即可通过proto程序生成读取和写入AddressBook message所需的类。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>protoc -I=<span style="color:#666;font-weight:bold;font-style:italic">$SRC</span> --cpp_out=<span style="color:#666;font-weight:bold;font-style:italic">$DST</span> <span style="color:#666;font-weight:bold;font-style:italic">$SRC</span>/addressbook.proto
+</span></span></code></pre></div><p>这会在&ndash;cpp_out指定的目录下生成addressbook.pb.h与addressbook.pb.cc</p>
+<h2 id="api的使用">API的使用</h2>
+<p>打开addressbook.pb.h可以看到，protobuf为每一个message都生成了一个单独的类，并且为每个message中的表项都生成了一些获取与设置的api。下面截取了addressboot.pb.h中的部分片段：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>  <span style="color:#888;font-style:italic">// repeated .tutorial.Person.PhoneNumber phones = 4;
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>  <span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">phones_size</span>() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">int</span> _internal_phones_size() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> clear_phones();
+</span></span><span style="display:flex;"><span>  ::tutorial::Person_PhoneNumber* mutable_phones(<span style="font-weight:bold;text-decoration:underline">int</span> index);
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField&lt; ::tutorial::Person_PhoneNumber &gt;*
+</span></span><span style="display:flex;"><span>      mutable_phones();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> ::tutorial::Person_PhoneNumber&amp; _internal_phones(<span style="font-weight:bold;text-decoration:underline">int</span> index) <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  ::tutorial::Person_PhoneNumber* _internal_add_phones();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> ::tutorial::Person_PhoneNumber&amp; phones(<span style="font-weight:bold;text-decoration:underline">int</span> index) <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  ::tutorial::Person_PhoneNumber* add_phones();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField&lt; ::tutorial::Person_PhoneNumber &gt;&amp;
+</span></span><span style="display:flex;"><span>      phones() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888;font-style:italic">// optional string name = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>  <span style="font-weight:bold;text-decoration:underline">bool</span> <span style="color:#666;font-weight:bold;font-style:italic">has_name</span>() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">bool</span> _internal_has_name() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> clear_name();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp; name() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">template</span> &lt;<span style="font-weight:bold;text-decoration:underline">typename</span> ArgT0 = <span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp;, <span style="font-weight:bold;text-decoration:underline">typename</span>... ArgT&gt;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> set_name(ArgT0&amp;&amp; arg0, ArgT... args);
+</span></span><span style="display:flex;"><span>  std::string* mutable_name();
+</span></span><span style="display:flex;"><span>  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_name();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">set_allocated_name</span>(std::string* name);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp; _internal_name() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">inline</span> PROTOBUF_ALWAYS_INLINE <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">_internal_set_name</span>(<span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp; value);
+</span></span><span style="display:flex;"><span>  std::string* _internal_mutable_name();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888;font-style:italic">// optional string email = 3;
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>  <span style="font-weight:bold;text-decoration:underline">bool</span> has_email() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">clear_email</span>();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp; email() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">template</span> &lt;<span style="font-weight:bold;text-decoration:underline">typename</span> ArgT0 = <span style="font-weight:bold;text-decoration:underline">const</span> std::string&amp;, <span style="font-weight:bold;text-decoration:underline">typename</span>... ArgT&gt;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> set_email(ArgT0&amp;&amp; arg0, ArgT... args);
+</span></span><span style="display:flex;"><span>  std::string* mutable_email();
+</span></span><span style="display:flex;"><span>  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_email();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">set_allocated_email</span>(std::string* email);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888;font-style:italic">// optional int32 id = 2;
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>  <span style="font-weight:bold;text-decoration:underline">bool</span> <span style="color:#666;font-weight:bold;font-style:italic">has_id</span>() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">bool</span> _internal_has_id() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> clear_id();
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::int32 id() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">set_id</span>(::PROTOBUF_NAMESPACE_ID::int32 value);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::int32 _internal_id() <span style="font-weight:bold;text-decoration:underline">const</span>;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">_internal_set_id</span>(::PROTOBUF_NAMESPACE_ID::int32 value);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888;font-style:italic">// @@protoc_insertion_point(class_scope:tutorial.Person)
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span> <span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">_Internal</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">template</span> &lt;<span style="font-weight:bold;text-decoration:underline">typename</span> T&gt; <span style="font-weight:bold;text-decoration:underline">friend</span> <span style="font-weight:bold;text-decoration:underline">class</span> <span style="">::</span><span style="color:#666;font-weight:bold;font-style:italic">PROTOBUF_NAMESPACE_ID</span>::Arena::InternalHelper;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">typedef</span> <span style="font-weight:bold;text-decoration:underline">void</span> InternalArenaConstructable_;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">typedef</span> <span style="font-weight:bold;text-decoration:underline">void</span> DestructorSkippable_;
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::internal::HasBits&lt;1&gt; _has_bits_;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">mutable</span> ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField&lt; ::tutorial::Person_PhoneNumber &gt; phones_;
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr email_;
+</span></span><span style="display:flex;"><span>  ::PROTOBUF_NAMESPACE_ID::int32 id_;
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">friend</span> <span style="font-weight:bold;text-decoration:underline">struct</span> <span style="">::</span><span style="color:#666;font-weight:bold;font-style:italic">TableStruct_address_2eproto</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>我们可以看到，对于message中的每个字段，protobuf生成了四个关键的方法：</p>
+<ol>
+<li>获取字段值：函数名称与字段命名完全相同，如name()</li>
+<li>设置字段值：函数名称以set_为开头</li>
+<li>判断字段是否被设置：这个函数只存在于optional字段中，以has_开头，如果字段有被设置，则返回true</li>
+<li>清空已经被设置的变量：函数名称以clear_开头。</li>
+</ol>
+<p>除了上述四个基础方法外，对于name和email这类字符串还会存在一些特有方法:</p>
+<ol>
+<li>mutable_方法：直接指向字符串的setter和getter,当字段没有被设置时，这个函数也可以被调用，并初始化该字段为空，并返回指向该字段的指针。</li>
+</ol>
+<p>重复字段也有一些特殊的方法——如果你查看重复phones字段的方法，你会发现你可以</p>
+<p>检查重复字段的_size（换句话说，有多少电话号码与此相关联Person）。
+使用其索引获取指定的电话号码。
+更新指定索引处的现有电话号码。
+将另一个电话号码添加到消息中，然后您可以对其进行编辑（重复的标量类型有一个add_只允许您传入新值）。
+有关协议编译器为任何特定字段定义确切生成哪些成员的更多信息，请参阅C++ 生成的代码参考。</p>
+<h1 id="参考链接">参考链接</h1>
+<ol>
+<li><a href="https://blog.csdn.net/huangdenan/article/details/111867350">https://blog.csdn.net/huangdenan/article/details/111867350</a></li>
+</ol>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>代码混淆 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">代码混淆</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>2 Keep 选项
+keep选项是为了在代码混淆的过程中保留部分类及其字段不被混淆以满足程序运行需求。keep选项一共有如下6种规则：</p>
+<p>keep
+keepnames
+keepclassmember
+keepclassmembernames
+keepclasseswithmembers
+keepclasseswithmembernames
+2.1 keep
+<code>-keep</code> [<a href="https://www.guardsquare.com/manual/configuration/usage#keepoptionmodifiers">,<em>modifier</em></a>,&hellip;] <a href="https://www.guardsquare.com/manual/configuration/usage#classspecification"><em>class_specification</em></a></p>
+<p>Specifies classes and class members (fields and methods) to be preserved as entry points to your code. For example, in order to <a href="https://www.guardsquare.com/manual/configuration/examples#application">keep an application</a>, you can specify the main class along with its main method. In order to <a href="https://www.guardsquare.com/manual/configuration/examples#library">process a library</a>, you should specify all publicly accessible elements.</p>
+<p>keep规则用于标识程序入口，被keep规则修饰的类及其成员会被指定为程序入口，从而免于被混淆。</p>
+<p>2.2 keepnames
+被keepnames修饰的类及其成员不会被混淆，但前提是对应的成员在shrinking类没有被删减掉。比如保留所有实现Serializable接口的类名：</p>
+<p>-keepnames class * implements java.io.Serializable
+1
+2.3 keepclassmembers
+keepclassmembers仅保留指定的类成员不被混淆，但类名会被混淆。接着上面的例子，如果我们不仅向保留所有实现Seriablizable接口的类名，同时还要保留其所有的接口方法：</p>
+<pre tabindex="0"><code>-keepnames class * implements java.io.Serializable 
+-keepclassmembers class * implements java.io.Serializable { 
+    static final long serialVersionUID; 
+    private static final java.io.ObjectStreamField[] serialPersistentFields; 
+    !static !transient &lt;fields&gt;; 
+    private void writeObject(java.io.ObjectOutputStream); 
+    private void readObject(java.io.ObjectInputStream); 
+    java.lang.Object writeReplace(); 
+    java.lang.Object readResolve(); 
+} 
+</code></pre><p>2.4 keepclassmembernames
+keepclassmembernames保留指定类成员不被混淆，前提是相关的类成员没有在shrinking阶段被删减。</p>
+<p><code>-keepclasseswithmembers</code> [<a href="https://www.guardsquare.com/manual/configuration/usage#keepoptionmodifiers">,<em>modifier</em></a>,&hellip;] <a href="https://www.guardsquare.com/manual/configuration/usage#classspecification"><em>class_specification</em></a>
+Specifies classes and class members to be preserved, on the condition that all of the specified class members are present. For example, you may want to <a href="https://www.guardsquare.com/manual/configuration/examples#applications">keep all applications</a> that have a main method, without having to list them explicitly.</p>
+<p>保留类和类成员不被混淆，前提是对应的类包含所有指定的类成员。适用于指定一批拥有功能类成员的方法，而不用一一列举。比如保留所有又main方法的类：</p>
+<pre tabindex="0"><code>-keepclasseswithmembers public class * { 
+    public static void main(java.lang.String[]); 
+} 
+</code></pre><p>2.6 keepclasswithmembernames
+keepclasseswithmembernames保留类和类成员不被混淆,前提是对应的类包含所有指定的类成员,同时对应的类成员在shrinking阶段没有被删减。比如保留所有native方法：</p>
+<pre tabindex="0"><code>-keepclasseswithmembernames class * { 
+    native &lt;methods&gt;; 
+} 
+</code></pre><p>2.7 关系梳理
+看完上述几个规则一定有点晕，没有关系，记住下面这个表就是：</p>
+<p>Keep	From being removed or renamed	From being renamed
+Classes and class members	-keep	-keepnames
+Class members only	-keepclassmembers	-keepclassmembernames
+Classes and class members, if class members present	-keepclasseswithmembers	keepclasseswithmembernames
+每一条keep规则都应该跟一个类说明（specification of classes and class members）。如下就是一个类说明的例子：</p>
+<pre tabindex="0"><code>class * { 
+    native &lt;methods&gt;; 
+} 
+</code></pre><p>类说明的规则将在下一节详细介绍。</p>
+<p>如果你不清楚到底该用哪个keep规则，建议直接使用keep,被keep标明的类及其类成员不会被删减或重命名。需要注意的是，如果仅仅指明要keep的类，而不指明其类成员：</p>
+<p>keep class yourpackage.demo
+1
+那ProGuard仅会保留其类和无参数构造方法不被删减或重命名。</p>
+<p><code>-dontwarn</code> [<em><a href="https://www.guardsquare.com/manual/configuration/usage#filters">class_filter</a></em>]</p>
+<p>Specifies not to warn about unresolved references and other important problems at all. The optional filter is a regular expression; ProGuard doesn&rsquo;t print warnings about classes with matching names. Ignoring warnings can be dangerous. For instance, if the unresolved classes or class members are indeed required for processing, the processed code will not function properly. <em>Only use this option if you know what you&rsquo;re doing!</em></p>
+<p>译文：指定根本不警告未解决的引用和其他重要问题。可选的过滤器是正则表达式； ProGuard 不会打印有关具有匹配名称的类的警告。忽视警告可能会很危险。例如，如果确实需要处理未解析的类或类成员，则处理后的代码将无法正常运行。 <em>仅当您知道自己在做什么时才使用此选项！</em></p>
+<p><code>-repackageclasses</code> [<em>package_name</em>]</p>
+<p>Specifies to repackage all class files that are renamed, by moving them into the single given package. Without argument or with an empty string (&rsquo;&rsquo;), the package is removed completely. This option overrides the <a href="https://www.guardsquare.com/manual/configuration/usage#flattenpackagehierarchy"><code>-flattenpackagehierarchy</code></a> option. It is another example of further <a href="https://www.guardsquare.com/manual/configuration/examples#repackaging">obfuscating package names</a>. It can make the processed code even smaller and less comprehensible. Its deprecated name is <code>-defaultpackage</code>. Only applicable when obfuscating.</p>
+<p><em>Counter-indication:</em> classes that look for resource files in their package directories will no longer work properly if they are moved elsewhere. When in doubt, just leave the packaging untouched by not using this option.</p>
+<p><code>-keeppackagenames</code> [<em><a href="https://www.guardsquare.com/manual/configuration/usage#filters">package_filter</a></em>]</p>
+<p>Specifies not to obfuscate the given package names. The optional filter is a comma-separated list of package names. Package names can contain <strong>?</strong>, *****, and ****** wildcards, and they can be preceded by the <strong>!</strong> negator. Only applicable when obfuscating.</p>
+<p><code>-keepattributes</code> [<em><a href="https://www.guardsquare.com/manual/configuration/attributes">attribute_filter</a></em>]</p>
+<p>Specifies any optional attributes to be preserved. The attributes can be specified with one or more <a href="https://www.guardsquare.com/manual/configuration/usage#keepattributes"><code>-keepattributes</code></a> directives. The optional filter is a comma-separated list of <a href="https://www.guardsquare.com/manual/configuration/attributes">attribute names</a> that Java virtual machines and ProGuard support. Attribute names can contain <strong>?</strong>, *****, and ****** wildcards, and they can be preceded by the <strong>!</strong> negator. For example, you should at least keep the <code>Exceptions</code>, <code>InnerClasses</code>, and <code>Signature</code> attributes when <a href="https://www.guardsquare.com/manual/configuration/examples#library">processing a library</a>. You should also keep the <code>SourceFile</code> and <code>LineNumberTable</code> attributes for <a href="https://www.guardsquare.com/manual/configuration/examples#stacktrace">producing useful obfuscated stack traces</a>. Finally, you may want to <a href="https://www.guardsquare.com/manual/configuration/examples#annotations">keep annotations</a> if your code depends on them. Only applicable when obfuscating.</p>
+<h2 id="参考链接">参考链接</h2>
+<p><a href="https://www.guardsquare.com/manual/home">ProGuard Manual</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

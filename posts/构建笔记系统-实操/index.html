@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>构建笔记系统-实操 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">构建笔记系统-实操</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p><a href="https://zhuanlan.zhihu.com/p/353521308">如何构建笔记系统-实际操作篇</a>中提供了建立完整笔记系统的工作流，现总结如下：</p>
+<ol>
+<li>先直接记录，不整理，到达自己能接受的混乱阈值时（我认为如何设定阈值并在阈值达到时严格执行是一门艺术），进入步骤 2；</li>
+<li>整理笔记：
+<ol>
+<li>针对阅读笔记等篇幅比较长的笔记，大胆拆分并原子化它；</li>
+<li>将整理好的原子化笔记按照《中图法》等图书分类法，归入一级类目；</li>
+<li>随着笔记的增加，一级类目无法准确分类，此时考虑增加二级类目；</li>
+<li>二级类目仍然无法清晰表征结构时，就为笔记制作属于自己的目录；</li>
+</ol>
+</li>
+<li>输出笔记：首先构思文章的基本框架，然后到笔记中寻找佐证框架中各个论点的证据，自下而上的输出。</li>
+</ol>
+<p><a href="https://sspai.com/post/60802">从卡片链接到大脑联想，基于 Obsidian 的卡片盒笔记法实践</a> 中也给出了类似的流程，但其连接笔记的方式不是使用分类法，而是利用[[双向链接]]。并且作者在文章中强调了利用[[Anki]]进行复习的重要性。</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

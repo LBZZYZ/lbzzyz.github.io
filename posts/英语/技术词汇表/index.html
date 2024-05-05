@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>技术词汇表 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">技术词汇表</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <table>
+<thead>
+<tr>
+<th>英文</th>
+<th>中文</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ethernet</td>
+<td>/ˈiːθərnet/ n. 以太网</td>
+<td></td>
+</tr>
+<tr>
+<td>case-sensitive</td>
+<td>adj. 大小写敏感的</td>
+<td></td>
+</tr>
+<tr>
+<td>strongly typed language</td>
+<td>强类型语言</td>
+<td>是一种总是强制类型定义的语言，要求变量的使用要严格符合定义，所有变量都必须先定义后使用。</td>
+</tr>
+<tr>
+<td>Weakly Typed Language</td>
+<td>弱类型语言</td>
+<td>与强类型语言相反</td>
+</tr>
+<tr>
+<td>primitive types</td>
+<td>原始类型</td>
+<td>Java有8种: byte, short, int, long, float, double, boolean, char</td>
+</tr>
+<tr>
+<td>thread context switch/thread switch</td>
+<td>线程切换</td>
+<td>“thread context switch”更准确地涵盖了线程切换的全部过程，而不仅仅是简单的线程状态切换。虽然在实际使用中，“thread switch”也被广泛使用，但“thread context switch”更为标准和准确。</td>
+</tr>
+<tr>
+<td>Hypertext Makeup Language</td>
+<td>超文本标记语言</td>
+<td></td>
+</tr>
+<tr>
+<td>alt text</td>
+<td>替代文本</td>
+<td>是用来描述网页上的图像的文本，通常用于为视力障碍或无法加载图像的用户提供信息。Alt text 应该简明扼要地描述图像内容，以便搜索引擎和其他工具可以理解图像的含义。在 HTML 中，可以使用 <code>&lt;alt&gt;</code> 标签为图像设置 alt text。</td>
+</tr>
+<tr>
+<td>corner case</td>
+<td>极端情况</td>
+<td></td>
+</tr>
+<tr>
+<td>edge case</td>
+<td>边界情况</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>HTML | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">HTML</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>Hyper Text Makeup Language</p>
+<p>Hypertext代表页面可以包含链接，让用户可以跳转到页面其他位置或完全跳转到另一个文档
+first created by Tim Berners-Lee, Robert Cailliau, and others</p>
+<h2 id="makeup-language">Makeup Language</h2>
+<p><strong>tags</strong>和<strong>attributes</strong>是<strong>HTML</strong>的基本元素
+Makeup Language：一种计算机之间用于控制文本如何被处理和呈现的方式</p>
+<h3 id="tags">tags</h3>
+<p>mark up the start of an HTML element
+usually enclosed in angle brackets
+ex: <code>&lt;h1&gt;</code>
+<code>&lt;h1&gt;&lt;/h1&gt;</code></p>
+<h3 id="attributes">attributes</h3>
+<p>example
+he image source (src) and the alt text (alt) are attributes of the <code>&lt;img&gt;</code> tag.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img src=<span style="color:#666;font-style:italic">&#34;mydog.jpg&#34;</span> alt=<span style="color:#666;font-style:italic">&#34;A photo of my dog.&#34;</span>&gt;
+</span></span></code></pre></div><h4 id="golden-rules-to-remember">Golden Rules To Remember</h4>
+<ol>
+<li>The vast majority of tags must be <strong>opened</strong> (<code>&lt;tag&gt;</code>) and <strong>closed</strong> (<code>&lt;/tag&gt;</code>) with the element information such as a title or text resting between the tags.</li>
+<li>When using multiple tags, the tags must be <strong>closed in the order in which they were opened</strong>.</li>
+</ol>
+<p>These tags should be placed underneath each other <strong>at the top of every HTML page</strong> that you create.</p>
+<p><a href="https://html.com/tags/doctype/"><code>&lt;!DOCTYPE html&gt;</code></a> — This tag <strong>specifies the language</strong> you will write on the page. In this case, the language is HTML 5.</p>
+<p><a href="https://html.com/tags/html/"><code>&lt;html&gt;</code></a> — This tag signals that from here on we are going to write in HTML code.</p>
+<p><a href="https://html.com/tags/head/"><code>&lt;head&gt;</code></a> — This is where all the <strong>metadata for the page</strong> goes — stuff mostly meant for search engines and other computer programs.</p>
+<p><a href="https://html.com/tags/body/"><code>&lt;body&gt;</code></a> — This is where the <strong>content of the page</strong> goes.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;html&gt;
+</span></span><span style="display:flex;"><span>&lt;head&gt;
+</span></span><span style="display:flex;"><span>&lt;/head&gt;
+</span></span><span style="display:flex;"><span>&lt;body&gt;
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>head标签中，
+<code>&lt;title&gt;</code>标签是必须包含的，设置之后，该标签中的内容就会作为网页的标题
+<code>&lt;meta&gt;</code>标签，同样存在于head中，设置字符编码，名称和描述</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;head&gt; 
+</span></span><span style="display:flex;"><span>&lt;title&gt;My First Webpage&lt;/title&gt; 
+</span></span><span style="display:flex;"><span>&lt;meta charset=<span style="color:#666;font-style:italic">&#34;UTF-8&#34;</span>&gt; 
+</span></span><span style="display:flex;"><span>&lt;meta name=<span style="color:#666;font-style:italic">&#34;description&#34;</span> content=<span style="color:#666;font-style:italic">&#34;This field contains information about your page. It is usually around two sentences long.&#34;</span>&gt;. 
+</span></span><span style="display:flex;"><span>&lt;meta name=<span style="color:#666;font-style:italic">&#34;author&#34;</span> content=<span style="color:#666;font-style:italic">&#34;Conor Sheils&#34;</span>&gt; 
+</span></span><span style="display:flex;"><span>&lt;/header&gt;
+</span></span></code></pre></div><p>body tag是展示给用户看的内容
+<strong>text, images, tables, forms</strong> and everything else that we see on the internet each day.
+h标签用于展示标题</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;h1&gt;
+</span></span><span style="display:flex;"><span>  &lt;h2&gt;
+</span></span><span style="display:flex;"><span>    &lt;h3&gt;
+</span></span></code></pre></div><h2 id="添加文字">添加文字</h2>
+<p><code>&lt;p&gt;</code>标签，paragraph的缩写，所有常规文字都放到该标签里面</p>
+<h3 id="夹杂在文字中的标签">夹杂在文字中的标签</h3>
+<pre tabindex="0"><code>**Element****Meaning****Purpose****&lt;b&gt;**BoldHighlight important information**&lt;strong&gt;**StrongSimilarly to bold, to highlight key text**&lt;i&gt;**ItalicTo denote text**&lt;em&gt;**Emphasised TextUsually used as image captions**&lt;mark&gt;**Marked TextHighlight the background of the text**&lt;small&gt;**Small TextTo shrink the text**&lt;strike&gt;**Striked Out TextTo place a horizontal line across the text**&lt;u&gt;**Underlined TextUsed for links or text highlights**&lt;ins&gt;**Inserted TextDisplayed with an underline to show an inserted text**&lt;sub&gt;**Subscript TextTypographical stylistic choice**&lt;sup&gt;**Superscript TextAnother typographical presentation style 
+</code></pre><h2 id="添加链接">添加链接</h2>
+<p>[[a标签]]</p>
+<h2 id="显示图像">显示图像</h2>
+<p><code>&lt;img&gt;</code></p>
+<pre tabindex="0"><code>&lt;img src=&#34;yourimage.jpg&#34; alt=&#34;Describe the image&#34; height=&#34;X&#34; width=&#34;X&#34;&gt;
+</code></pre><h2 id="列表">列表</h2>
+<p>ordered list
+unordered list
+defination list</p>
+<h2 id="table">table</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Table Tag</strong></th>
+<th><strong>Meaning</strong></th>
+<th><strong>Location</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>**&lt;thead&gt;**</code></td>
+<td>Table Head</td>
+<td>Top of the table</td>
+</tr>
+<tr>
+<td><strong><!-- raw HTML omitted --></strong></td>
+<td>Table Body</td>
+<td>Content of the table</td>
+</tr>
+<tr>
+<td><strong><!-- raw HTML omitted --></strong></td>
+<td>Table Foot</td>
+<td>Bottom of the table</td>
+</tr>
+<tr>
+<td><strong><!-- raw HTML omitted --></strong></td>
+<td>Column Group</td>
+<td>Within the table</td>
+</tr>
+<tr>
+<td><strong><!-- raw HTML omitted --></strong></td>
+<td>Table Header</td>
+<td>Data cell for the table header</td>
+</tr>
+</tbody>
+</table>
+<h2 id="html代码检查">HTML代码检查</h2>
+<p><a href="https://validator.w3.org/">https://validator.w3.org/</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

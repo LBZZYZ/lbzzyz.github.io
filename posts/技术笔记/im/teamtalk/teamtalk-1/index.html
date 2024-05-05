@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>TeamTalk-1 db_porxy_server | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">TeamTalk-1 db_porxy_server</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-03-06T23:56:00&#43;00:00">March 6, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="1-初始化redis缓存数据库">1. 初始化redis缓存数据库</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>	CacheManager* <span style="color:#666;font-weight:bold;font-style:italic">pCacheManager</span> = CacheManager::getInstance();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!pCacheManager) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;CacheManager init failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>进到CacheManager，这里用了一个<code>单例模式</code>得到CacheManager的实例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CacheManager* CacheManager::getInstance()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!s_cache_manager) {
+</span></span><span style="display:flex;"><span>		<span style="color:#666;font-weight:bold;font-style:italic">s_cache_manager</span> = new CacheManager();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (s_cache_manager-&gt;Init()) {
+</span></span><span style="display:flex;"><span>			delete s_cache_manager;
+</span></span><span style="display:flex;"><span>			<span style="color:#666;font-weight:bold;font-style:italic">s_cache_manager</span> = NULL;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> s_cache_manager;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上面的s_cache_manager是CacheManager类的私有static变量<code>static CacheManager* 	s_cache_manager;</code></p>
+<p>由于是单例,因此CacheManager的构造函数是一个private的空构造，实际上的初始化步骤在Init内</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CacheManager::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CConfigFileReader config_file(<span style="color:#666;font-style:italic">&#34;dbproxyserver.conf&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	char* <span style="color:#666;font-weight:bold;font-style:italic">cache_instances</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;CacheInstances&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!cache_instances) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;not configure CacheIntance&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	char host[64];
+</span></span><span style="display:flex;"><span>	char port[64];
+</span></span><span style="display:flex;"><span>	char db[64];
+</span></span><span style="display:flex;"><span>    char maxconncnt[64];
+</span></span><span style="display:flex;"><span>	CStrExplode instances_name(cache_instances, <span style="color:#666;font-style:italic">&#39;,&#39;</span>);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (uint32_t <span style="color:#666;font-weight:bold;font-style:italic">i</span> = 0; i &lt; instances_name.GetItemCnt(); i++) {
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">pool_name</span> = instances_name.GetItem(i);
+</span></span><span style="display:flex;"><span>		//printf(<span style="color:#666;font-style:italic">&#34;%s&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(host, 64, <span style="color:#666;font-style:italic">&#34;%s_host&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(port, 64, <span style="color:#666;font-style:italic">&#34;%s_port&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(db, 64, <span style="color:#666;font-style:italic">&#34;%s_db&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>        snprintf(maxconncnt, 64, <span style="color:#666;font-style:italic">&#34;%s_maxconncnt&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">cache_host</span> = config_file.GetConfigName(host);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">str_cache_port</span> = config_file.GetConfigName(port);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">str_cache_db</span> = config_file.GetConfigName(db);
+</span></span><span style="display:flex;"><span>        char* <span style="color:#666;font-weight:bold;font-style:italic">str_max_conn_cnt</span> = config_file.GetConfigName(maxconncnt);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (!cache_host || !str_cache_port || !str_cache_db || !str_max_conn_cnt) {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;not configure cache instance: %s&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> 2;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		CachePool* <span style="color:#666;font-weight:bold;font-style:italic">pCachePool</span> = new CachePool(pool_name, cache_host, atoi(str_cache_port),
+</span></span><span style="display:flex;"><span>				atoi(str_cache_db), atoi(str_max_conn_cnt));
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pCachePool-&gt;Init()) {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;Init cache pool failed&#34;</span>);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> 3;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_cache_pool_map.insert(make_pair(pool_name, pCachePool));
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>init函数有点长，具体可解释为以下几个步骤</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>init
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">#1.解析配置文件dbproxyserver.conf，获取缓存数据库实例</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">#  CacheInstances=unread,group_set,token,sync,group_member</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">#2. 根据配置文件的实例建立数据库连接池</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">#CachePool* pCachePool = new CachePool(pool_name, cache_host, atoi(str_cache_port),</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">#			atoi(str_cache_db), atoi(str_max_conn_cnt));</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">#if (pCachePool-&gt;Init()) {</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">#	log(&#34;Init cache pool failed&#34;);</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">#	return 3;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">#}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">#3. 将建立好的池子加入映射表，name和池子指针的映射，这张map属于CacheManager类，便于对池子管理</span>
+</span></span><span style="display:flex;"><span>    map&lt;string, CachePool*&gt;	m_cache_pool_map;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里把几个Cache instance列出来方便后续梳理</p>
+<table>
+<thead>
+<tr>
+<th>Instance Name</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unread</td>
+<td></td>
+</tr>
+<tr>
+<td>group_set</td>
+<td></td>
+</tr>
+<tr>
+<td>token</td>
+<td></td>
+</tr>
+<tr>
+<td>sync</td>
+<td></td>
+</tr>
+<tr>
+<td>group_member</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>下面走进CachePool类的构造函数和init函数，先看构造，很简单，单纯的给成员变量赋值而已</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CachePool::CachePool(const char* pool_name, const char* server_ip, int server_port, int db_num, int max_conn_cnt)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_pool_name</span> = pool_name;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_server_ip</span> = server_ip;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_server_port</span> = server_port;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_db_num</span> = db_num;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_max_conn_cnt</span> = max_conn_cnt;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_cur_conn_cnt</span> = MIN_CACHE_CONN_CNT;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接下来是CachePool的init函数,这是关键，通过对m_cur_conn_cnt的判断，建立这么多根连接，进到真正去连接数据库的CacheConn类，然后很关键：把建立好的新连接Push back进去一个m_free_list，这是CachePool维护的一个空闲连接的链表</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CachePool::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (int <span style="color:#666;font-weight:bold;font-style:italic">i</span> = 0; i &lt; m_cur_conn_cnt; i++) {
+</span></span><span style="display:flex;"><span>		CacheConn* <span style="color:#666;font-weight:bold;font-style:italic">pConn</span> = new CacheConn(this);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pConn-&gt;Init()) {
+</span></span><span style="display:flex;"><span>			delete pConn;
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_free_list.push_back(pConn);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	log(<span style="color:#666;font-style:italic">&#34;cache pool: %s, list size: %lu&#34;</span>, m_pool_name.c_str(), m_free_list.size());
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>真正去建立连接的构造函数，这里面有个4s重连的机制，要注意一下m_last_connect_time</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CacheConn::CacheConn(CachePool* pCachePool)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_pCachePool</span> = pCachePool;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_pContext</span> = NULL;
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_last_connect_time</span> = 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>CacheConn的init函数</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CacheConn::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (m_pContext) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// 4s 尝试重连一次
+</span></span><span style="display:flex;"><span>	uint64_t <span style="color:#666;font-weight:bold;font-style:italic">cur_time</span> = (uint64_t)time(NULL);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (cur_time &lt; m_last_connect_time + 4) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_last_connect_time</span> = cur_time;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	// 200ms超时
+</span></span><span style="display:flex;"><span>	struct timeval <span style="color:#666;font-weight:bold;font-style:italic">timeout</span> = {0, 200000};
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_pContext</span> = redisConnectWithTimeout(m_pCachePool-&gt;GetServerIP(), m_pCachePool-&gt;GetServerPort(), timeout);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!m_pContext || m_pContext-&gt;err) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (m_pContext) {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;redisConnect failed: %s&#34;</span>, m_pContext-&gt;errstr);
+</span></span><span style="display:flex;"><span>			redisFree(m_pContext);
+</span></span><span style="display:flex;"><span>			<span style="color:#666;font-weight:bold;font-style:italic">m_pContext</span> = NULL;
+</span></span><span style="display:flex;"><span>		} <span style="font-weight:bold;text-decoration:underline">else</span> {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;redisConnect failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	redisReply* <span style="color:#666;font-weight:bold;font-style:italic">reply</span> = (redisReply *)redisCommand(m_pContext, <span style="color:#666;font-style:italic">&#34;SELECT %d&#34;</span>, m_pCachePool-&gt;GetDBNum());
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (reply &amp;&amp; (reply-&gt;type == REDIS_REPLY_STATUS) &amp;&amp; (strncmp(reply-&gt;str, <span style="color:#666;font-style:italic">&#34;OK&#34;</span>, 2) == 0)) {
+</span></span><span style="display:flex;"><span>		freeReplyObject(reply);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>	} <span style="font-weight:bold;text-decoration:underline">else</span> {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;select cache db failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 2;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里用到的redis client是hiredis，头文件：hiredis.h;库文件：libhiredis.a</p>
+<p>redis数据库默认不需要账号密码，redisConnectWithTimeout只要提供Ip,port以及超时时间即可连接，调用后会返回一个redisContext类型的指针，这是连接的具体实例。</p>
+<p>REDIS_REPLY_STATUS：</p>
+<p>返回执行结果为状态的命令。比如set命令的返回值的类型是REDIS_REPLY_STATUS，然后只有当返回信息是&quot;OK&quot;时，才表示该命令执行成功。可以通过reply-&gt;str得到文字信息，通过reply-&gt;len得到信息长度。</p>
+<p>redisCommand：向redis写入一个命令，下面这一段我个人认为是测试一下redis连接成功了没有，如果连接成功就返回0，否则返回2</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>	redisReply* <span style="color:#666;font-weight:bold;font-style:italic">reply</span> = (redisReply *)redisCommand(m_pContext, <span style="color:#666;font-style:italic">&#34;SELECT %d&#34;</span>, m_pCachePool-&gt;GetDBNum());
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (reply &amp;&amp; (reply-&gt;type == REDIS_REPLY_STATUS) &amp;&amp; (strncmp(reply-&gt;str, <span style="color:#666;font-style:italic">&#34;OK&#34;</span>, 2) == 0)) {
+</span></span><span style="display:flex;"><span>		freeReplyObject(reply);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>	} <span style="font-weight:bold;text-decoration:underline">else</span> {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;select cache db failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 2;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>函数原型void freeReplyObject(void *reply);</p>
+<p>说明：释放redisCommand执行后返回的redisReply所占用的内存</p>
+<p>函数原型：void redisFree(redisContext *c);</p>
+<p>说明：释放redisConnect()所产生的连接。</p>
+<h3 id="简单总结">简单总结：</h3>
+<p>CacheManager维护一个Instance名和CachePool指针键值对的map,CachePool维护一张：某个Instance的所有connect的列表，ManagerCache运用单例避免多次初始化,redis client采用的是hiredis</p>
+<h2 id="2初始化存储数据库">2.初始化存储数据库</h2>
+<p>存储数据库的初始化流程与redis大同小异，Teamtalk中选用的存储数据库是Mysql</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>	CDBManager* <span style="color:#666;font-weight:bold;font-style:italic">pDBManager</span> = CDBManager::getInstance();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!pDBManager) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;DBManager init failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>s_db_manager就是DBManager的实例</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CDBManager* CDBManager::getInstance()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!s_db_manager) {
+</span></span><span style="display:flex;"><span>		<span style="color:#666;font-weight:bold;font-style:italic">s_db_manager</span> = new CDBManager();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (s_db_manager-&gt;Init()) {
+</span></span><span style="display:flex;"><span>			delete s_db_manager;
+</span></span><span style="display:flex;"><span>			<span style="color:#666;font-weight:bold;font-style:italic">s_db_manager</span> = NULL;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> s_db_manager;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CDBManager::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CConfigFileReader config_file(<span style="color:#666;font-style:italic">&#34;dbproxyserver.conf&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	char* <span style="color:#666;font-weight:bold;font-style:italic">db_instances</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;DBInstances&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!db_instances) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;not configure DBInstances&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	char host[64];
+</span></span><span style="display:flex;"><span>	char port[64];
+</span></span><span style="display:flex;"><span>	char dbname[64];
+</span></span><span style="display:flex;"><span>	char username[64];
+</span></span><span style="display:flex;"><span>	char password[64];
+</span></span><span style="display:flex;"><span>    char maxconncnt[64];
+</span></span><span style="display:flex;"><span>	CStrExplode instances_name(db_instances, <span style="color:#666;font-style:italic">&#39;,&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (uint32_t <span style="color:#666;font-weight:bold;font-style:italic">i</span> = 0; i &lt; instances_name.GetItemCnt(); i++) {
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">pool_name</span> = instances_name.GetItem(i);
+</span></span><span style="display:flex;"><span>		snprintf(host, 64, <span style="color:#666;font-style:italic">&#34;%s_host&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(port, 64, <span style="color:#666;font-style:italic">&#34;%s_port&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(dbname, 64, <span style="color:#666;font-style:italic">&#34;%s_dbname&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(username, 64, <span style="color:#666;font-style:italic">&#34;%s_username&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>		snprintf(password, 64, <span style="color:#666;font-style:italic">&#34;%s_password&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>        snprintf(maxconncnt, 64, <span style="color:#666;font-style:italic">&#34;%s_maxconncnt&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">db_host</span> = config_file.GetConfigName(host);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">str_db_port</span> = config_file.GetConfigName(port);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">db_dbname</span> = config_file.GetConfigName(dbname);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">db_username</span> = config_file.GetConfigName(username);
+</span></span><span style="display:flex;"><span>		char* <span style="color:#666;font-weight:bold;font-style:italic">db_password</span> = config_file.GetConfigName(password);
+</span></span><span style="display:flex;"><span>        char* <span style="color:#666;font-weight:bold;font-style:italic">str_maxconncnt</span> = config_file.GetConfigName(maxconncnt);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (!db_host || !str_db_port || !db_dbname || !db_username || !db_password || !str_maxconncnt) {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;not configure db instance: %s&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> 2;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		int <span style="color:#666;font-weight:bold;font-style:italic">db_port</span> = atoi(str_db_port);
+</span></span><span style="display:flex;"><span>        int <span style="color:#666;font-weight:bold;font-style:italic">db_maxconncnt</span> = atoi(str_maxconncnt);
+</span></span><span style="display:flex;"><span>		CDBPool* <span style="color:#666;font-weight:bold;font-style:italic">pDBPool</span> = new CDBPool(pool_name, db_host, db_port, db_username, db_password, db_dbname, db_maxconncnt);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pDBPool-&gt;Init()) {
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;init db instance failed: %s&#34;</span>, pool_name);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> 3;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		m_dbpool_map.insert(make_pair(pool_name, pDBPool));
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>存储数据库的Manager也维护了一张Instance Name和pool指针的map。存储数据库在构造函数上与缓存数据库有些不同，他需要增加用户名和密码，因为存储数据库需要账户密码。</p>
+<p>进入到存储数据库的初始化，同样维护了一张新建立的连接的链表：<code>m_free_list</code>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CDBPool::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (int <span style="color:#666;font-weight:bold;font-style:italic">i</span> = 0; i &lt; m_db_cur_conn_cnt; i++) {
+</span></span><span style="display:flex;"><span>		CDBConn* <span style="color:#666;font-weight:bold;font-style:italic">pDBConn</span> = new CDBConn(this);
+</span></span><span style="display:flex;"><span>		int <span style="color:#666;font-weight:bold;font-style:italic">ret</span> = pDBConn-&gt;Init();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (ret) {
+</span></span><span style="display:flex;"><span>			delete pDBConn;
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> ret;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_free_list.push_back(pDBConn);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	log(<span style="color:#666;font-style:italic">&#34;db pool: %s, size: %d&#34;</span>, m_pool_name.c_str(), (int)m_free_list.size());
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>真正初始化单根连接</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>int CDBConn::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#666;font-weight:bold;font-style:italic">m_mysql</span> = mysql_init(NULL);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!m_mysql) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;mysql_init failed&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	my_bool <span style="color:#666;font-weight:bold;font-style:italic">reconnect</span> = true;
+</span></span><span style="display:flex;"><span>	mysql_options(m_mysql, MYSQL_OPT_RECONNECT, &amp;reconnect);
+</span></span><span style="display:flex;"><span>	mysql_options(m_mysql, MYSQL_SET_CHARSET_NAME, <span style="color:#666;font-style:italic">&#34;utf8mb4&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!mysql_real_connect(m_mysql, m_pDBPool-&gt;GetDBServerIP(), m_pDBPool-&gt;GetUsername(), m_pDBPool-&gt;GetPasswrod(),
+</span></span><span style="display:flex;"><span>			m_pDBPool-&gt;GetDBName(), m_pDBPool-&gt;GetDBServerPort(), NULL, 0)) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;mysql_real_connect failed: %s&#34;</span>, mysql_error(m_mysql));
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 2;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>设置自动重连<br>
+mysql_options(m_mysql, MYSQL_OPT_RECONNECT, &amp;reconnect);</p>
+<p>更改字符集为utp-8<br>
+mysql_options(m_mysql, MYSQL_SET_CHARSET_NAME, &ldquo;utf8mb4&rdquo;);</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic">#configure for mysql</span>
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">DBInstances</span>=teamtalk_master,teamtalk_slave
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">#teamtalk_master</span>
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_host</span>=127.0.0.1
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_port</span>=3306
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_dbname</span>=teamtalk
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_username</span>=<span style="font-weight:bold;font-style:italic">test</span>
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_password</span>=12345
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_master_maxconncnt</span>=16
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">#teamtalk_slave</span>
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_host</span>=127.0.0.1
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_port</span>=3306
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_dbname</span>=teamtalk
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_username</span>=<span style="font-weight:bold;font-style:italic">test</span>
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_password</span>=12345
+</span></span><span style="display:flex;"><span><span style="color:#666;font-weight:bold;font-style:italic">teamtalk_slave_maxconncnt</span>=16
+</span></span></code></pre></div><p>一共配置了2个存储库：主&amp;从，每个库的最大连接数都是16</p>
+<p>到这里，缓存数据库和存储数据库的初始化工作就完成了。</p>
+<h2 id="3将主线程初始化为单例">3.将主线程初始化为单例</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>	// 主线程初始化单例，不然在工作线程可能会出现多次初始化
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!CAudioModel::getInstance()) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (!CGroupMessageModel::getInstance()) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (!CGroupModel::getInstance()) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (!CMessageModel::getInstance()) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!CSessionModel::getInstance()) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span>(!CRelationModel::getInstance())
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (!CUserModel::getInstance()) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (!CFileModel::getInstance()) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><h2 id="4这段应该是给audio-model用的也写在main里面">4.这段应该是给Audio Model用的，也写在main里面</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>	CConfigFileReader config_file(<span style="color:#666;font-style:italic">&#34;dbproxyserver.conf&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	char* <span style="color:#666;font-weight:bold;font-style:italic">listen_ip</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;ListenIP&#34;</span>);
+</span></span><span style="display:flex;"><span>	char* <span style="color:#666;font-weight:bold;font-style:italic">str_listen_port</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;ListenPort&#34;</span>);
+</span></span><span style="display:flex;"><span>	char* <span style="color:#666;font-weight:bold;font-style:italic">str_thread_num</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;ThreadNum&#34;</span>);
+</span></span><span style="display:flex;"><span>    char* <span style="color:#666;font-weight:bold;font-style:italic">str_file_site</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;MsfsSite&#34;</span>);
+</span></span><span style="display:flex;"><span>    char* <span style="color:#666;font-weight:bold;font-style:italic">str_aes_key</span> = config_file.GetConfigName(<span style="color:#666;font-style:italic">&#34;aesKey&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> -1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span>(strlen(str_aes_key) != 32)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        log(<span style="color:#666;font-style:italic">&#34;aes key is invalied&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span> -2;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    string strAesKey(str_aes_key, 32);
+</span></span><span style="display:flex;"><span>    CAes <span style="color:#666;font-weight:bold;font-style:italic">cAes</span> = CAes(strAesKey);
+</span></span><span style="display:flex;"><span>    string <span style="color:#666;font-weight:bold;font-style:italic">strAudio</span> = <span style="color:#666;font-style:italic">&#34;[语音]&#34;</span>;
+</span></span><span style="display:flex;"><span>    char* pAudioEnc;
+</span></span><span style="display:flex;"><span>    uint32_t nOutLen;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span>(cAes.Encrypt(strAudio.c_str(), strAudio.length(), &amp;pAudioEnc, nOutLen) == 0)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        strAudioEnc.clear();
+</span></span><span style="display:flex;"><span>        strAudioEnc.append(pAudioEnc, nOutLen);
+</span></span><span style="display:flex;"><span>        cAes.Free(pAudioEnc);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	uint16_t <span style="color:#666;font-weight:bold;font-style:italic">listen_port</span> = atoi(str_listen_port);
+</span></span><span style="display:flex;"><span>	uint32_t <span style="color:#666;font-weight:bold;font-style:italic">thread_num</span> = atoi(str_thread_num);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    string strFileSite(str_file_site);
+</span></span><span style="display:flex;"><span>    CAudioModel::getInstance()-&gt;setUrl(strFileSite);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	int <span style="color:#666;font-weight:bold;font-style:italic">ret</span> = netlib_init();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (<span style="color:#666;font-weight:bold;font-style:italic">ret</span> == NETLIB_ERROR)
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> ret;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    /// yunfan add 2014.9.28
+</span></span><span style="display:flex;"><span>    // <span style="font-weight:bold;text-decoration:underline">for</span> 603 push
+</span></span><span style="display:flex;"><span>    curl_global_init(CURL_GLOBAL_ALL);
+</span></span><span style="display:flex;"><span>    /// yunfan add end
+</span></span></code></pre></div><h2 id="5启动任务队列用于处理任务">5.启动任务队列，用于处理任务</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">init_proxy_conn</span>(<span style="font-weight:bold;text-decoration:underline">uint32_t</span> thread_num)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	s_handler_map = CHandlerMap::getInstance();
+</span></span><span style="display:flex;"><span>	g_thread_pool.Init(thread_num);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	netlib_add_loop(proxy_loop_callback, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	signal(SIGTERM, sig_handler);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> netlib_register_timer(proxy_timer_callback, <span style="font-weight:bold;font-style:italic">NULL</span>, 1000);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="51-创建handlermap对象并初始化">5.1 创建HandlerMap对象并初始化</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>CHandlerMap* CHandlerMap::getInstance()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!s_handler_instance) {
+</span></span><span style="display:flex;"><span>		s_handler_instance = <span style="font-weight:bold;text-decoration:underline">new</span> CHandlerMap();
+</span></span><span style="display:flex;"><span>		s_handler_instance-&gt;Init();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> s_handler_instance;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="数据类型的定义">数据类型的定义</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>HandlerMap_t 	m_handler_map;  
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">typedef</span> map&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>, pdu_handler_t&gt; HandlerMap_t;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">typedef</span> <span style="color:#666;font-weight:bold;font-style:italic">void</span> (*pdu_handler_t)(CImPdu* pPdu, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> conn_uuid);
+</span></span></code></pre></div><p>pdu_handler_t是逻辑处理函数的函数指针</p>
+<h4 id="chandlermap的init函数">CHandlerMap的init函数</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *  初始化函数,加载了各种commandId 对应的处理函数
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> */</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CHandlerMap::Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">// Login validate
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_OTHER_VALIDATE_REQ), DB_PROXY::doLogin));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_LOGIN_REQ_PUSH_SHIELD), DB_PROXY::doPushShield));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_LOGIN_REQ_QUERY_PUSH_SHIELD), DB_PROXY::doQueryPushShield));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// recent session
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST), DB_PROXY::getRecentSession));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_REMOVE_SESSION_REQ), DB_PROXY::deleteRecentSession));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// users
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_USER_INFO_REQUEST), DB_PROXY::getUserInfo));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_ALL_USER_REQUEST), DB_PROXY::getChangedUser));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_DEPARTMENT_REQUEST), DB_PROXY::getChgedDepart));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_BUDDY_LIST_CHANGE_SIGN_INFO_REQUEST), DB_PROXY::changeUserSignInfo));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// message content
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_DATA), DB_PROXY::sendMessage));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_LIST_REQUEST), DB_PROXY::getMessage));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_UNREAD_CNT_REQUEST), DB_PROXY::getUnreadMsgCounter));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_READ_ACK), DB_PROXY::clearUnreadMsgCounter));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_GET_BY_MSG_ID_REQ), DB_PROXY::getMessageById));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_MSG_GET_LATEST_MSG_ID_REQ), DB_PROXY::getLatestMsgId));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// device token
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_LOGIN_REQ_DEVICETOKEN), DB_PROXY::setDevicesToken));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_OTHER_GET_DEVICE_TOKEN_REQ), DB_PROXY::getDevicesToken));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">//push 推送设置
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_GROUP_SHIELD_GROUP_REQUEST), DB_PROXY::setGroupPush));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_OTHER_GET_SHIELD_REQ), DB_PROXY::getGroupPush));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// group
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_GROUP_NORMAL_LIST_REQUEST), DB_PROXY::getNormalGroupList));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_GROUP_INFO_REQUEST), DB_PROXY::getGroupInfo));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_GROUP_CREATE_REQUEST), DB_PROXY::createGroup));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_GROUP_CHANGE_MEMBER_REQUEST), DB_PROXY::modifyMember));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// file
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_FILE_HAS_OFFLINE_REQ), DB_PROXY::hasOfflineFile));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_FILE_ADD_OFFLINE_REQ), DB_PROXY::addOfflineFile));
+</span></span><span style="display:flex;"><span>    m_handler_map.insert(make_pair(<span style="font-weight:bold;text-decoration:underline">uint32_t</span>(CID_FILE_DEL_OFFLINE_REQ), DB_PROXY::delOfflineFile));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://blog.csdn.net/weixin_42825576/article/details/81571419">make_pair的使用方法</a></p>
+<h3 id="52-初始化工作线程">5.2 初始化工作线程</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">static</span> CThreadPool g_thread_pool;  <span style="color:#888;font-style:italic">//定义一个基础的线程池类
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>g_thread_pool.Init(thread_num);   <span style="color:#888;font-style:italic">//初始化线程池
+</span></span></span></code></pre></div><p>根据<code>init_proxy_conn</code>函数传入的线程个数创建线程，并加入队列<code>m_worker_list</code>管理</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> CThreadPool::Init(<span style="font-weight:bold;text-decoration:underline">uint32_t</span> worker_size)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    m_worker_size = worker_size;
+</span></span><span style="display:flex;"><span>	m_worker_list = <span style="font-weight:bold;text-decoration:underline">new</span> CWorkerThread [m_worker_size];
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!m_worker_list) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> 1;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (<span style="font-weight:bold;text-decoration:underline">uint32_t</span> i = 0; i &lt; m_worker_size; i++) {
+</span></span><span style="display:flex;"><span>		m_worker_list[i].SetThreadIdx(i);
+</span></span><span style="display:flex;"><span>		m_worker_list[i].Start();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>linux下创建进程函数:<a href="https://www.cnblogs.com/amanlikethis/p/5537175.html">pthread_create</a></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CWorkerThread::Start()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	(<span style="font-weight:bold;text-decoration:underline">void</span>)pthread_create(&amp;m_thread_id, <span style="font-weight:bold;font-style:italic">NULL</span>, StartRoutine, <span style="font-weight:bold;text-decoration:underline">this</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>创建线程时指定的线程函数<code>StartRoutine</code>，pthread_create的第四个参数是线程函数的传入参数，上文在线程创建时传入了<code>this</code>指针，因此下文中的arg为<code>CWorkerThread* this</code>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span>* CWorkerThread::StartRoutine(<span style="font-weight:bold;text-decoration:underline">void</span>* arg)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CWorkerThread* pThread = (CWorkerThread*)arg;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	pThread-&gt;Execute();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="工作线程阻塞等待事件notify">工作线程阻塞等待事件Notify</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">//数据定义
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>CThreadNotify	m_thread_notify;   
+</span></span><span style="display:flex;"><span>list&lt;CTask*&gt;	m_task_list;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CWorkerThread::Execute()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">while</span> (<span style="font-weight:bold;font-style:italic">true</span>) {
+</span></span><span style="display:flex;"><span>		m_thread_notify.Lock();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#888;font-style:italic">// put wait in while cause there can be spurious wake up (due to signal/ENITR)
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>		<span style="font-weight:bold;text-decoration:underline">while</span> (m_task_list.empty()) {
+</span></span><span style="display:flex;"><span>			m_thread_notify.Wait();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		CTask* pTask = m_task_list.front();
+</span></span><span style="display:flex;"><span>		m_task_list.pop_front();
+</span></span><span style="display:flex;"><span>		m_thread_notify.Unlock();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		pTask-&gt;run();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">delete</span> pTask;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_task_cnt++;
+</span></span><span style="display:flex;"><span>		<span style="color:#888;font-style:italic">//log(&#34;%d have the execute %d task\n&#34;, m_thread_idx, m_task_cnt);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="execute一直循环阻塞等待任务到来而addtask向m_worker_list中添加一个task则会停止这种等待状态从而执行ptask-run"><code>Execute()</code>一直循环阻塞等待任务到来，而<code>AddTask()</code>向<code>m_worker_list</code>中添加一个Task则会停止这种等待状态，从而执行pTask-&gt;run()。</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CThreadPool::AddTask(CTask* pTask)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">	 * select a random thread to push task
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">	 * we can also select a thread that has less task to do
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">	 * but that will scan the whole thread list and use thread lock to get each task size
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">	 */</span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">uint32_t</span> thread_idx = random() % m_worker_size;
+</span></span><span style="display:flex;"><span>	m_worker_list[thread_idx].PushTask(pTask);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里m_thread_notify会触发一个signal从而使m_thread_notify从wait状态解除出来，这里要加锁操作，避免其他Task影响。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CWorkerThread::PushTask(CTask* pTask)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	m_thread_notify.Lock();
+</span></span><span style="display:flex;"><span>	m_task_list.push_back(pTask);
+</span></span><span style="display:flex;"><span>	m_thread_notify.Signal();
+</span></span><span style="display:flex;"><span>	m_thread_notify.Unlock();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="53-调用网络库注册callback函数">5.3 调用网络库，注册callback函数</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>netlib_add_loop(proxy_loop_callback, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">//
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">proxy_loop_callback</span>(<span style="font-weight:bold;text-decoration:underline">void</span>* callback_data, <span style="font-weight:bold;text-decoration:underline">uint8_t</span> msg, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> handle, <span style="font-weight:bold;text-decoration:underline">void</span>* pParam)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CProxyConn::SendResponsePduList();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CProxyConn::SendResponsePduList()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	s_list_lock.lock();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">while</span> (!s_response_pdu_list.empty()) {
+</span></span><span style="display:flex;"><span>		ResponsePdu_t* pResp = s_response_pdu_list.front();
+</span></span><span style="display:flex;"><span>		s_response_pdu_list.pop_front();
+</span></span><span style="display:flex;"><span>		s_list_lock.unlock();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		CProxyConn* pConn = get_proxy_conn_by_uuid(pResp-&gt;conn_uuid);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pConn) {
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span> (pResp-&gt;pPdu) {
+</span></span><span style="display:flex;"><span>				pConn-&gt;SendPdu(pResp-&gt;pPdu);
+</span></span><span style="display:flex;"><span>			} <span style="font-weight:bold;text-decoration:underline">else</span> {
+</span></span><span style="display:flex;"><span>				log(<span style="color:#666;font-style:italic">&#34;close connection uuid=%d by parse pdu error</span><span style="color:#666;font-style:italic">\b</span><span style="color:#666;font-style:italic">&#34;</span>, pResp-&gt;conn_uuid);
+</span></span><span style="display:flex;"><span>				pConn-&gt;Close();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pResp-&gt;pPdu)
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">delete</span> pResp-&gt;pPdu;
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">delete</span> pResp;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		s_list_lock.lock();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	s_list_lock.unlock();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">netlib_add_loop</span>(callback_t callback, <span style="font-weight:bold;text-decoration:underline">void</span>* user_data)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CEventDispatch::Instance()-&gt;AddLoop(callback, user_data);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CEventDispatch::AddLoop(callback_t callback, <span style="font-weight:bold;text-decoration:underline">void</span>* user_data)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    TimerItem* pItem = <span style="font-weight:bold;text-decoration:underline">new</span> TimerItem;
+</span></span><span style="display:flex;"><span>    pItem-&gt;callback = callback;
+</span></span><span style="display:flex;"><span>    pItem-&gt;user_data = user_data;
+</span></span><span style="display:flex;"><span>    m_loop_list.push_back(pItem);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="54-signal函数httpswwwrunoobcomcprogrammingc-function-signalhtml">5.4 <a href="https://www.runoob.com/cprogramming/c-function-signal.html">signal函数</a></h3>
+<p>为SIGTERM信号设置处理函数sig_handler</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>signal(SIGTERM, sig_handler);
+</span></span></code></pre></div><p>信号处理函数</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">static</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">sig_handler</span>(<span style="font-weight:bold;text-decoration:underline">int</span> sig_no)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (sig_no == SIGTERM) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;receive SIGTERM, prepare for exit&#34;</span>);
+</span></span><span style="display:flex;"><span>        CImPdu cPdu;
+</span></span><span style="display:flex;"><span>        IM::Server::IMStopReceivePacket msg;
+</span></span><span style="display:flex;"><span>        msg.set_result(0);
+</span></span><span style="display:flex;"><span>        cPdu.SetPBMsg(&amp;msg);
+</span></span><span style="display:flex;"><span>        cPdu.SetServiceId(IM::BaseDefine::SID_OTHER);
+</span></span><span style="display:flex;"><span>        cPdu.SetCommandId(IM::BaseDefine::CID_OTHER_STOP_RECV_PACKET);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">for</span> (ConnMap_t::iterator it = g_proxy_conn_map.begin(); it != g_proxy_conn_map.end(); it++) {
+</span></span><span style="display:flex;"><span>            CProxyConn* pConn = (CProxyConn*)it-&gt;second;
+</span></span><span style="display:flex;"><span>            pConn-&gt;SendPdu(&amp;cPdu);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#888;font-style:italic">// Add By ZhangYuanhao
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>        <span style="color:#888;font-style:italic">// Before stop we need to stop the sync thread,otherwise maybe will not sync the internal data any more
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>        CSyncCenter::getInstance()-&gt;stopSync();
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#888;font-style:italic">// callback after 4 second to exit process;
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>		netlib_register_timer(exit_callback, <span style="font-weight:bold;font-style:italic">NULL</span>, 4000);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="55-注册定时器用于保活">5.5 注册定时器，用于保活</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>netlib_register_timer(proxy_timer_callback, <span style="font-weight:bold;font-style:italic">NULL</span>, 1000);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">//
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">netlib_register_timer</span>(callback_t callback, <span style="font-weight:bold;text-decoration:underline">void</span>* user_data, <span style="font-weight:bold;text-decoration:underline">uint64_t</span> interval)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CEventDispatch::Instance()-&gt;AddTimer(callback, user_data, interval);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">//
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">void</span> CEventDispatch::AddTimer(callback_t callback, <span style="font-weight:bold;text-decoration:underline">void</span>* user_data, <span style="font-weight:bold;text-decoration:underline">uint64_t</span> interval)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	list&lt;TimerItem*&gt;::iterator it;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (it = m_timer_list.begin(); it != m_timer_list.end(); it++)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		TimerItem* pItem = *it;
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (pItem-&gt;callback == callback &amp;&amp; pItem-&gt;user_data == user_data)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			pItem-&gt;interval = interval;
+</span></span><span style="display:flex;"><span>			pItem-&gt;next_tick = get_tick_count() + interval;
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	TimerItem* pItem = <span style="font-weight:bold;text-decoration:underline">new</span> TimerItem;
+</span></span><span style="display:flex;"><span>	pItem-&gt;callback = callback;
+</span></span><span style="display:flex;"><span>	pItem-&gt;user_data = user_data;
+</span></span><span style="display:flex;"><span>	pItem-&gt;interval = interval;
+</span></span><span style="display:flex;"><span>	pItem-&gt;next_tick = get_tick_count() + interval;
+</span></span><span style="display:flex;"><span>	m_timer_list.push_back(pItem);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">proxy_timer_callback</span>(<span style="font-weight:bold;text-decoration:underline">void</span>* callback_data, <span style="font-weight:bold;text-decoration:underline">uint8_t</span> msg, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> handle, <span style="font-weight:bold;text-decoration:underline">void</span>* pParam)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">uint64_t</span> cur_time = get_tick_count();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (ConnMap_t::iterator it = g_proxy_conn_map.begin(); it != g_proxy_conn_map.end(); ) {
+</span></span><span style="display:flex;"><span>		ConnMap_t::iterator it_old = it;
+</span></span><span style="display:flex;"><span>		it++;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		CProxyConn* pConn = (CProxyConn*)it_old-&gt;second;
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnTimer(cur_time);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如果当前时间大于<code>SERVER_HEARTBEAT_INTERVAL</code>，则发出一个心跳包;<br>
+如果当前时间大于<code>SERVER_TIMEOUT</code>,则Time out,断开连接;</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CProxyConn::OnTimer(<span style="font-weight:bold;text-decoration:underline">uint64_t</span> curr_tick)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (curr_tick &gt; m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        CImPdu cPdu;
+</span></span><span style="display:flex;"><span>        IM::Other::IMHeartBeat msg;
+</span></span><span style="display:flex;"><span>        cPdu.SetPBMsg(&amp;msg);
+</span></span><span style="display:flex;"><span>        cPdu.SetServiceId(IM::BaseDefine::SID_OTHER);
+</span></span><span style="display:flex;"><span>        cPdu.SetCommandId(IM::BaseDefine::CID_OTHER_HEARTBEAT);
+</span></span><span style="display:flex;"><span>		SendPdu(&amp;cPdu);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (curr_tick &gt; m_last_recv_tick + SERVER_TIMEOUT) {
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;proxy connection timeout %s:%d&#34;</span>, m_peer_ip.c_str(), m_peer_port);
+</span></span><span style="display:flex;"><span>		Close();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="6-存储服务器同步至缓存服务器">6. 存储服务器同步至缓存服务器</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>CSyncCenter::getInstance()-&gt;init();
+</span></span><span style="display:flex;"><span>CSyncCenter::getInstance()-&gt;startSync();
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> * 初始化函数，从cache里面加载上次同步的时间信息等
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> */</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CSyncCenter::init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// Load total update time
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    CacheManager* pCacheManager = CacheManager::getInstance();
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-style:italic">// increase message count
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    CacheConn* pCacheConn = pCacheManager-&gt;GetCacheConn(<span style="color:#666;font-style:italic">&#34;unread&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (pCacheConn)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        string strTotalUpdate = pCacheConn-&gt;get(<span style="color:#666;font-style:italic">&#34;total_user_updated&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        string strLastUpdateGroup = pCacheConn-&gt;get(<span style="color:#666;font-style:italic">&#34;last_update_group&#34;</span>);
+</span></span><span style="display:flex;"><span>        pCacheManager-&gt;RelCacheConn(pCacheConn);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span>(strTotalUpdate != <span style="color:#666;font-style:italic">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            m_nLastUpdate = string2int(strTotalUpdate);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            updateTotalUpdate(time(<span style="font-weight:bold;font-style:italic">NULL</span>));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">if</span>(strLastUpdateGroup.empty())
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            m_nLastUpdateGroup = string2int(strLastUpdateGroup);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            updateLastUpdateGroup(time(<span style="font-weight:bold;font-style:italic">NULL</span>));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        log(<span style="color:#666;font-style:italic">&#34;no cache connection to get total_user_updated&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *  开启内网数据同步以及群组聊天记录同步
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> */</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CSyncCenter::startSync()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">#ifdef _WIN32
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold"></span>    (<span style="font-weight:bold;text-decoration:underline">void</span>)CreateThread(<span style="font-weight:bold;font-style:italic">NULL</span>, 0, doSyncGroupChat, <span style="font-weight:bold;font-style:italic">NULL</span>, 0, &amp;m_nGroupChatThreadId);
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">#else
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold"></span>    (<span style="font-weight:bold;text-decoration:underline">void</span>)pthread_create(&amp;m_nGroupChatThreadId, <span style="font-weight:bold;font-style:italic">NULL</span>, doSyncGroupChat, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold"></span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *  同步群组聊天信息
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *  @param arg NULL
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> *  @return NULL
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"> */</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span>* CSyncCenter::doSyncGroupChat(<span style="font-weight:bold;text-decoration:underline">void</span>* arg)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    m_bSyncGroupChatRuning = <span style="font-weight:bold;font-style:italic">true</span>;
+</span></span><span style="display:flex;"><span>    CDBManager* pDBManager = CDBManager::getInstance();
+</span></span><span style="display:flex;"><span>    map&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>, <span style="font-weight:bold;text-decoration:underline">uint32_t</span>&gt; mapChangedGroup;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">do</span>{
+</span></span><span style="display:flex;"><span>        mapChangedGroup.clear();
+</span></span><span style="display:flex;"><span>        CDBConn* pDBConn = pDBManager-&gt;GetDBConn(<span style="color:#666;font-style:italic">&#34;teamtalk_slave&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">if</span>(pDBConn)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            string strSql = <span style="color:#666;font-style:italic">&#34;select id, lastChated from IMGroup where status=0 and lastChated &gt;=&#34;</span> + int2string(m_pInstance-&gt;getLastUpdateGroup());
+</span></span><span style="display:flex;"><span>            CResultSet* pResult = pDBConn-&gt;ExecuteQuery(strSql.c_str());
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">if</span>(pResult)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">while</span> (pResult-&gt;Next()) {
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nGroupId = pResult-&gt;GetInt(<span style="color:#666;font-style:italic">&#34;id&#34;</span>);
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nLastChat = pResult-&gt;GetInt(<span style="color:#666;font-style:italic">&#34;lastChated&#34;</span>);
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold;text-decoration:underline">if</span>(nLastChat != 0)
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        mapChangedGroup[nGroupId] = nLastChat;
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">delete</span> pResult;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            pDBManager-&gt;RelDBConn(pDBConn);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            log(<span style="color:#666;font-style:italic">&#34;no db connection for teamtalk_slave&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        m_pInstance-&gt;updateLastUpdateGroup(time(<span style="font-weight:bold;font-style:italic">NULL</span>));
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">for</span> (<span style="font-weight:bold;text-decoration:underline">auto</span> it=mapChangedGroup.begin(); it!=mapChangedGroup.end(); ++it)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nGroupId =it-&gt;first;
+</span></span><span style="display:flex;"><span>            list&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>&gt; lsUsers;
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nUpdate = it-&gt;second;
+</span></span><span style="display:flex;"><span>            CGroupModel::getInstance()-&gt;getGroupUser(nGroupId, lsUsers);
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">for</span> (<span style="font-weight:bold;text-decoration:underline">auto</span> it1=lsUsers.begin(); it1!=lsUsers.end(); ++it1)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nUserId = *it1;
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">uint32_t</span> nSessionId = INVALID_VALUE;
+</span></span><span style="display:flex;"><span>                nSessionId = CSessionModel::getInstance()-&gt;getSessionId(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, <span style="font-weight:bold;font-style:italic">true</span>);
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">if</span>(nSessionId != INVALID_VALUE)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    CSessionModel::getInstance()-&gt;updateSession(nSessionId, nUpdate);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    CSessionModel::getInstance()-&gt;addSession(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">//    } while (!m_pInstance-&gt;m_pCondSync-&gt;waitTime(5*1000));
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    } <span style="font-weight:bold;text-decoration:underline">while</span> (m_pInstance-&gt;m_bSyncGroupChatWaitting &amp;&amp; !(m_pInstance-&gt;m_pCondGroupChat-&gt;waitTime(5*1000)));
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">//    } while(m_pInstance-&gt;m_bSyncGroupChatWaitting);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>    m_bSyncGroupChatRuning = <span style="font-weight:bold;font-style:italic">false</span>;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-监听端口接收数据收发">7. 监听端口，接收数据收发</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>	CStrExplode listen_ip_list(listen_ip, <span style="color:#666;font-style:italic">&#39;;&#39;</span>);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (<span style="font-weight:bold;text-decoration:underline">uint32_t</span> i = 0; i &lt; listen_ip_list.GetItemCnt(); i++) {
+</span></span><span style="display:flex;"><span>		ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, proxy_serv_callback, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (ret == NETLIB_ERROR)
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> ret;
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> CBaseSocket::Listen(<span style="font-weight:bold;text-decoration:underline">const</span> <span style="font-weight:bold;text-decoration:underline">char</span>* server_ip, <span style="font-weight:bold;text-decoration:underline">uint16_t</span> port, callback_t callback, <span style="font-weight:bold;text-decoration:underline">void</span>* callback_data)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	m_local_ip = server_ip;
+</span></span><span style="display:flex;"><span>	m_local_port = port;
+</span></span><span style="display:flex;"><span>	m_callback = callback;
+</span></span><span style="display:flex;"><span>	m_callback_data = callback_data;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	m_socket = socket(AF_INET, SOCK_STREAM, 0);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (m_socket == INVALID_SOCKET)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		printf(<span style="color:#666;font-style:italic">&#34;socket failed, err_code=%d</span><span style="color:#666;font-style:italic">\n</span><span style="color:#666;font-style:italic">&#34;</span>, _GetErrorCode());
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> NETLIB_ERROR;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	_SetReuseAddr(m_socket);
+</span></span><span style="display:flex;"><span>	_SetNonblock(m_socket);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	sockaddr_in serv_addr;
+</span></span><span style="display:flex;"><span>	_SetAddr(server_ip, port, &amp;serv_addr);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">int</span> ret = ::bind(m_socket, (sockaddr*)&amp;serv_addr, <span style="font-weight:bold;text-decoration:underline">sizeof</span>(serv_addr));
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (ret == SOCKET_ERROR)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;bind failed, err_code=%d&#34;</span>, _GetErrorCode());
+</span></span><span style="display:flex;"><span>		closesocket(m_socket);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> NETLIB_ERROR;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	ret = listen(m_socket, 64);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (ret == SOCKET_ERROR)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;listen failed, err_code=%d&#34;</span>, _GetErrorCode());
+</span></span><span style="display:flex;"><span>		closesocket(m_socket);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> NETLIB_ERROR;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	m_state = SOCKET_STATE_LISTENING;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	log(<span style="color:#666;font-style:italic">&#34;CBaseSocket::Listen on %s:%d&#34;</span>, server_ip, port);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	AddBaseSocket(<span style="font-weight:bold;text-decoration:underline">this</span>);
+</span></span><span style="display:flex;"><span>	CEventDispatch::Instance()-&gt;AddEvent(m_socket, SOCKET_READ | SOCKET_EXCEP);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> NETLIB_OK;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CEventDispatch::AddEvent(SOCKET fd, <span style="font-weight:bold;text-decoration:underline">uint8_t</span> socket_event)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CAutoLock <span style="color:#666;font-weight:bold;font-style:italic">func_lock</span>(&amp;m_lock);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> ((socket_event &amp; SOCKET_READ) != 0)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		FD_SET(fd, &amp;m_read_set);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> ((socket_event &amp; SOCKET_WRITE) != 0)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		FD_SET(fd, &amp;m_write_set);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> ((socket_event &amp; SOCKET_EXCEP) != 0)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		FD_SET(fd, &amp;m_excep_set);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">netlib_eventloop</span>(<span style="font-weight:bold;text-decoration:underline">uint32_t</span> wait_timeout)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	CEventDispatch::Instance()-&gt;StartDispatch(wait_timeout);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CEventDispatch::StartDispatch(<span style="font-weight:bold;text-decoration:underline">uint32_t</span> wait_timeout)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	fd_set read_set, write_set, excep_set;
+</span></span><span style="display:flex;"><span>	timeval timeout;
+</span></span><span style="display:flex;"><span>	timeout.tv_sec = 0;
+</span></span><span style="display:flex;"><span>	timeout.tv_usec = wait_timeout * 1000;	<span style="color:#888;font-style:italic">// 10 millisecond
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span>(running)
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>    running = <span style="font-weight:bold;font-style:italic">true</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">while</span> (running)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		_CheckTimer();
+</span></span><span style="display:flex;"><span>        _CheckLoop();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (!m_read_set.fd_count &amp;&amp; !m_write_set.fd_count &amp;&amp; !m_excep_set.fd_count)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			Sleep(MIN_TIMER_DURATION);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">continue</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_lock.lock();
+</span></span><span style="display:flex;"><span>		memcpy(&amp;read_set, &amp;m_read_set, <span style="font-weight:bold;text-decoration:underline">sizeof</span>(fd_set));
+</span></span><span style="display:flex;"><span>		memcpy(&amp;write_set, &amp;m_write_set, <span style="font-weight:bold;text-decoration:underline">sizeof</span>(fd_set));
+</span></span><span style="display:flex;"><span>		memcpy(&amp;excep_set, &amp;m_excep_set, <span style="font-weight:bold;text-decoration:underline">sizeof</span>(fd_set));
+</span></span><span style="display:flex;"><span>		m_lock.unlock();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">int</span> nfds = select(0, &amp;read_set, &amp;write_set, &amp;excep_set, &amp;timeout);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (nfds == SOCKET_ERROR)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			log(<span style="color:#666;font-style:italic">&#34;select failed, error code: %d&#34;</span>, GetLastError());
+</span></span><span style="display:flex;"><span>			Sleep(MIN_TIMER_DURATION);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">continue</span>;			<span style="color:#888;font-style:italic">// select again
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (nfds == 0)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">continue</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">for</span> (u_int i = 0; i &lt; read_set.fd_count; i++)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#888;font-style:italic">//log(&#34;select return read count=%d\n&#34;, read_set.fd_count);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>			SOCKET fd = read_set.fd_array[i];
+</span></span><span style="display:flex;"><span>			CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span> (pSocket)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				pSocket-&gt;OnRead();
+</span></span><span style="display:flex;"><span>				pSocket-&gt;ReleaseRef();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">for</span> (u_int i = 0; i &lt; write_set.fd_count; i++)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#888;font-style:italic">//log(&#34;select return write count=%d\n&#34;, write_set.fd_count);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>			SOCKET fd = write_set.fd_array[i];
+</span></span><span style="display:flex;"><span>			CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span> (pSocket)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				pSocket-&gt;OnWrite();
+</span></span><span style="display:flex;"><span>				pSocket-&gt;ReleaseRef();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">for</span> (u_int i = 0; i &lt; excep_set.fd_count; i++)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#888;font-style:italic">//log(&#34;select return exception count=%d\n&#34;, excep_set.fd_count);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>			SOCKET fd = excep_set.fd_array[i];
+</span></span><span style="display:flex;"><span>			CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span> (pSocket)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				pSocket-&gt;OnClose();
+</span></span><span style="display:flex;"><span>				pSocket-&gt;ReleaseRef();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里真正去call db_proxy_server.app的回调函数</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CBaseSocket::OnRead()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (m_state == SOCKET_STATE_LISTENING)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		_AcceptNewSocket();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		u_long avail = 0;
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> ( (ioctlsocket(m_socket, FIONREAD, &amp;avail) == SOCKET_ERROR) || (avail == 0) )
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			m_callback(m_callback_data, NETLIB_MSG_CLOSE, (net_handle_t)m_socket, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			m_callback(m_callback_data, NETLIB_MSG_READ, (net_handle_t)m_socket, <span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>回调函数</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">// this callback will be replaced by imconn_callback() in OnConnect()
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">proxy_serv_callback</span>(<span style="font-weight:bold;text-decoration:underline">void</span>* callback_data, <span style="font-weight:bold;text-decoration:underline">uint8_t</span> msg, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> handle, <span style="font-weight:bold;text-decoration:underline">void</span>* pParam)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (msg == NETLIB_MSG_CONNECT)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		CProxyConn* pConn = <span style="font-weight:bold;text-decoration:underline">new</span> CProxyConn();
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnConnect(handle);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;!!!error msg: %d&#34;</span>, msg);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CProxyConn::OnConnect(net_handle_t handle)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	m_handle = handle;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	g_proxy_conn_map.insert(make_pair(handle, <span style="font-weight:bold;text-decoration:underline">this</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (<span style="font-weight:bold;text-decoration:underline">void</span>*)imconn_callback);
+</span></span><span style="display:flex;"><span>	netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (<span style="font-weight:bold;text-decoration:underline">void</span>*)&amp;g_proxy_conn_map);
+</span></span><span style="display:flex;"><span>	netlib_option(handle, NETLIB_OPT_GET_REMOTE_IP, (<span style="font-weight:bold;text-decoration:underline">void</span>*)&amp;m_peer_ip);
+</span></span><span style="display:flex;"><span>	netlib_option(handle, NETLIB_OPT_GET_REMOTE_PORT, (<span style="font-weight:bold;text-decoration:underline">void</span>*)&amp;m_peer_port);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	log(<span style="color:#666;font-style:italic">&#34;connect from %s:%d, handle=%d&#34;</span>, m_peer_ip.c_str(), m_peer_port, m_handle);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">imconn_callback</span>(<span style="font-weight:bold;text-decoration:underline">void</span>* callback_data, <span style="font-weight:bold;text-decoration:underline">uint8_t</span> msg, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> handle, <span style="font-weight:bold;text-decoration:underline">void</span>* pParam)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	NOTUSED_ARG(handle);
+</span></span><span style="display:flex;"><span>	NOTUSED_ARG(pParam);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!callback_data)
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	ConnMap_t* conn_map = (ConnMap_t*)callback_data;
+</span></span><span style="display:flex;"><span>	CImConn* pConn = FindImConn(conn_map, handle);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span> (!pConn)
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#888;font-style:italic">//log(&#34;msg=%d, handle=%d &#34;, msg, handle);
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">switch</span> (msg)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">case</span> NETLIB_MSG_CONFIRM:
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnConfirm();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">case</span> NETLIB_MSG_READ:
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnRead();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">case</span> NETLIB_MSG_WRITE:
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnWrite();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">case</span> NETLIB_MSG_CLOSE:
+</span></span><span style="display:flex;"><span>		pConn-&gt;OnClose();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">default</span>:
+</span></span><span style="display:flex;"><span>		log(<span style="color:#666;font-style:italic">&#34;!!!imconn_callback error msg: %d &#34;</span>, msg);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	pConn-&gt;ReleaseRef();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">// 由于数据包是在另一个线程处理的，所以不能在主线程delete数据包，所以需要Override这个方法
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">void</span> CProxyConn::OnRead()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">for</span> (;;) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">uint32_t</span> free_buf_len = m_in_buf.GetAllocSize() - m_in_buf.GetWriteOffset();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (free_buf_len &lt; READ_BUF_SIZE)
+</span></span><span style="display:flex;"><span>			m_in_buf.Extend(READ_BUF_SIZE);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">int</span> ret = netlib_recv(m_handle, m_in_buf.GetBuffer() + m_in_buf.GetWriteOffset(), READ_BUF_SIZE);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (ret &lt;= 0)
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_recv_bytes += ret;
+</span></span><span style="display:flex;"><span>		m_in_buf.IncWriteOffset(ret);
+</span></span><span style="display:flex;"><span>		m_last_recv_tick = get_tick_count();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">uint32_t</span> pdu_len = 0;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">while</span> ( CImPdu::IsPduAvailable(m_in_buf.GetBuffer(), m_in_buf.GetWriteOffset(), pdu_len) ) {
+</span></span><span style="display:flex;"><span>            HandlePduBuf(m_in_buf.GetBuffer(), pdu_len);
+</span></span><span style="display:flex;"><span>            m_in_buf.Read(<span style="font-weight:bold;font-style:italic">NULL</span>, pdu_len);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } <span style="font-weight:bold;text-decoration:underline">catch</span> (CPduException&amp; ex) {
+</span></span><span style="display:flex;"><span>        log(<span style="color:#666;font-style:italic">&#34;!!!catch exception, err_code=%u, err_msg=%s, close the connection &#34;</span>,
+</span></span><span style="display:flex;"><span>            ex.GetErrorCode(), ex.GetErrorMsg());
+</span></span><span style="display:flex;"><span>        OnClose();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>读完数据包之后处理包,核心处理函数</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> CProxyConn::HandlePduBuf(uchar_t* pdu_buf, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> pdu_len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    CImPdu* pPdu = <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    pPdu = CImPdu::ReadPdu(pdu_buf, pdu_len);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (pPdu-&gt;GetCommandId() == IM::BaseDefine::CID_OTHER_HEARTBEAT) {
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    pdu_handler_t handler = s_handler_map-&gt;GetHandler(pPdu-&gt;GetCommandId());
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span> (handler) {
+</span></span><span style="display:flex;"><span>        CTask* pTask = <span style="font-weight:bold;text-decoration:underline">new</span> CProxyTask(m_uuid, handler, pPdu);
+</span></span><span style="display:flex;"><span>        g_thread_pool.AddTask(pTask);
+</span></span><span style="display:flex;"><span>    } <span style="font-weight:bold;text-decoration:underline">else</span> {
+</span></span><span style="display:flex;"><span>        log(<span style="color:#666;font-style:italic">&#34;no handler for packet type: %d&#34;</span>, pPdu-&gt;GetCommandId());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="业务逻辑函数">业务逻辑函数</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">doLogin</span>(CImPdu* pPdu, <span style="font-weight:bold;text-decoration:underline">uint32_t</span> conn_uuid)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    CImPdu* pPduResp = <span style="font-weight:bold;text-decoration:underline">new</span> CImPdu;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    IM::Server::IMValidateReq msg;
+</span></span><span style="display:flex;"><span>    IM::Server::IMValidateRsp msgResp;
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">if</span>(msg.ParseFromArray(pPdu-&gt;GetBodyData(), pPdu-&gt;GetBodyLength()))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        string strDomain = msg.user_name();
+</span></span><span style="display:flex;"><span>        string strPass = msg.password();
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        msgResp.set_user_name(strDomain);
+</span></span><span style="display:flex;"><span>        msgResp.set_attach_data(msg.attach_data());
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">do</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            CAutoLock cAutoLock(&amp;g_cLimitLock);
+</span></span><span style="display:flex;"><span>            list&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>&gt;&amp; lsErrorTime = g_hmLimits[strDomain];
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">uint32_t</span> tmNow = time(<span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#888;font-style:italic">//清理超过30分钟的错误时间点记录
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>            <span style="color:#888;font-style:italic">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">             清理放在这里还是放在密码错误后添加的时候呢？
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">             放在这里，每次都要遍历，会有一点点性能的损失。
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">             放在后面，可能会造成30分钟之前有10次错的，但是本次是对的就没办法再访问了。
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">             */</span>
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">auto</span> itTime=lsErrorTime.begin();
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">for</span>(; itTime!=lsErrorTime.end();++itTime)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">if</span>(tmNow - *itTime &gt; 30*60)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold;text-decoration:underline">break</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="font-weight:bold;text-decoration:underline">if</span>(itTime != lsErrorTime.end())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                lsErrorTime.erase(itTime, lsErrorTime.end());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#888;font-style:italic">// 判断30分钟内密码错误次数是否大于10
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>            <span style="font-weight:bold;text-decoration:underline">if</span>(lsErrorTime.size() &gt; 10)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                itTime = lsErrorTime.begin();
+</span></span><span style="display:flex;"><span>                <span style="font-weight:bold;text-decoration:underline">if</span>(tmNow - *itTime &lt;= 30*60)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    msgResp.set_result_code(6);
+</span></span><span style="display:flex;"><span>                    msgResp.set_result_string(<span style="color:#666;font-style:italic">&#34;用户名/密码错误次数太多&#34;</span>);
+</span></span><span style="display:flex;"><span>                    pPduResp-&gt;SetPBMsg(&amp;msgResp);
+</span></span><span style="display:flex;"><span>                    pPduResp-&gt;SetSeqNum(pPdu-&gt;GetSeqNum());
+</span></span><span style="display:flex;"><span>                    pPduResp-&gt;SetServiceId(IM::BaseDefine::SID_OTHER);
+</span></span><span style="display:flex;"><span>                    pPduResp-&gt;SetCommandId(IM::BaseDefine::CID_OTHER_VALIDATE_RSP);
+</span></span><span style="display:flex;"><span>                    CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
+</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold;text-decoration:underline">return</span> ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="font-weight:bold;text-decoration:underline">while</span>(<span style="font-weight:bold;font-style:italic">false</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        log(<span style="color:#666;font-style:italic">&#34;%s request login.&#34;</span>, strDomain.c_str());
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        IM::BaseDefine::UserInfo cUser;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">if</span>(g_loginStrategy.doLogin(strDomain, strPass, cUser))
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            IM::BaseDefine::UserInfo* pUser = msgResp.mutable_user_info();
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_id(cUser.user_id());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_gender(cUser.user_gender());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_department_id(cUser.department_id());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_nick_name(cUser.user_nick_name());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_domain(cUser.user_domain());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_avatar_url(cUser.avatar_url());
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_email(cUser.email());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_tel(cUser.user_tel());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_user_real_name(cUser.user_real_name());
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_status(0);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            pUser-&gt;set_sign_info(cUser.sign_info());
+</span></span><span style="display:flex;"><span>           
+</span></span><span style="display:flex;"><span>            msgResp.set_result_code(0);
+</span></span><span style="display:flex;"><span>            msgResp.set_result_string(<span style="color:#666;font-style:italic">&#34;成功&#34;</span>);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#888;font-style:italic">//如果登陆成功，则清除错误尝试限制
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>            CAutoLock cAutoLock(&amp;g_cLimitLock);
+</span></span><span style="display:flex;"><span>            list&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>&gt;&amp; lsErrorTime = g_hmLimits[strDomain];
+</span></span><span style="display:flex;"><span>            lsErrorTime.clear();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#888;font-style:italic">//密码错误，记录一次登陆失败
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>            <span style="font-weight:bold;text-decoration:underline">uint32_t</span> tmCurrent = time(<span style="font-weight:bold;font-style:italic">NULL</span>);
+</span></span><span style="display:flex;"><span>            CAutoLock cAutoLock(&amp;g_cLimitLock);
+</span></span><span style="display:flex;"><span>            list&lt;<span style="font-weight:bold;text-decoration:underline">uint32_t</span>&gt;&amp; lsErrorTime = g_hmLimits[strDomain];
+</span></span><span style="display:flex;"><span>            lsErrorTime.push_front(tmCurrent);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            log(<span style="color:#666;font-style:italic">&#34;get result false&#34;</span>);
+</span></span><span style="display:flex;"><span>            msgResp.set_result_code(1);
+</span></span><span style="display:flex;"><span>            msgResp.set_result_string(<span style="color:#666;font-style:italic">&#34;用户名/密码错误&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        msgResp.set_result_code(2);
+</span></span><span style="display:flex;"><span>        msgResp.set_result_string(<span style="color:#666;font-style:italic">&#34;服务端内部错误&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    pPduResp-&gt;SetPBMsg(&amp;msgResp);
+</span></span><span style="display:flex;"><span>    pPduResp-&gt;SetSeqNum(pPdu-&gt;GetSeqNum());
+</span></span><span style="display:flex;"><span>    pPduResp-&gt;SetServiceId(IM::BaseDefine::SID_OTHER);
+</span></span><span style="display:flex;"><span>    pPduResp-&gt;SetCommandId(IM::BaseDefine::CID_OTHER_VALIDATE_RSP);
+</span></span><span style="display:flex;"><span>    CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h2 id="end--过路小菜">End&ndash;过路小菜</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>signal(SIGCHLD, SIG_IGN);
+</span></span></code></pre></div><p>因为并发服务器常常fork很多子进程，子进程终结之后需要服务器进程去wait清理资源。如果将此信号的处理方式设为忽略，可让内核把僵尸子进程转交给init进程去处理，省去了大量僵尸进程占用系统资源。(Linux Only)</p>
+<p>对于某些进程，特别是服务器进程往往在请求到来时生成子进程处理请求。如果父进程不等待子进程结束，子进程将成为僵尸进程（zombie）从而占用系统资源。如果父进程等待子进程结束，将增加父进程的负担，影响服务器进程的并发性能。在Linux下可以简单地将 SIGCHLD信号的操作设为SIG_IGN。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>signal(SIGPIPE, SIG_IGN);
+</span></span></code></pre></div><p>TCP是全双工的信道, 可以看作两条单工信道, TCP连接两端的两个端点各负责一条. 当对端调用close时, 虽然本意是关闭整个两条信道,
+但本端只是收到FIN包. 按照TCP协议的语义, 表示对端只是关闭了其所负责的那一条单工信道, 仍然可以继续接收数据. 也就是说, 因为TCP协议的限制,
+一个端点无法获知对端的socket是调用了close还是shutdown.</p>
+<p>对一个已经收到FIN包的socket调用read方法,
+如果接收缓冲已空, 则返回0, 这就是常说的表示连接关闭. 但第一次对其调用write方法时, 如果发送缓冲没问题, 会返回正确写入(发送).
+但发送的报文会导致对端发送RST报文, 因为对端的socket已经调用了close, 完全关闭, 既不发送, 也不接收数据. 所以,
+第二次调用write方法(假设在收到RST之后), 会生成SIGPIPE信号, 导致进程退出.</p>
+<p>为了避免进程退出, 可以捕获SIGPIPE信号, 或者忽略它, 给它设置SIG_IGN信号处理函数:</p>
+<p>signal(SIGPIPE, SIG_IGN);</p>
+<p>这样, 第二次调用write方法时, 会返回-1, 同时errno置为SIGPIPE. 程序便能知道对端已经关闭.</p>
+<h3 id="为什么redisconnectwithtimeout只给了ipport而没给账户密码">为什么redisConnectWithTimeout只给了ip+port而没给账户密码</h3>
+<p>关于“访问redis不需要用户名密码吗”这个问题,我认为:默认不需要的。
+你可以在redis.conf 中 修改下面的配置,加上认证。
+(把下面配置去掉注释,然后修改foobared为你指定的密码,重启redis-ass=&ldquo;aliyun-text-card&rdquo; data-text-url=&ldquo;searchblock/database/dts&rdquo; href= &ldquo;<a href="https://www.aliyun.com/product/dts%22%3Eserver">https://www.aliyun.com/product/dts&quot;&gt;server</a>即可生效。)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888;font-style:italic"># requirepass foobared</span>
+</span></span></code></pre></div><p>然后,客户端连接的时候,输入auth 密码 即可认证。</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

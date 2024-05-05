@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>IM-数据协议设计 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">IM-数据协议设计</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-06-05T01:38:02&#43;00:00">June 5, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="前言">前言</h1>
+<p>本文主要介绍IM通讯软件的数据封装。我们知道，TCP协议是一种流式协议，即以字节流的形式在网络中传输。TCP协议本身不存在边界，因此对于数据收发端，必须定义一种共识的协议，用于双方对数据进行编码与解码。一般来说，编码动作由发送端完成，解码则由接收端完成。
+本文介绍的数据封装形式表现为：协议头 + 协议体。下面首先介绍协议头的设计。</p>
+<!-- raw HTML omitted -->
+<hr>
+<h1 id="协议头设计">协议头设计</h1>
+<p>首先考虑一个例子，客户端需要给服务器提供一个表单信息如下：
+name : 如Bingzhi Li(变长字段)
+年龄 : 22
+电话 : 嵌入类型：手机 座机
+语言 : 中文 英文
+&hellip;</p>
+<p>由于表单中存在很多变长字段，因此无法用结构体的形式对数据进行定长定义。</p>
+<p>再考虑这样一个问题，客户端向服务器发送两个数据包：1.文字信息包（33字节）；2.登录信息包（22字节）。上文有提到，TCP是一种流式协议，如果在传输过程中发生“粘包”的现象，即客户端一次收到33+22=55字节的信息，这时如果没有定义双端的协议，则接收端根本没有办法将这55字节的协议拆分成两个包，这时就体现出了协议的重要性。
+简单总结以下定义数据协议的原因：
+1.保证消息完整性(在消息头定义包长度，解决TCP粘包问题)。
+2.封装body使用的序列化协议可能不同，如protobuf,json,xml等。</p>
+<p>
+
+
+
+<figure   >
+    <img loading="lazy" alt="" src=" header-1.png">
+</figure>
+
+
+
+
+<figure   >
+    <img loading="lazy" alt="" src=" header-1-1.png">
+</figure>
+
+
+
+
+<figure   >
+    <img loading="lazy" alt="" src=" header-2.png">
+</figure>
+针对protobuf设计协议头，会有service id和cmd id两个字段，service id代表大的服务类，如登录，消息发送等，cmd id则代表具体的服务，如请求登录，请求离线，请求发送消息等。
+为什么xml不需要这样定义？
+因为它可以在收到消息之后再去解析，因为他是文本形式传输的，而protobuf为二进制，不便于解析。</p>
+<p>nginx使用的协议：
+
+
+
+
+<figure   >
+    <img loading="lazy" alt="" src=" header-3.png">
+</figure></p>
+<p>typedef struct
+{
+uint8_t magic[2];         //magic number
+uint16_t version;         //protocol version
+uint16_t type;            //protocol type: json, xml, binary, protobuf and so on
+uint16_t len;             //body length
+uint32_t seq;             //message number
+uint16_t sid;             //service id
+uint16_t cid;             //command id
+uint8_t  reserve[2];      //reserve</p>
+<p>}message_head_t;</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

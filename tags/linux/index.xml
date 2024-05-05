@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on 欣菜团</title>
+    <link>http://localhost:1313/tags/linux/</link>
+    <description>Recent content in Linux on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 09 Jan 2021 19:46:25 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SELinux</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/selinux/</link>
+      <pubDate>Sat, 09 Jan 2021 19:46:25 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/selinux/</guid>
+      <description>一、背景介绍 由于最近工作中要向Android中合入一个新的功能，需要配置selinux相关策略让相关进程有权限访问资源，但是对SELinux的概念以及配置方法完全陌生，因此写下此文整理一下学习过程。&#xA;二、前言 Security-Enhanced Linux，简称SELinux，他是Linux中的一个子模块&#xA;SElinux for Android 官方文档&#xA;三、基础概念 1. 两种模式 1.1 DAC Discretionary Access Control，自主访问控制。在该模式下，用户拥有其登录身份下对文件、套接字等的所有访问权限。&#xA;1.2 MAC Mandatory Access Control，强制访问控制。此模式下没有超级用户的概念，一切进程除了要受其自身能访问资源的限制，还要经过MAC对资源进一步控制，保证了资源的最小化访问原则。这样即使存在获得了超级权限的恶意软件，也只能对少部分资源造成破坏。&#xA;2. 四个基本概念 Subject &amp;mdash; 主体&#xA;Object &amp;mdash; 客体&#xA;Policy &amp;mdash; 策略&#xA;Mode &amp;mdash; 模式&#xA;主体可以理解为进程/服务，客体的形式有很多，文件、文件夹、套接字等都可以成为客体。策略是用来描述主体/客体能访问内容的规则。对于模式来说，他并非上文提到的两种访问控制模式，而是针对selinux对主体/客体访问的态度，在意义上更像是一种开关。在linux系统中有三种可以设置的Mode：1.宽容模式（Permissive Mode);2.强制模式(Enforcing Mode);3.关闭(Disabled)&#xA;设置Mode的方法 setenforce 0 #0表示Permissive Mode；1表示Enforcing Mode 四、语法规则 五、参考文献 https://www.phpyuan.com/235739.html https://www.linuxprobe.com/selinux-introduction.html https://blog.csdn.net/qq_19923217/article/details/81240027 </description>
+    </item>
+    <item>
+      <title>fstab</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/fstab/</link>
+      <pubDate>Wed, 16 Dec 2020 00:37:53 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/fstab/</guid>
+      <description>一、前言 由于今天周会有同事介绍到了fstab及其作用，但是我本人对其完全未知，因此写下本文对fstab做一个简单的学习和整理。&#xA;二、基本概念 1. 定义 fstab是linux系统中存放文件系统静态信息的一个文本文件，其在系统中的位置是/etc/fstab。&#xA;2. 作用 当系统启动时，liunx会按照fstab中定义的信息去捞需要挂载的文件系统信息并动态的挂载到相应位置。&#xA;三、具体实例 1. 下面是linux帮助文档中给出的配置fstab的具体实例。 LABEL=t-home2 /home ext4 defaults,auto_da_alloc 0 2 2. 想要配置一条fstab需要描述六个字段 file system&amp;mdash;指明要挂载的块特殊设备或远端文件系统 dir&amp;mdash;file system的挂载点 type&amp;mdash;file system的类型 options&amp;mdash;描述了与文件系统相关的mount选项 dump&amp;mdash;指明文件系统是否要被dump，默认为0(不dump) pass&amp;mdash;被fsck(file system check, 文件系统检查)使用，0为不fsck，1为root使用，其他用户为2 TIPS：查看fstab帮助文档 man 5 fstab 参考链接 https://blog.csdn.net/richerg85/article/details/17917129 </description>
+    </item>
+    <item>
+      <title>第一章 绪论</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/1.-%E7%BB%AA%E8%AE%BA/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/1.-%E7%BB%AA%E8%AE%BA/</guid>
+      <description>硬件的依赖性 为了切分软硬件源代码，Linux源码在 arch 与 include 目录下分离出了23个子目录，以对应Linux支持的不同硬件平台。&#xA;名称 含义 alpha HP的Alpha工作站，最早属于Digital公司，后来属于Compag公司，现在不再生产。 arm，arm26 基于ARM处理器的计算机（如PDA）和嵌入式设备 cris Axis在他的瘦服务器中使用的&amp;quot;代码精简指令集(Code Reduced Instruction Set)&amp;ldquo;CPU,用在诸如Web摄像机或开发主板中。 Frv 基于Fujitsu FR-V系列微处理器的嵌入式系统。 H8300 Hitachi h8/300 和 h8s的8位和16位RISC微处理器 I386 基于80x86微处理器的IBM兼容个人计算机 Ia64 基于64位Itanium微处理器的工作站 M32r 基于Renesas M32R 系列微处理器的计算机 M68k,m68knommu 基于Motorola MC680x0微处理器的个人计算机 Mips 基于MIPS微处理器的工作站，如Silicon Graphics公司销售的那些工作站 Parisc 基于HP公司HP 9000 PA-RISC微处理器的工作站 Ppc,ppc64 基于Motorola-IBM PowerPC32位和64位微处理器的工作站 S390 IBM ESA/390及zSeries大型机 Sh,sh64 基于Hitachi和STMicroelectronics联合开发的SuperH微处理器和嵌入式系统 Sparc,sparc64 基于Sun公司SPARC和64位Ultra SPARC微处理器的工作站 Um 用户态的Linux &amp;mdash; 一个允许开发者在用户态下运行内核的虚拟平台 V850 集成了Harvard体系结构的32位RISC核心的NEC V850微控制器 X86_64 基于AMD的64位微处理器的工作站，如Athlon和Optern,以及基于Intel的ia32e/EM64T64位微处理器的工作站 Linux版本 2.5之前 一直用三位数字表示，中间用圆点分割，第二位如果为偶数表示稳定版，奇数表示非稳定版 前两位是版本号，后两位是发布号 如2.4.10表示一个稳定版本&#xA;2.5之后 第二位无法表示内核稳定与否</description>
+    </item>
+    <item>
+      <title>第三章 进程</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/3.-%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/3.-%E8%BF%9B%E7%A8%8B/</guid>
+      <description>进程描述符处理 thread_info和内核栈 表示方法： union thread_union{ struct thread_info thread_info; unsigned long stack[2048]; };&#xA;双向链表 内核维护了一个双向链表的数据结构，其可以用宏LIST_HEAD(list_name)进行创建。</description>
+    </item>
+    <item>
+      <title>第二章 内存寻址</title>
+      <link>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/2.-%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8/2.-%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80/</guid>
+      <description>硬件中的分页 分页单元(paging unit) 把线性地址转换成物理地址。 分页单元的一个关键任务：把所请求的访问类型与线性地址的访问权限相比较，如果这次内存访问是无效的，就产生一个缺页异常。(link to 第四章 &amp;amp; 第八章)&#xA;页(page) 线性地址被分成的以固定长度为单位的组，称为页。 页内部连续的线性地址被映射到连续的物理地址中。因此内核可以指定某一页的存取权限而不用指定这一页中包含的所有线性地址的存取权限。&#xA;页框(page frame) 分页单元把所有的RAM分为固定长度的页框（有时叫做物理页）。 每个页框包含一个页，即一个页框的长度=一个页的长度。&#xA;页框和页的区别 页框是主存的一部分，因此也是一个存储区域。 页是一个数据块，可存放任何页框(RAM)或磁盘中。&#xA;页表(page table) 把线性地址映射到物理地址的数据结构。 页表存放在主存中，应在启动分页单元之前必须由内核对页表进行适当的初始化。&#xA;从80386开始，所有的80x86处理器都支持分页，它通过设置cr0寄存器的PG标志启用。当PG=0时，线性地址就被解释成物理地址。&#xA;常规分页 从80386起，Intel处理器的分页单元处理4KB的页。&#xA;32位的线性地址被分成3个域： Directory(目录)：最高十位 Table（页表）：中间十位 Offset（偏移量）：最低12位&#xA;31~22 21~12 11~0 Directory Table Offset 线性地址的转换分两步完成，每一步都基于一种转换表 第一种转换表称为页目录表（page directory）&#xA;第二中转换表称为页表（page table）&#xA;使用二级模式的意义 减少每个进程表所需的RAM的数量。 如果使用一级页表，假设一个进程使用全部的4GB线性地址空间，那么想要表示全部的页需要2的20次方个表项（一个页的大小为4K，页表地址以4K为间隔)。 每个表项为4个字节时，一共需要2^20 * 4 = 4MB RAM来表示一个进程的页表。&#xA;二级模式 二级模式通过只为进程实际使用的那些虚拟内存区请求页表来减少内存容量。 二级模式下，每个进程都会持有一个页目录表，但是不会马上为页表分配RAM，只有当进程实际需要一个页表时才给该页表分配RAM。&#xA;正在使用的页目录的物理地址存放在控制寄存器cr3中。 线性地址中的Directory字段决定页目录中的目录项。目录项指向相应的页表。线性地址中的Table字段决定页表中的表项。表项又指向页框的物理地址。Offset项决定实际的物理单元，也即页框中的相对位置。 Offset字段决定每页的大小。&#xA;P52. 图2-7 ：80x86处理器的分页&#xA;这时我们考虑一个问题，二级模式相对于一级模式节省了多少空间？ 我们知道二级模式下存在两个寻页所用的表：页目录表和页表。从线性地址的分段可以看出，页目录表和页表的表项最多为1024个，按照每个表项为4字节计算，一个表的尺寸为1024 * 4B = 4KB 我们知道页目录表是提前分配，而页表是按需分配，因此页表占用的RAM范围是0 ~ 4KB * 1024 = 4MB 可以看出，使用二级寻页的方式，每个进程所占用的RAM从4MB变成了在4KB ~ 4MB + 4KB间波动。但由于按需分配的存在，所以其实每个进程所占用的内存倾向于大大下降。</description>
+    </item>
+  </channel>
+</rss>

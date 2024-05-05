@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>卡片笔记索引 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">卡片笔记索引</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>#literaturenotes</p>
+<h2 id="四种索引类型">四种索引类型</h2>
+<ol>
+<li>主题索引卡：同类的内容整理到一张卡片，标页码或写几句概要</li>
+<li>盒子里相邻的卡片做索引（TODO：不知道这里要干嘛？）</li>
+<li>给卡片做内容逻辑索引，在盒子里可能不挨着，但是逻辑上下文是有关联的</li>
+<li>乱索引，随便连线，激发新想法💥</li>
+</ol>
+<h2 id="编号索引的格式">编号索引的格式</h2>
+<blockquote>
+<p>卢曼所用的笔记序列可以看成[[大纲笔记]]在纸质时代的物理实现。</p>
+</blockquote>
+<p>数字+字母
+1/1 ：1主题的第 1 个想法
+1/1a：1/1 想法的第一个想法</p>
+<p>注意：<strong>只对永久笔记索引</strong>，方便知识提取。索引不要面面俱到，只需体现重点信息。</p>
+<hr>
+<p><a href="https://medium.com/pm%E7%9A%84%E7%94%9F%E7%94%A2%E5%8A%9B%E5%B7%A5%E5%85%B7%E7%AE%B1/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%8D%A1%E7%89%87%E7%9B%92%E7%AD%86%E8%A8%98%E6%B3%95%E4%B8%AD%E7%9A%84%E5%8D%A1%E7%89%87%E9%80%A3%E7%B5%90-b6a4fdc18431">【卡片盒筆記法系列】如何建立卡片盒筆記法中的卡片連結(上)？編寫索引編號，串起自己的想法</a>
+<a href="https://functoreality.github.io/blog-pkm/contents/%E7%AC%94%E8%AE%B0%E9%97%B4%E5%85%B3%E8%81%94%E6%96%B9%E5%BC%8F/">笔记间关联方式</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

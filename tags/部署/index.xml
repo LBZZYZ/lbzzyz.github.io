@@ -2,18 +2,53 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>部署 on 欣菜团</title>
-    <link>https://lbzzyz.github.io/tags/%E9%83%A8%E7%BD%B2/</link>
+    <link>http://localhost:1313/tags/%E9%83%A8%E7%BD%B2/</link>
     <description>Recent content in 部署 on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Apr 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://lbzzyz.github.io/tags/%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Mar 2021 00:25:54 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hugo安装与配置指南</title>
-      <link>https://lbzzyz.github.io/post/post/</link>
-      <pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>https://lbzzyz.github.io/post/post/</guid>
-      <description>Hugo 是最流行的静态站点生成器之一。&#xA;安装 我这里使用的是 Windows 平台，安装版本为 hugo_0.125.4_windows-amd64.zip。下载的压缩包中有一个名为 hugo.exe 的文件，可以使用 PowerShell 进入其所在目录执行，也可以把它添加到环境变量。&#xA;执行 hugo version，看到类似的输出则代表安装成功。&#xA;PS C:\&amp;gt; hugo version hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 windows/amd64 BuildDate=2024-04-25T13:27:26Z VendorInfo=gohugoio 创建网站 hugo new site myblog 生成的 myblog 目录结构如下：&#xA;Mode LastWriteTime Length Name ---- ------------- ------ ---- d----- 2024/4/28 23:43 archetypes d----- 2024/4/28 23:43 assets d----- 2024/4/28 23:43 content d----- 2024/4/28 23:43 data d----- 2024/4/28 23:43 i18n d----- 2024/4/28 23:43 layouts d----- 2024/4/28 23:43 static d----- 2024/4/28 23:43 themes -a---- 2024/4/28 23:43 83 hugo.</description>
+      <title>Redis 安装与配置指南</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/redis-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Mon, 08 Mar 2021 00:25:54 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/redis-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+      <description>Ubuntu安装 sudo apt update sudo apt install redis-server 实际会有三个instance被安装：&#xA;libjemalloc1 redis-server redis-tools 检查安装是否成功 $ redis-cli 127.0.0.1:6379&amp;gt; 输入ping,有下方回显说明连接成功&#xA;127.0.0.1:6379&amp;gt; ping PONG </description>
+    </item>
+    <item>
+      <title>MySQL 安装与配置指南</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Sun, 21 Feb 2021 12:27:22 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+      <description>安装 MySQL 系统版本：Ubuntu 18.04.6 LTS&#xA;a. 本地环境安装 sudo apt update sudo apt install mysql-server b. 使用 Docker 安装 docker run -itd --name mysql-container -p 9636:3306 --restart=always -e MYSQL_ROOT_PASSWORD={set-your-password} -v /path/to/mysql:/var/lib/mysql mysql:latest 查看运行状态 systemctl status mysql 运行安全向导 MySQL 提供了一个脚本使数据库更加安全，建议首次安装完成后执行一次该脚本。&#xA;$ mysql_secure_installation 运行 mysql_secure_installation 会执行几个设置：&#xA;为 root 用户设置密码 删除匿名账号 取消 root 用户远程登录 删除 test 库和对 test 库的访问权限 刷新授权表使修改生效 root@iZwz928lti88uknt38usc5Z:~# mysql_secure_installation Securing the MySQL server deployment. Connecting to MySQL using a blank password. The &amp;#39;validate_password&amp;#39; plugin is installed on the server.</description>
+    </item>
+    <item>
+      <title>Docker 安装 Nginx</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/docker-%E5%AE%89%E8%A3%85-nginx/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/docker-%E5%AE%89%E8%A3%85-nginx/</guid>
+      <description>[[安装 Docker]]&#xA;docker run \ --restart=always \ -it \ --name ns \ -p 80:80 \ -p 443:443 \ -v ~/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \ -v ~/nginx/log:/var/log/nginx \ -v ~/nginx/html:/usr/share/nginx/html \ -v ~/nginx/cert:/opt/cert \ -d nginx:latest </description>
+    </item>
+    <item>
+      <title>安装 Docker</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%AE%89%E8%A3%85-docker/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%AE%89%E8%A3%85-docker/</guid>
+      <description>sudo apt-get remove docker docker-engine docker.io containerd runc sudo apt update sudo apt-get install ca-certificates curl gnupg lsb-release curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add - sudo add-apt-repository &amp;#34;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable&amp;#34; sudo apt-get install docker-ce docker-ce-cli containerd.io [[命令大全#add-apt-repository command not found]]</description>
+    </item>
+    <item>
+      <title>搭建calibre-web</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E6%90%AD%E5%BB%BAcalibre-web/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E6%90%AD%E5%BB%BAcalibre-web/</guid>
+      <description>1. [[安装 Docker]] 2. 搜索镜像 docker search calibre-web 3.下载镜像 docker pull johngong/calibre-web 4.确认镜像下载成功 docker images 5. 启动容器 docker run -d --name=my-library -p 5241:8083 -v /root/library/calibre/config:/config -v /root/library/calibre/library:/library johngong/calibre-web 6. 确认镜像启动 docker ps -a docker rm &amp;lt;container id&amp;gt; #删除容器 </description>
+    </item>
+    <item>
+      <title>部署 Gitea</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E9%83%A8%E7%BD%B2-gitea/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E9%83%A8%E7%BD%B2-gitea/</guid>
+      <description>在数据库实例上，使用 root 用户登录到数据库控制台：&#xA;mysql -u root -p 按提示输入密码。&#xA;创建一个将被 Gitea 使用的数据库用户，并使用密码进行身份验证。以下示例中使用了 &amp;lsquo;gitea&amp;rsquo; 作为密码。请为您的实例使用一个安全密码。&#xA;对于本地数据库：&#xA;SET old_passwords=0; CREATE USER &amp;#39;gitea&amp;#39; IDENTIFIED BY &amp;#39;gitea&amp;#39;; 对于远程数据库：&#xA;SET old_passwords=0; CREATE USER &amp;#39;gitea&amp;#39;@&amp;#39;192.0.2.10&amp;#39; IDENTIFIED BY &amp;#39;gitea&amp;#39;; 其中 192.0.2.10 是您的 Gitea 实例的 IP 地址。&#xA;根据需要替换上述用户名和密码。&#xA;使用 UTF-8 字符集和排序规则创建数据库。确保使用 utf8mb4 字符集，而不是 utf8，因为前者支持 Basic Multilingual Plane 之外的所有 Unicode 字符（包括表情符号）。排序规则根据您预期的内容选择。如果不确定，可以使用 unicode_ci 或 general_ci。&#xA;CREATE DATABASE giteadb CHARACTER SET &amp;#39;utf8mb4&amp;#39; COLLATE &amp;#39;utf8mb4_unicode_ci&amp;#39;; 根据需要替换数据库名称。&#xA;将数据库上的所有权限授予上述创建的数据库用户。&#xA;对于本地数据库：&#xA;GRANT ALL PRIVILEGES ON giteadb.* TO &amp;#39;gitea&amp;#39;; FLUSH PRIVILEGES; 对于远程数据库：</description>
     </item>
   </channel>
 </rss>

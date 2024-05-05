@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>设计模式-单例模式 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">设计模式-单例模式</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-03-26T23:40:33&#43;00:00">March 26, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>一种创建型设计模式， 让你能够保证一个类只有一个实例， 并提供一个访问该实例的全局节点。</p>
+<!-- raw HTML omitted -->
+<h2 id="如何让一个类无法定义对象">如何让一个类无法定义对象?</h2>
+<p><strong>接口类</strong>或<strong>抽象类</strong>无法定义对象。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">A</span>	<span style="color:#888;font-style:italic">//接口类
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">virtual</span> <span style="font-weight:bold;text-decoration:underline">void</span> AA() = 0;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<hr>
+<h2 id="如何定义一个整形变量让他只能是10的倍数">如何定义一个整形变量，让他只能是10的倍数</h2>
+<p>如果想要规定别人必须怎么做，就要使用<strong>接口</strong></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">CNum</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">int</span> num;
+</span></span><span style="display:flex;"><span>	CNum()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		num = 0;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">Set</span>(<span style="font-weight:bold;text-decoration:underline">int</span> n)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		num = n*10;
+</span></span><span style="display:flex;"><span>		cout &lt;&lt; <span style="color:#666;font-style:italic">&#34;附加应用&#34;</span> &lt;&lt; endl;	<span style="color:#888;font-style:italic">//唯一操作num的方式,如果想用num,那在这个函数内写的其他内容都被捆绑执行
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><hr>
+<p>封装过程
+1：把int num隐藏起来不让别人用。
+2：提供一个调用int num的接口并且这个接口的方法是固定的。</p>
+<hr>
+<h2 id="什么是单例模式">什么是单例模式?</h2>
+<p>1.先不让一个类定义对象
+2.再提供一个接口，产生一个对象</p>
+<hr>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>A *pA = <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">A</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>		A(){}		<span style="color:#888;font-style:italic">//第一步:把构造函数设置为私有方法
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">static</span> A *GetObject()	<span style="color:#888;font-style:italic">//静态函数无需对象即可调用
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>		{
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span>(pA == <span style="font-weight:bold;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				pA = <span style="font-weight:bold;text-decoration:underline">new</span> A;		<span style="color:#888;font-style:italic">//第二步：如果没有对象，就创建一个对象，如果有，就不定义了。
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>			}
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">return</span> pA;
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	A *pA = A::GetObject();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="为什么要用单例模式">为什么要用单例模式</h2>
+<hr>
+<h3 id="单例模式应用场景">单例模式应用场景</h3>
+<p>打印机的任务队列
+任务管理器</p>
+<hr>
+<h3 id="实现">实现</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">singleton</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">static</span> singleton *getInstance()
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="font-weight:bold;text-decoration:underline">if</span>(pSingle == <span style="font-weight:bold;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>				{
+</span></span><span style="display:flex;"><span>					pSingle = <span style="font-weight:bold;text-decoration:underline">new</span> singleton;
+</span></span><span style="display:flex;"><span>					<span style="font-weight:bold;text-decoration:underline">return</span> pSingle;
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				 
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">static</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">DestroyInstance</span>()
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="font-weight:bold;text-decoration:underline">if</span>(pSingle)
+</span></span><span style="display:flex;"><span>				{
+</span></span><span style="display:flex;"><span>					<span style="font-weight:bold;text-decoration:underline">delete</span> pSingle;
+</span></span><span style="display:flex;"><span>					pSingle = <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">private</span>:
+</span></span><span style="display:flex;"><span>		singleton(){}
+</span></span><span style="display:flex;"><span>		~singleton(){}
+</span></span><span style="display:flex;"><span>		singleton(<span style="font-weight:bold;text-decoration:underline">const</span> singleton&amp;);
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">static</span> singleton *pSingle;	<span style="color:#888;font-style:italic">//初始化  1  pSingle = NULL(懒汉) pSingle = getInstance()(饿汉)
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>}
+</span></span></code></pre></div>
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

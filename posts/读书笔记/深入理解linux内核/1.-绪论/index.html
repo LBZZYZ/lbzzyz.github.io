@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>第一章 绪论 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">第一章 绪论</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="硬件的依赖性">硬件的依赖性</h2>
+<p>为了切分软硬件源代码，Linux源码在 arch 与 include 目录下分离出了23个子目录，以对应Linux支持的不同硬件平台。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>alpha</td>
+<td>HP的Alpha工作站，最早属于Digital公司，后来属于Compag公司，现在不再生产。</td>
+</tr>
+<tr>
+<td>arm，arm26</td>
+<td>基于ARM处理器的计算机（如PDA）和嵌入式设备</td>
+</tr>
+<tr>
+<td>cris</td>
+<td>Axis在他的瘦服务器中使用的&quot;代码精简指令集(Code Reduced Instruction Set)&ldquo;CPU,用在诸如Web摄像机或开发主板中。</td>
+</tr>
+<tr>
+<td>Frv</td>
+<td>基于Fujitsu FR-V系列微处理器的嵌入式系统。</td>
+</tr>
+<tr>
+<td>H8300</td>
+<td>Hitachi h8/300 和 h8s的8位和16位RISC微处理器</td>
+</tr>
+<tr>
+<td>I386</td>
+<td>基于80x86微处理器的IBM兼容个人计算机</td>
+</tr>
+<tr>
+<td>Ia64</td>
+<td>基于64位Itanium微处理器的工作站</td>
+</tr>
+<tr>
+<td>M32r</td>
+<td>基于Renesas M32R 系列微处理器的计算机</td>
+</tr>
+<tr>
+<td>M68k,m68knommu</td>
+<td>基于Motorola MC680x0微处理器的个人计算机</td>
+</tr>
+<tr>
+<td>Mips</td>
+<td>基于MIPS微处理器的工作站，如Silicon Graphics公司销售的那些工作站</td>
+</tr>
+<tr>
+<td>Parisc</td>
+<td>基于HP公司HP 9000 PA-RISC微处理器的工作站</td>
+</tr>
+<tr>
+<td>Ppc,ppc64</td>
+<td>基于Motorola-IBM PowerPC32位和64位微处理器的工作站</td>
+</tr>
+<tr>
+<td>S390</td>
+<td>IBM ESA/390及zSeries大型机</td>
+</tr>
+<tr>
+<td>Sh,sh64</td>
+<td>基于Hitachi和STMicroelectronics联合开发的SuperH微处理器和嵌入式系统</td>
+</tr>
+<tr>
+<td>Sparc,sparc64</td>
+<td>基于Sun公司SPARC和64位Ultra SPARC微处理器的工作站</td>
+</tr>
+<tr>
+<td>Um</td>
+<td>用户态的Linux &mdash; 一个允许开发者在用户态下运行内核的虚拟平台</td>
+</tr>
+<tr>
+<td>V850</td>
+<td>集成了Harvard体系结构的32位RISC核心的NEC V850微控制器</td>
+</tr>
+<tr>
+<td>X86_64</td>
+<td>基于AMD的64位微处理器的工作站，如Athlon和Optern,以及基于Intel的ia32e/EM64T64位微处理器的工作站</td>
+</tr>
+</tbody>
+</table>
+<h2 id="linux版本">Linux版本</h2>
+<h3 id="25之前">2.5之前</h3>
+<p>一直用三位数字表示，中间用圆点分割，第二位如果为偶数表示稳定版，奇数表示非稳定版
+前两位是版本号，后两位是发布号
+如2.4.10表示一个稳定版本</p>
+<h3 id="25之后">2.5之后</h3>
+<p>第二位无法表示内核稳定与否</p>
+<p>具体含义可以参考下面两个Link
+<a href="https://www.cnblogs.com/x_wukong/p/5937470.html">https://www.cnblogs.com/x_wukong/p/5937470.html</a>
+<a href="https://blog.csdn.net/digimon/article/details/8607482">https://blog.csdn.net/digimon/article/details/8607482</a></p>
+<h2 id="操作系统基本概念">操作系统基本概念</h2>
+<p>操作系统两个目标：</p>
+<ol>
+<li>与硬件交互，为硬件平台的底层可编程部件提供服务</li>
+<li>为运行在计算机上的应用程序（即用户程序）提供执行环境</li>
+</ol>
+<p>用户态（User Space) 内核态（kernel space)</p>
+<h2 id="多用户系统">多用户系统</h2>
+<p>一台能并发和独立地执行分别属于两个或多个用户的若干应用程序的计算机</p>
+<h2 id="用户和组">用户和组</h2>
+<p>再多用户系统中，每个用户在机器上都拥有私用空间</p>
+<p>所有的用户由一个唯一的数字来标识，这个数字叫用户标识符（User ID，UID）。
+为了和其他用户有选择的共享资料，每个用户是一个或多个用户组的一名成员，组由唯一的用户组标识符(user group ID）标识。
+每个文件也恰好与一个组相对应。</p>
+<p>root用户
+root用户几乎无所不能，他能访问系统中的每一个文件，能干涉每一个正在执行的用户程序的活动</p>
+<h2 id="进程">进程</h2>
+<p>程序执行时的一个实例
+地址空间：允许进程引用的内存地址集合。
+传统操作系统中，一个进程在地址空间中执行一个单独的指令序列。
+现代操作系统中，一个地址空间可以执行多个指令序列，即允许进程拥有多个执行流。</p>
+<p>调度程序：决定哪个进程可以被执行的程序
+非抢占式进程：只有进程自愿放弃CPU时，调度程序才能被调用</p>
+<p>多用户系统中的进程必须是抢占式的
+操作系统记录下每个进程占有的CPU时间，并周期性地激活调度程序</p>
+<h2 id="内核体系结构">内核体系结构</h2>
+<p>单块结构：大部分Unix内核所采用的结构
+微内核：Mac os的结构，模块化，单个model可拆解，对模块api设计要求较高</p>
+<p>Linux 模块（module) : 模块是一个目标文件，其代码可以在运行时链接到内核或从内核解除
+目标代码通常用一组函数</p>
+<h2 id="unix-文件系统概述">Unix 文件系统概述</h2>
+<h2 id="文件">文件</h2>
+<h2 id="软链接和硬链接">软链接和硬链接</h2>
+<p>硬链接创建方法
+$ ln srcfile desfile
+两点限制：</p>
+<ol>
+<li>不允许用户给目录创建硬链接。可能导致目录树变成环形图</li>
+<li>只有在同一个文件系统中的文件才能创建硬链接。
+Ls -l的第二列可以判断文件是否为硬链接
+为解决上述两点限制，linux引入了软连接，也称符号链接
+创建方法：
+$ ln -s srcfile desfile</li>
+</ol>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

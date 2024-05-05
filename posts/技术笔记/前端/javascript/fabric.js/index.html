@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Fabric.js | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">Fabric.js</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="events">Events</h1>
+<p><a href="http://fabricjs.com/fabric-intro-part-2#events">Events</a>
+<a href="http://fabricjs.com/events">Event inspector</a></p>
+<h2 id="objectscaling">object:scaling</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	&#34;e&#34;: {
+</span></span><span style="display:flex;"><span>		&#34;isTrusted&#34;: <span style="font-weight:bold;text-decoration:underline">true</span>
+</span></span><span style="display:flex;"><span>	},
+</span></span><span style="display:flex;"><span>	&#34;transform&#34;: {
+</span></span><span style="display:flex;"><span>		&#34;target&#34;: {
+</span></span><span style="display:flex;"><span>			&#34;type&#34;: <span style="color:#666;font-style:italic">&#34;circle&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;version&#34;: <span style="color:#666;font-style:italic">&#34;5.2.1&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;originX&#34;: <span style="color:#666;font-style:italic">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;originY&#34;: <span style="color:#666;font-style:italic">&#34;top&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;left&#34;: 242,
+</span></span><span style="display:flex;"><span>			&#34;top&#34;: 108.49,
+</span></span><span style="display:flex;"><span>			&#34;width&#34;: 40,
+</span></span><span style="display:flex;"><span>			&#34;height&#34;: 40,
+</span></span><span style="display:flex;"><span>			&#34;fill&#34;: <span style="color:#666;font-style:italic">&#34;blue&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;stroke&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>			&#34;strokeWidth&#34;: 1,
+</span></span><span style="display:flex;"><span>			&#34;strokeDashArray&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>			&#34;strokeLineCap&#34;: <span style="color:#666;font-style:italic">&#34;butt&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;strokeDashOffset&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;strokeLineJoin&#34;: <span style="color:#666;font-style:italic">&#34;miter&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;strokeUniform&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>			&#34;strokeMiterLimit&#34;: 4,
+</span></span><span style="display:flex;"><span>			&#34;scaleX&#34;: 2.18,
+</span></span><span style="display:flex;"><span>			&#34;scaleY&#34;: 2.18,
+</span></span><span style="display:flex;"><span>			&#34;angle&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;flipX&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>			&#34;flipY&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>			&#34;opacity&#34;: 1,
+</span></span><span style="display:flex;"><span>			&#34;shadow&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>			&#34;visible&#34;: <span style="font-weight:bold;text-decoration:underline">true</span>,
+</span></span><span style="display:flex;"><span>			&#34;backgroundColor&#34;: <span style="color:#666;font-style:italic">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;fillRule&#34;: <span style="color:#666;font-style:italic">&#34;nonzero&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;paintFirst&#34;: <span style="color:#666;font-style:italic">&#34;fill&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;globalCompositeOperation&#34;: <span style="color:#666;font-style:italic">&#34;source-over&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;skewX&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;skewY&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;radius&#34;: 20,
+</span></span><span style="display:flex;"><span>			&#34;startAngle&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;endAngle&#34;: 360
+</span></span><span style="display:flex;"><span>		},
+</span></span><span style="display:flex;"><span>		&#34;action&#34;: <span style="color:#666;font-style:italic">&#34;scale&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;corner&#34;: <span style="color:#666;font-style:italic">&#34;tr&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;scaleX&#34;: 1.7075711343346573,
+</span></span><span style="display:flex;"><span>		&#34;scaleY&#34;: 1.7075711343346573,
+</span></span><span style="display:flex;"><span>		&#34;skewX&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;skewY&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;offsetX&#34;: 68.3333330154419,
+</span></span><span style="display:flex;"><span>		&#34;offsetY&#34;: -1.6770834922790527,
+</span></span><span style="display:flex;"><span>		&#34;originX&#34;: <span style="color:#666;font-style:italic">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;originY&#34;: <span style="color:#666;font-style:italic">&#34;bottom&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;ex&#34;: 310.3333330154419,
+</span></span><span style="display:flex;"><span>		&#34;ey&#34;: 126.3125,
+</span></span><span style="display:flex;"><span>		&#34;lastX&#34;: 310.3333330154419,
+</span></span><span style="display:flex;"><span>		&#34;lastY&#34;: 126.3125,
+</span></span><span style="display:flex;"><span>		&#34;theta&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;width&#34;: 68.30284537338629,
+</span></span><span style="display:flex;"><span>		&#34;shiftKey&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;altKey&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;original&#34;: {
+</span></span><span style="display:flex;"><span>			&#34;scaleX&#34;: 1.7075711343346573,
+</span></span><span style="display:flex;"><span>			&#34;scaleY&#34;: 1.7075711343346573,
+</span></span><span style="display:flex;"><span>			&#34;skewX&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;skewY&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;angle&#34;: 0,
+</span></span><span style="display:flex;"><span>			&#34;left&#34;: 242,
+</span></span><span style="display:flex;"><span>			&#34;flipX&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>			&#34;flipY&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>			&#34;top&#34;: 127.98958349227905,
+</span></span><span style="display:flex;"><span>			&#34;originX&#34;: <span style="color:#666;font-style:italic">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>			&#34;originY&#34;: <span style="color:#666;font-style:italic">&#34;bottom&#34;</span>
+</span></span><span style="display:flex;"><span>		},
+</span></span><span style="display:flex;"><span>		&#34;reset&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;signX&#34;: 1,
+</span></span><span style="display:flex;"><span>		&#34;signY&#34;: -1,
+</span></span><span style="display:flex;"><span>		&#34;actionPerformed&#34;: <span style="font-weight:bold;text-decoration:underline">true</span>
+</span></span><span style="display:flex;"><span>	},
+</span></span><span style="display:flex;"><span>	&#34;pointer&#34;: {
+</span></span><span style="display:flex;"><span>		&#34;x&#34;: 340.3333330154419,
+</span></span><span style="display:flex;"><span>		&#34;y&#34;: 117.3125
+</span></span><span style="display:flex;"><span>	},
+</span></span><span style="display:flex;"><span>	&#34;target&#34;: {
+</span></span><span style="display:flex;"><span>		&#34;type&#34;: <span style="color:#666;font-style:italic">&#34;circle&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;version&#34;: <span style="color:#666;font-style:italic">&#34;5.2.1&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;originX&#34;: <span style="color:#666;font-style:italic">&#34;left&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;originY&#34;: <span style="color:#666;font-style:italic">&#34;top&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;left&#34;: 242,
+</span></span><span style="display:flex;"><span>		&#34;top&#34;: 108.49,
+</span></span><span style="display:flex;"><span>		&#34;width&#34;: 40,
+</span></span><span style="display:flex;"><span>		&#34;height&#34;: 40,
+</span></span><span style="display:flex;"><span>		&#34;fill&#34;: <span style="color:#666;font-style:italic">&#34;blue&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;stroke&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>		&#34;strokeWidth&#34;: 1,
+</span></span><span style="display:flex;"><span>		&#34;strokeDashArray&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>		&#34;strokeLineCap&#34;: <span style="color:#666;font-style:italic">&#34;butt&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;strokeDashOffset&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;strokeLineJoin&#34;: <span style="color:#666;font-style:italic">&#34;miter&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;strokeUniform&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;strokeMiterLimit&#34;: 4,
+</span></span><span style="display:flex;"><span>		&#34;scaleX&#34;: 2.18,
+</span></span><span style="display:flex;"><span>		&#34;scaleY&#34;: 2.18,
+</span></span><span style="display:flex;"><span>		&#34;angle&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;flipX&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;flipY&#34;: <span style="font-weight:bold;text-decoration:underline">false</span>,
+</span></span><span style="display:flex;"><span>		&#34;opacity&#34;: 1,
+</span></span><span style="display:flex;"><span>		&#34;shadow&#34;: <span style="font-weight:bold;text-decoration:underline">null</span>,
+</span></span><span style="display:flex;"><span>		&#34;visible&#34;: <span style="font-weight:bold;text-decoration:underline">true</span>,
+</span></span><span style="display:flex;"><span>		&#34;backgroundColor&#34;: <span style="color:#666;font-style:italic">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;fillRule&#34;: <span style="color:#666;font-style:italic">&#34;nonzero&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;paintFirst&#34;: <span style="color:#666;font-style:italic">&#34;fill&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;globalCompositeOperation&#34;: <span style="color:#666;font-style:italic">&#34;source-over&#34;</span>,
+</span></span><span style="display:flex;"><span>		&#34;skewX&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;skewY&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;radius&#34;: 20,
+</span></span><span style="display:flex;"><span>		&#34;startAngle&#34;: 0,
+</span></span><span style="display:flex;"><span>		&#34;endAngle&#34;: 360
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="originxoriginy-和-lefttop">originX、originY 和 left、top</h1>
+<p>以左上角为基准点，left 和 top 指明了原点的位置；
+originX 和 originY 指明了矩形的水平和垂直方向哪个点与原点重合；
+originX 取值有 left, right 和 center；
+originY 取值有 top, bottom 和 center；
+如 left = 100, top = 100, originX = left, originY = top 时，代表原点为 (100, 100)，矩形左上角的点与原点重合。
+<a href="http://fabricjs.com/test/misc/origin.html">http://fabricjs.com/test/misc/origin.html</a>
+<a href="https://www.cnblogs.com/xc-dh/p/17218233.html">https://www.cnblogs.com/xc-dh/p/17218233.html</a>
+object:scaling 事件发生时，transfrom.target.originX 和 transform.target.originY 是用户拖拽点对侧的点。如用户拖拽左上角，则 originX = right，originY = bottom。</p>
+<h1 id="属性解释">属性解释</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Json" data-lang="Json"><span style="display:flex;"><span><span style="">lockScalingFlip:</span> <span style="font-weight:bold;text-decoration:underline">true</span> <span style="color:#888;font-style:italic">// 禁止水平翻转
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="">centeredRotation:</span> <span style="font-weight:bold;text-decoration:underline">true</span> <span style="color:#888;font-style:italic">// 启用中心旋转
+</span></span></span></code></pre></div><h1 id="fabricjs-禁止元素超出画布httpscloudtencentcomdeveloperarticle2119056"><a href="https://cloud.tencent.com/developer/article/2119056">Fabric.js 禁止元素超出画布</a></h1>
+<h1 id="我从-fabricjs-中学到了什么httpssegmentfaultcoma1190000019054853"><a href="https://segmentfault.com/a/1190000019054853">我从 fabric.js 中学到了什么</a></h1>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>AIDL | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">AIDL</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="作用">作用</h1>
+<p><strong>进程间通信</strong></p>
+<h1 id="remotecallbacklist">RemoteCallbackList</h1>
+<p>用于<strong>服务端</strong>回调<strong>客户端</strong>的方法。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">interface</span> <span style="color:#666;font-weight:bold;font-style:italic">ICloudService</span> {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">registerCallback</span>(EventCallback callback);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">unRegisterCallback</span>(EventCallback callback);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">interface</span> <span style="color:#666;font-weight:bold;font-style:italic">EventCallback</span> {
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">onEvent</span>(<span style="font-weight:bold;text-decoration:underline">int</span> state, String args);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888;font-style:italic">// 用于存储注册的客户端，需要时服务端会通过这个list向客户端发消息。</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">static</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">final</span> RemoteCallbackList&lt;EventCallback&gt; remoteCallbackList = <span style="font-weight:bold;text-decoration:underline">new</span> RemoteCallbackList&lt;&gt;();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">static</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">final</span> ICloudService.Stub binder = <span style="font-weight:bold;text-decoration:underline">new</span> ICloudService.Stub() {
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">registerCallback</span>(EventCallback callback) <span style="font-weight:bold;font-style:italic;text-decoration:underline">throws</span> RemoteException {
+</span></span><span style="display:flex;"><span>		remoteCallbackList.register(callback);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">unRegisterCallback</span>(EventCallback callback) <span style="font-weight:bold;font-style:italic;text-decoration:underline">throws</span> RemoteException {
+</span></span><span style="display:flex;"><span>		remoteCallbackList.unregister(callback);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// 此函数用于向客户端发送消息</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">static</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">sendEvent</span>(<span style="font-weight:bold;text-decoration:underline">int</span> event, String args) {
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">int</span> i = remoteCallbackList.beginBroadcast();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">while</span> (i &gt; 0) {
+</span></span><span style="display:flex;"><span>		i--;
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">try</span> {
+</span></span><span style="display:flex;"><span>			remoteCallbackList.getBroadcastItem(i).onEvent(event, args);
+</span></span><span style="display:flex;"><span>		} <span style="font-weight:bold;text-decoration:underline">catch</span> (RemoteException e) {
+</span></span><span style="display:flex;"><span>			<span style="color:#888;font-style:italic">// The RemoteCallbackList will take care of removing</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#888;font-style:italic">// the dead object for us.</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	remoteCallbackList.finishBroadcast();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888;font-style:italic">// 客户端定义EventCallback</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">final</span> EventCallback mCloudEventCallback = <span style="font-weight:bold;text-decoration:underline">new</span> EventCallback.Stub() {
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">onEvent</span>(<span style="font-weight:bold;text-decoration:underline">int</span> state, String args) <span style="font-weight:bold;font-style:italic;text-decoration:underline">throws</span> RemoteException {
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic">// connected后，把上面定义的callback注册到服务端供其调用，disconnected时再把其反注册掉。</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">final</span> ServiceConnection serviceConnection = <span style="font-weight:bold;text-decoration:underline">new</span> ServiceConnection() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">onServiceConnected</span>(ComponentName componentName, IBinder service) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;font-style:italic;text-decoration:underline">synchronized</span> (remoteLock) {
+</span></span><span style="display:flex;"><span>			remoteServer = ICloudService.Stub.asInterface(service);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		registerRemoteCallback();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">public</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">onServiceDisconnected</span>(ComponentName componentName) {
+</span></span><span style="display:flex;"><span>		unRegisterRemoteCallback();
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;font-style:italic;text-decoration:underline">synchronized</span> (remoteLock) {
+</span></span><span style="display:flex;"><span>			remoteServer = <span style="font-weight:bold;text-decoration:underline">null</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">registerRemoteCallback</span>() {
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">synchronized</span> (remoteLock) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (remoteServer != <span style="font-weight:bold;text-decoration:underline">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">try</span> {
+</span></span><span style="display:flex;"><span>				remoteServer.registerCallback(mCloudEventCallback);
+</span></span><span style="display:flex;"><span>			} <span style="font-weight:bold;text-decoration:underline">catch</span> (RemoteException e) {
+</span></span><span style="display:flex;"><span>				<span style="font-weight:bold;text-decoration:underline">throw</span> <span style="font-weight:bold;text-decoration:underline">new</span> RuntimeException(e);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;font-style:italic;text-decoration:underline">private</span> <span style="font-weight:bold;text-decoration:underline">void</span> <span style="color:#666;font-weight:bold;font-style:italic">unRegisterRemoteCallback</span>() {
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;font-style:italic;text-decoration:underline">synchronized</span> (remoteLock) {
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">if</span> (remoteServer != <span style="font-weight:bold;text-decoration:underline">null</span>) {
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">try</span> {
+</span></span><span style="display:flex;"><span>				remoteServer.unRegisterCallback(mCloudEventCallback);
+</span></span><span style="display:flex;"><span>			} <span style="font-weight:bold;text-decoration:underline">catch</span> (RemoteException e) {
+</span></span><span style="display:flex;"><span>				<span style="font-weight:bold;text-decoration:underline">throw</span> <span style="font-weight:bold;text-decoration:underline">new</span> RuntimeException(e);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="参考连接">参考连接</h1>
+<p>[1] <a href="https://developer.android.com/guide/components/aidl?hl=zh-cn">Android 接口定义语言 (AIDL)</a>
+[2] <a href="https://www.cnblogs.com/SupperMary/p/14746477.html">安卓 RemoteCallbackList 的使用 （应用篇）</a>
+[3] <a href="https://goo.su/ZspSy">学习AIDL入门-传递自定义类的对象</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

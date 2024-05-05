@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>202404082252 docsify 打造自动生成和自动收缩的 sidebar | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">202404082252 docsify 打造自动生成和自动收缩的 sidebar</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="docsify-file-catalog-actionhttpsgithubcomif-nildocsify-file-catalog-action-利用-github-actions-自动生成-_sidebarmd"><a href="https://github.com/if-nil/docsify-file-catalog-action">docsify-file-catalog-action</a> 利用 Github actions 自动生成 _sidebar.md</h2>
+<p>首先在仓库目录新建 <code>.github/workflows/main.yml</code>，粘贴以下脚本。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>on: [push]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>jobs:
+</span></span><span style="display:flex;"><span>  add_sidebar_job:
+</span></span><span style="display:flex;"><span>    runs-on: ubuntu-latest
+</span></span><span style="display:flex;"><span>    name: job to add _sidebar.md
+</span></span><span style="display:flex;"><span>    steps:
+</span></span><span style="display:flex;"><span>      - uses: actions/checkout@v4
+</span></span><span style="display:flex;"><span>      - uses: if-nil/docsify-file-catalog-action@main
+</span></span><span style="display:flex;"><span>        with:
+</span></span><span style="display:flex;"><span>          github_token: ${{ secrets.GITHUB_TOKEN }}
+</span></span><span style="display:flex;"><span>          include: <span style="color:#666;font-style:italic">&#39;.*\.md&#39;</span>
+</span></span></code></pre></div><p>然后进入 <code>Github -&gt; Actions -&gt; Gernal</code>，修改 <code>Workflow permissions</code> 权限为 <code>Read and write permissions</code>。</p>
+<p>最后执行代码推送项目到 Github，即可看到 _sidebar.md 已生成。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .github<span style="color:#666;font-style:italic">\w</span>orkflows<span style="color:#666;font-style:italic">\m</span>ain.yaml
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#666;font-style:italic">&#39;Add workflow&#39;</span>
+</span></span><span style="display:flex;"><span>git push origin main
+</span></span></code></pre></div><h2 id="docsify-sidebar-collapsehttpsgithubcomipeng6docsify-sidebar-collapse-自动收缩的-sidebar"><a href="https://github.com/iPeng6/docsify-sidebar-collapse">docsify-sidebar-collapse</a> 自动收缩的 sidebar</h2>
+<p>确保 <code>loadSidebar: true</code> 后，在 <code>index.html</code> 的 <code>&lt;body&gt;</code> 标签中加入以下代码。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;script src=<span style="color:#666;font-style:italic">&#34;//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js&#34;</span>&gt;&lt;/script&gt;
+</span></span></code></pre></div><p>该项目还提供了两种 sidebar 样式。</p>
+<p>箭头风格。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;link rel=<span style="color:#666;font-style:italic">&#34;stylesheet&#34;</span> href=<span style="color:#666;font-style:italic">&#34;//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css&#34;</span> /&gt;
+</span></span></code></pre></div><p>文件夹风格</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;link rel=<span style="color:#666;font-style:italic">&#34;stylesheet&#34;</span> href=<span style="color:#666;font-style:italic">&#34;//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css&#34;</span> /&gt;
+</span></span></code></pre></div><hr>
+<p><a href="https://juejin.cn/post/7309921542384992266">https://juejin.cn/post/7309921542384992266</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

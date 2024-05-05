@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>202403020825 工作流 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">202403020825 工作流</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 id="粗读精读">粗读&amp;精读</h2>
+<blockquote>
+<p>粗读的网页链接或内容，则直接把链接放入Obsidian笔记中作为待办(稍后读)。
+粗读即为提取大纲
+精读则是提大纲、作标注的同时，花更多时间去理解及组织知识结构
+最终完成精读后，导出标注内容至精读笔记中</p>
+</blockquote>
+<h2 id="整理">整理</h2>
+<blockquote>
+<p>通过步骤一的阅读流程后，我们有了笔记中的链接、大纲、标注、注释，我们把这些内容放到Obsidian的ZK笔记中。</p>
+</blockquote>
+<p>粗读时是不产生卡片的，作者在每日笔记里放了一个粗读的链接。只有精读之后才导出标注写到卡片。然后对精读笔记进一步<strong>结构化整理</strong>。</p>
+<h3 id="待整理笔记索引卡">待整理笔记索引卡</h3>
+<p>作者用的是 <code>Incremental Writing</code> 插件把待整理的文章汇总成表，但目前该插件已无法使用，我这里改为<a href="https://forum-zh.obsidian.md/t/topic/200">用 <code>DataView</code> 建立自定义索引</a>。</p>
+<h2 id="笔记与链接">笔记与链接</h2>
+<blockquote>
+<p>对笔记进行双链或引用、嵌入等操作。并在足够体系化后最终进行重命名或归档至TOC目录的操作</p>
+</blockquote>
+<hr>
+<p><a href="https://forum-zh.obsidian.md/t/topic/4107">https://forum-zh.obsidian.md/t/topic/4107</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>async 与 await | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">async 与 await</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="await">await</h1>
+<p>在 TypeScript 中，<code>await</code> 关键字用于等待一个异步操作完成，并返回其结果。</p>
+<p>当使用 <code>async/await</code> 语法时，可以将异步操作看作是同步操作，这使得代码更易读、易维护。通过使用 <code>await</code>，代码会在异步操作完成之前暂停执行，然后返回异步结果，从而避免了回调地狱和深层嵌套的问题。</p>
+<p>例如，以下是一个 TypeScript 中使用 <code>await</code> 的示例：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">async</span> <span style="font-weight:bold;font-style:italic;text-decoration:underline">function</span> fetchData() {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> response = <span style="font-weight:bold;text-decoration:underline">await</span> fetch(<span style="color:#666;font-style:italic">&#39;https://api.example.com/data&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">const</span> data = <span style="font-weight:bold;text-decoration:underline">await</span> response.json();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold;text-decoration:underline">return</span> data;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>上述代码使用 <code>fetch</code> 函数获取数据，然后使用 <code>await</code> 等待响应返回结果。一旦响应返回，使用 <code>await</code> 获取其 JSON 数据并返回它。这样，我们就可以将异步操作看作是同步操作，从而更容易地处理数据。</p>
+<p><code>async</code> 是 JavaScript 中的一个关键字，表示函数是异步函数。异步函数与普通函数不同的是，它会返回一个 Promise 对象，可以通过 <code>await</code> 关键字来等待异步操作完成并返回结果，而不是像普通函数一样立即返回结果。</p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>ANR | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">ANR</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p><a href="https://mugenshenghuo.com/index.php/archives/36.html">https://mugenshenghuo.com/index.php/archives/36.html</a></p>
+<p><a href="https://www.jianshu.com/p/386bbb5fa29a">https://www.jianshu.com/p/386bbb5fa29a</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1778496">https://cloud.tencent.com/developer/article/1778496</a></p>
+<p><a href="https://developer.android.com/training/articles/perf-anr.html#anr">https://developer.android.com/training/articles/perf-anr.html#anr</a></p>
+<p>Choreographer 的引入，主要是配合 Vsync ，给上层 App 的渲染提供一个稳定的 Message 处理的时机，也就是 Vsync 到来的时候 ，系统通过对 Vsync 信号周期的调整，来控制每一帧绘制操作的时机. 目前大部分手机都是 60Hz 的刷新率，也就是 16.6ms 刷新一次，系统为了配合屏幕的刷新频率，将 Vsync 的周期也设置为 16.6 ms，每个 16.6 ms ， Vsync 信号唤醒 Choreographer 来做 App 的绘制操作 ，这就是引入 Choreographer 的主要作用。</p>
+<p>1.NEW(创建)
+创建态：当一个已经被创建的线程处于未被启动时，即：还没有调用start方法时，就处于这个状态。</p>
+<p>2.RUNNABLE(运行时)
+运行态：当线程已被占用，在Java虚拟机中正常执行时，就处于此状态。</p>
+<p>3.BLOCKED(排队时)
+阻塞态：当一个线程试图获取一个对象锁，而该对象锁被其他的线程持有，则该线程进入Blocked状态。当该线程持有锁时，该线程将自动变成RUNNABLE状态。</p>
+<p>4.WAITING(休眠)
+休眠态：一个线程在等待另一个线程执行一个(唤醒)动作时，该线程进入Waiting状态。进入这个状态后是不能自动唤醒的，必须等待另一个线程调用notify或者notifyAll方法才能够唤醒。</p>
+<p>5.TIMED_WAITING (指定休眠时间)
+指定时间休眠态：基本同WAITING状态，多了个超时参数，调用对应方法时线程将进入TIMED_WAITING状态，这一状态将一直保持到超时期满或者接收到唤醒通知，带有超时参数的常用方法有Thread.sleep、锁对象.wait() 。</p>
+<p>6.TERMINATED (结束)
+结束态：从RUNNABLE状态正常退出而死亡，或者因为没有捕获的异常终止了RUNNABLE状态而死亡。</p>
+<h3 id="cpu-平均负载">CPU 平均负载</h3>
+<p>Load后面的三个数字的意思分别是1分钟、5分钟、15分钟内系统的平均负载。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Load: 3.46 / 2.71 / 1.24
+</span></span></code></pre></div><h2 id="hwui呈现模式分析">hwui呈现模式分析</h2>
+<p>adb shell setprop debug.hwui.profile [true/visual_bars/false]</p>
+<h2 id="systrace">Systrace</h2>
+<p><a href="https://developer.android.com/topic/performance/tracing/command-line?hl=zh-cn">https://developer.android.com/topic/performance/tracing/command-line?hl=zh-cn</a></p>
+<h2 id="compose取代xml">Compose取代xml</h2>
+<p>Compose配合RecyclerView
+<a href="https://www.waseefakhtar.com/android/recyclerview-in-jetpack-compose/">https://www.waseefakhtar.com/android/recyclerview-in-jetpack-compose/</a></p>
+<p>tutorial
+<a href="https://developer.android.com/jetpack/compose/tutorial">https://developer.android.com/jetpack/compose/tutorial</a></p>
+<h2 id="插桩">插桩</h2>
+<p>
+
+
+
+<figure   >
+    <img loading="lazy" alt="插桩函数" src=" https://cdn.statically.io/gh/LBZZYZ/PicX@master/Blog/Pasted-image-20230208143358.5qu5r84y6n80.webp">
+</figure>
+使用时加上-a + 包名显示插桩信息</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python C:<span style="color:#666;font-style:italic">\U</span>sers<span style="color:#666;font-style:italic">\A</span>dministrator<span style="color:#666;font-style:italic">\A</span>ppData<span style="color:#666;font-style:italic">\L</span>ocal<span style="color:#666;font-style:italic">\A</span>ndroid<span style="color:#666;font-style:italic">\S</span>dk<span style="color:#666;font-style:italic">\p</span>latform-tools<span style="color:#666;font-style:italic">\s</span>ystrace<span style="color:#666;font-style:italic">\s</span>ystrace.py -t 10 -a com.intellyva.liveplayer -o C:<span style="color:#666;font-style:italic">\b</span>z_temp<span style="color:#666;font-style:italic">\s</span>imon.html
+</span></span></code></pre></div><h2 id="compose">Compose</h2>
+<p>DSL : <a href="https://developer.android.com/jetpack/compose/kotlin#dsl">https://developer.android.com/jetpack/compose/kotlin#dsl</a></p>
+<p>可拖拽LazyVerticalGrid
+<a href="https://github.com/aclassen/ComposeReorderable">https://github.com/aclassen/ComposeReorderable</a></p>
+<p>动画
+<a href="https://developer.android.com/jetpack/compose/animation">https://developer.android.com/jetpack/compose/animation</a></p>
+<p>UI层指南
+<a href="https://developer.android.com/jetpack/guide/ui-layer?hl=zh-cn">https://developer.android.com/jetpack/guide/ui-layer?hl=zh-cn</a></p>
+<p>Unidirectional data flow (UDF)
+状态向下流动、事件向上流动的这种模式称为单向数据流 (UDF)。</p>
+<ul>
+<li>How to define the UI state.</li>
+<li>Unidirectional data flow (UDF) as a means of producing and managing the UI state.</li>
+<li>How to expose UI state with observable data types according to UDF principles.</li>
+<li>How to implement UI that consumes the observable UI state.</li>
+</ul>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

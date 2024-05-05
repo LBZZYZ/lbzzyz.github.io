@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>设计模式-工厂模式 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">设计模式-工厂模式</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2021-06-19T13:26:43&#43;00:00">June 19, 2021</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p><strong>简单工厂</strong>和<strong>工厂方法</strong>都集中封装了对象的创建过程，使得要更改对象时，不需做大的改动就能实现，降低了客户程序与产品对象的耦合。</p>
+<hr>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#888;font-style:italic">//不使用工厂进行对象创建
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">Computer</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">virtual</span> <span style="font-weight:bold;text-decoration:underline">void</span> show() = 0;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">DellComputer</span> : <span style="font-weight:bold;text-decoration:underline">public</span> Computer
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">void</span> show()
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			std::cout &lt;&lt; <span style="color:#666;font-style:italic">&#34;This is Dell computer!&#34;</span> &lt;&lt; endl;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">HaseeComputer</span>: <span style="font-weight:bold;text-decoration:underline">public</span> Computer
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">void</span> show()
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			std::cout &lt;&lt; <span style="color:#666;font-style:italic">&#34;This is Haseecomputer!&#34;</span> &lt;&lt; endl;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Computer *pComputer = <span style="font-weight:bold;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">if</span>(<span style="">客户端需要</span>HaseeComputer)
+</span></span><span style="display:flex;"><span>		pComputer  = <span style="font-weight:bold;text-decoration:underline">new</span> HaseeComputer;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">else</span> <span style="font-weight:bold;text-decoration:underline">if</span>(<span style="">客户端需要</span>DellComputer)
+</span></span><span style="display:flex;"><span>		pComputer  = <span style="font-weight:bold;text-decoration:underline">new</span> DellComputer;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>		......			<span style="color:#888;font-style:italic">//当有其他电脑品牌的类时就需要修改main函数中的代码，违背了对扩展开放，对修改关闭的原则
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	pComputer-&gt;show();
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用简单工厂，增加新类SimpleFactory</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">SimpleFactory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		Computer *CreateComputer(string computer)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">if</span>(computer == <span style="color:#666;font-style:italic">&#34;HaseeComputer&#34;</span>)
+</span></span><span style="display:flex;"><span>				pComputer  = <span style="font-weight:bold;text-decoration:underline">new</span> HaseeComputer;
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">else</span> <span style="color:#666;font-weight:bold;font-style:italic">if</span>(computer == <span style="color:#666;font-style:italic">&#34;DellComputer&#34;</span>)
+</span></span><span style="display:flex;"><span>				pComputer  = <span style="font-weight:bold;text-decoration:underline">new</span> DellComputer;
+</span></span><span style="display:flex;"><span>			<span style="font-weight:bold;text-decoration:underline">else</span>
+</span></span><span style="display:flex;"><span>				......			<span style="color:#888;font-style:italic">//当有其他电脑品牌的类时就需要修改main函数中的代码，违背了对扩展开放，对修改关闭的原则
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用简单工厂后，main函数则改为</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	SimpleFactory *pFactory = <span style="font-weight:bold;text-decoration:underline">new</span> SimpleFactory;
+</span></span><span style="display:flex;"><span>	pFactory-&gt;CreateComputer(<span style="color:#666;font-style:italic">&#34;HaseeComuter&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可以看出，使用<strong>简单工厂</strong>后的main函数，不需要执行具体对象创建的细节，也就是无需在主函数中做判断，取而代之的是定义一个简单工厂类<strong>SimpleFactory</strong>，并通过<strong>SimpleFactory</strong>中的CreateComputer函数返回一个对象，对象的类型通过传参的方式进入函数中。调用者只需要对参数进行修改即可实现创建不同对象，减少了代码修改程度。
+但反观简单工厂类<strong>SimpleFactory</strong>可知，<strong>简单工厂</strong>与普通的创建对象方法的区别就是<strong>简单工厂</strong>把之前在main函数中的判断过程移到了其内部实现。这样虽然可以减少客户端的代码量，但是如果有新的电脑型号出现时，就需要更改<strong>SimpleFactory</strong>的内容，增加新的判断，破坏了对修改关闭的原则。
+为了解决上述问题，引入<strong>工厂方法</strong>。
+使用工厂方法解决上述问题，需要引入新的类。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">ComputerFactory</span>	<span style="color:#888;font-style:italic">//这个类相当于简单工厂类SimpleFactory,只不过将简单工厂中的实现延迟到了子类
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>{						<span style="color:#888;font-style:italic">//只把实现的接口定义出来
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	<span style="font-weight:bold;text-decoration:underline">virtual</span> Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>() = 0;		<span style="color:#888;font-style:italic">//定义为纯虚函数，在子类对该函数进行实现。
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">DellComputerFactory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> DellComputer;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">HaseeComputerFactory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> HaseeComputer;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>这时主函数的写法如下</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	ComputerFactory *pFactory = <span style="font-weight:bold;text-decoration:underline">new</span> HaseeComputerFactory;		<span style="color:#888;font-style:italic">//根据需要定义对应工厂
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	Computer *pComputer = pFactory-&gt;CreateComputer();
+</span></span><span style="display:flex;"><span>	pComputer-&gt;show();											<span style="color:#888;font-style:italic">//显示This is Haseecomputer!
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>注意到此时如果需要添加新的电脑品牌，只需要添加一个对应的产品类和相应的产品工厂类即可，而无需对现有的类进行修改，实现了<strong>对拓展的开放</strong>和<strong>对修改的关闭</strong>。</p>
+<h3 id="抽象工厂模式">抽象工厂模式</h3>
+<p>现在考虑这样一个问题，Dell 和 Hasee 两个厂商不可能只有电脑这一种类型的产品，假如现在增加了一个产品类型<strong>显示器</strong>，则需要增加一个抽象类 Monitor 和两个子类 DellMonitor 和 HaseeMonitor 。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">Monitor</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span> :
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">virtual</span> <span style="font-weight:bold;text-decoration:underline">void</span> show() = 0;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">DellMontor</span> : <span style="font-weight:bold;text-decoration:underline">public</span> Monitor
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">void</span> show()
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			std::cout &lt;&lt; <span style="color:#666;font-style:italic">&#34;This is a Dell Monitor&#34;</span> &lt;&lt; endl;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">HaseeMontor</span> : <span style="font-weight:bold;text-decoration:underline">public</span> Monitor
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">public</span>:
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">void</span> show()
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			std::cout &lt;&lt; <span style="color:#666;font-style:italic">&#34;This is a Hasee Monitor&#34;</span> &lt;&lt; endl;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>增加产品类之后，可将工厂方法中的三个工厂改为如下形式</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">Factory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">virtual</span> Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>() = 0;
+</span></span><span style="display:flex;"><span>	<span style="font-weight:bold;text-decoration:underline">virtual</span> Monitor *<span style="color:#666;font-weight:bold;font-style:italic">CreateMonitor</span>() = 0;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">DellComputerFactory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> DellComputer;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	Monitor *<span style="color:#666;font-weight:bold;font-style:italic">CreateMonitor</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> DellMontor;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">class</span> <span style="color:#666;font-weight:bold;font-style:italic">HaseeComputerFactory</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Computer *<span style="color:#666;font-weight:bold;font-style:italic">CreateComputer</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> HaseeComputer;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	Monitor *<span style="color:#666;font-weight:bold;font-style:italic">CreateMonitor</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="font-weight:bold;text-decoration:underline">return</span> <span style="font-weight:bold;text-decoration:underline">new</span> HaseeMontor;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>这样一个抽象工厂就产生了。类<strong>Factory</strong>作为抽象工厂的接口类，其子类产生具体的实例化对象。
+通过上面三个类的定义可以发现，<strong>抽象工厂中每一个产品的创建过程都是一个工厂方法</strong>。
+Computer和Monitor构成一个<strong>产品族</strong>。在抽象工厂中，一个实例化的工厂可以创建一个完整的产品族，产品族中的每个产品出于不同的<strong>产品结构</strong>。
+<strong>产品等级结构</strong>:即产品的继承结构。例如Computer类和他的子类DellComputer及HaseeComputer构成了一个产品等级结构。而Computer和Monitor自然出于不同的产品等级结构。
+<strong>产品族</strong>:处于不同产品等级结构的一族产品的合集。</p>
+<p>这时在主函数中可以这样实现</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="font-weight:bold;text-decoration:underline">int</span> <span style="color:#666;font-weight:bold;font-style:italic">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	Factory *pFactory = <span style="font-weight:bold;text-decoration:underline">new</span> DellFactory;		<span style="color:#888;font-style:italic">//假设创建一个Dell系列产品
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	Computer *pComputer = pFactory-&gt;CreateComputer();
+</span></span><span style="display:flex;"><span>	Monitor *pMonitor = pFactory-&gt;CreateMonitor();
+</span></span><span style="display:flex;"><span>	pComputer-&gt;show();			<span style="color:#888;font-style:italic">//This is DellComputer!
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	pMonitor -&gt;show();			<span style="color:#888;font-style:italic">//This is DellMonitor!
+</span></span></span><span style="display:flex;"><span><span style="color:#888;font-style:italic"></span>	<span style="font-weight:bold;text-decoration:underline">return</span> 0;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>从客户端代码可以看出，抽象工厂的好处是对同一产品族的产品进行了统一的设计。这里体现为对Dell厂商的产品进行了封闭的设计，保证了产品族中产品的统一。</p>
+<p>如果在产品中新增一个继承父类的子类厂商Mac，那么需要增加一个MacFactory来创建MacComputer和MacMonitor。</p>
+<h5 id="抽象工厂也存在一定的缺点">抽象工厂也存在一定的缺点</h5>
+<p>当添加一个产品时，需要修改很多代码。在上个例子中，如果增加一个产品为Mouse,那么在增加新产品的同时还需要更改Factory及其子类的内容，增加CreateMouse的工厂方法。</p>
+<p>从上面的分析可以看出:(1)<strong>增加一个产品的继承结构如Mac只需要增加新的MacFactory并对其实现即可，属于结构拓展。</strong>
+<strong>（2）但如果增加一个新的产品如Mouse，则需要对现有的工厂进行修改，这破坏了开闭原则，这也是抽象工厂的缺点所在。</strong></p>
+<p>针对抽象工厂的缺点进行如下改进。</p>
+<h3 id="用简单工厂优化抽象工厂解决扩展产品的灵活度不足的问题">用简单工厂优化抽象工厂(解决扩展产品的灵活度不足的问题）</h3>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>

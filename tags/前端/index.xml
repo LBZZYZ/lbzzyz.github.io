@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>前端 on 欣菜团</title>
+    <link>http://localhost:1313/tags/%E5%89%8D%E7%AB%AF/</link>
+    <description>Recent content in 前端 on 欣菜团</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>a标签</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%89%8D%E7%AB%AF/a%E6%A0%87%E7%AD%BE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%89%8D%E7%AB%AF/a%E6%A0%87%E7%AD%BE/</guid>
+      <description>写法 &amp;lt;a&amp;gt;&amp;lt;/a&amp;gt; 定义 HTML语言标签，定义一个超链接，用于从一个页面链接到另一个页面。 a是anchor的缩写。&#xA;属性 属性 内容 说明 href URL 链接目标的URL charset char_encoding 规定目标URL的字符编码。(H5不支持) coords coordinates 规定链接的坐标。(H5不支持) hreflang language_code 规定目标URL的基准语言。仅在href属性存在时使用。 media media_query 规定目标URL的媒介类型。默认值为all。仅在href属性存在时使用 name section_name 规定锚的名称。(H5不支持) rel link 规定当前文档与目标文档的关系。仅在href属性存在时使用 rev text 规定目标文档与当前文档之间的关系。(H5不支持) shape default/rect/circle/poly 规定链接的形状。(H5不支持) target link 规定在何处打开目标URL。仅在href属性存在时使用 type MIME_type 规定目标URL的MIME类型。仅在href属性存在时使用。 样式 参考链接 https://www.runoob.com/tags/tag-a.html </description>
+    </item>
+    <item>
+      <title>HTML</title>
+      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%89%8D%E7%AB%AF/html/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/%E5%89%8D%E7%AB%AF/html/</guid>
+      <description>Hyper Text Makeup Language&#xA;Hypertext代表页面可以包含链接，让用户可以跳转到页面其他位置或完全跳转到另一个文档 first created by Tim Berners-Lee, Robert Cailliau, and others&#xA;Makeup Language tags和attributes是HTML的基本元素 Makeup Language：一种计算机之间用于控制文本如何被处理和呈现的方式&#xA;tags mark up the start of an HTML element usually enclosed in angle brackets ex: &amp;lt;h1&amp;gt; &amp;lt;h1&amp;gt;&amp;lt;/h1&amp;gt;&#xA;attributes example he image source (src) and the alt text (alt) are attributes of the &amp;lt;img&amp;gt; tag.&#xA;&amp;lt;img src=&amp;#34;mydog.jpg&amp;#34; alt=&amp;#34;A photo of my dog.&amp;#34;&amp;gt; Golden Rules To Remember The vast majority of tags must be opened (&amp;lt;tag&amp;gt;) and closed (&amp;lt;/tag&amp;gt;) with the element information such as a title or text resting between the tags.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>版本号规范 | 欣菜团</title>
+
+
+<link rel="stylesheet" href="/assets/combined.min.01d9aede235af228fdb2da655899ae1ba335a94df8e5898e89f83ae5dfe2a5ac.css" media="all">
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+    <h1 class="header-title">欣菜团</h1>
+
+    <div class="flex">
+        
+
+        
+        
+        <p class="small ">
+            <a href="/">
+                /home
+            </a>
+        </p>
+        
+        <p class="small ">
+            <a href="/posts">
+                /posts
+            </a>
+        </p>
+        
+        
+    </div>
+
+</div>
+    </header>
+
+    <main class="main">
+      
+
+
+
+<div >
+
+  <div class=" single-intro-container">
+
+    
+
+    <h1 class="single-title">版本号规范</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h1 id="说明">说明</h1>
+<p>本规范遵循<a href="https://semver.org/">语义化版本通行规则</a>。</p>
+<h3 id="alpha">alpha</h3>
+<p>alpha 是内部测试版，由于功能亦未完善，一般不向外发布，会有很多 Bug，除非你也是测试人员，否则不建议使用。alpha 是希腊字母的第一位，表示最初级的版本，alpha 是 α，beta 就是 β，alpha 版就是比 beta 还早的测试版。</p>
+<p>所以，它是整个软件发布周期中的第一个阶段。</p>
+<h3 id="beta">beta</h3>
+<p>该版本相对于 α 版已有了很大的改进，消除了严重的错误，但还是存在着缺陷，需要经过多次测试来进一步消除。bate 版本最早对外公开的软件版本，会收集使用者的反馈意见，以便作为进一步修正软件的参考，这个阶段的版本会一直加入新的功能和特性。</p>
+<h3 id="rcrelease-candidate">rc（release candidate）</h3>
+<p>candidate 是候选人的意思，用在软件上就是候选版本，release candidate 就是发行候选版本。和 beta 版最大的区别在于 beta 阶段会一直加入新的功能或特性，但是到了 rc 版本，几乎就不会加入新的功能了，而主要着重于除错。rc 版本是最终发放给用户的最接近正式版的版本，修复完已知 bug 后就是正式版了，也就是正式版之前的最后一个测试版。</p>
+<h3 id="gageneral-availability">ga（general availability）</h3>
+<p>比如：vue-next ga 这是 vue-next 首次发行稳定的版本，ga 意味着 general availability，也就是官方开始推荐广泛使用了。因为 vue-next 还没有到这一版本，会不会这样发版本号也可以持续关注 <a href="https://link.juejin.cn?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue-next%2Freleases" title="https://github.com/vuejs/vue-next/releases">vue-next</a> 呀。</p>
+<h3 id="release">release</h3>
+<p>该版本意味 &ldquo;最终版本&rdquo;，在前面版本的一系列测试版之后，终归会有一个正式版本，是最终交付用户使用的一个版本。该版本有时也称为标准版。一般情况下，release 不会以单词形式出现在软件封面上，取而代之是符号（R）。</p>
+<h2 id="参考项目">参考项目</h2>
+<p><a href="https://github.com/vuejs/core">vuejs/core</a></p>
+
+  </div>
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    <p>Powered by
+    <a href="https://gohugo.io/">Hugo</a>
+    and
+    <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+</p>
+<p>
+    <a href="https://beian.miit.gov.cn/">粤ICP备2023133654号-1</a>
+</p>
+
+
+  </footer>
+
+</body>
+
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    console
+    document.body.classList.remove("auto");
+    let cls = "light";
+
+    console.log
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+
+  }
+
+  function invert() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    console.log("Setting invert listener");
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invert);
+  }
+
+  setTheme();
+
+</script>
+
+
+</html>
