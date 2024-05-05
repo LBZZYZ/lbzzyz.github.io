@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>TeamTalk on 欣菜团</title>
-    <link>http://localhost:1313/categories/teamtalk/</link>
+    <link>https://lbzzyz.github.io/categories/teamtalk/</link>
     <description>Recent content in TeamTalk on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 06 Mar 2021 23:56:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/teamtalk/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/categories/teamtalk/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>TeamTalk-1 db_porxy_server</title>
-      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/im/teamtalk/teamtalk-1/</link>
+      <link>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/im/teamtalk/teamtalk-1/</link>
       <pubDate>Sat, 06 Mar 2021 23:56:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/im/teamtalk/teamtalk-1/</guid>
+      <guid>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/im/teamtalk/teamtalk-1/</guid>
       <description>1. 初始化redis缓存数据库 CacheManager* pCacheManager = CacheManager::getInstance(); if (!pCacheManager) { log(&amp;#34;CacheManager init failed&amp;#34;); return -1; } 进到CacheManager，这里用了一个单例模式得到CacheManager的实例&#xA;CacheManager* CacheManager::getInstance() { if (!s_cache_manager) { s_cache_manager = new CacheManager(); if (s_cache_manager-&amp;gt;Init()) { delete s_cache_manager; s_cache_manager = NULL; } } return s_cache_manager; } 上面的s_cache_manager是CacheManager类的私有static变量static CacheManager* s_cache_manager;&#xA;由于是单例,因此CacheManager的构造函数是一个private的空构造，实际上的初始化步骤在Init内&#xA;int CacheManager::Init() { CConfigFileReader config_file(&amp;#34;dbproxyserver.conf&amp;#34;); char* cache_instances = config_file.GetConfigName(&amp;#34;CacheInstances&amp;#34;); if (!cache_instances) { log(&amp;#34;not configure CacheIntance&amp;#34;); return 1; } char host[64]; char port[64]; char db[64]; char maxconncnt[64]; CStrExplode instances_name(cache_instances, &amp;#39;,&amp;#39;); for (uint32_t i = 0; i &amp;lt; instances_name.</description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MySQL on 欣菜团</title>
-    <link>http://localhost:1313/tags/mysql/</link>
+    <link>https://lbzzyz.github.io/tags/mysql/</link>
     <description>Recent content in MySQL on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 21 Feb 2021 12:27:22 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MySQL 安装与配置指南</title>
-      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+      <link>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
       <pubDate>Sun, 21 Feb 2021 12:27:22 +0000</pubDate>
-      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+      <guid>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/mysql-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
       <description>安装 MySQL 系统版本：Ubuntu 18.04.6 LTS&#xA;a. 本地环境安装 sudo apt update sudo apt install mysql-server b. 使用 Docker 安装 docker run -itd --name mysql-container -p 9636:3306 --restart=always -e MYSQL_ROOT_PASSWORD={set-your-password} -v /path/to/mysql:/var/lib/mysql mysql:latest 查看运行状态 systemctl status mysql 运行安全向导 MySQL 提供了一个脚本使数据库更加安全，建议首次安装完成后执行一次该脚本。&#xA;$ mysql_secure_installation 运行 mysql_secure_installation 会执行几个设置：&#xA;为 root 用户设置密码 删除匿名账号 取消 root 用户远程登录 删除 test 库和对 test 库的访问权限 刷新授权表使修改生效 root@iZwz928lti88uknt38usc5Z:~# mysql_secure_installation Securing the MySQL server deployment. Connecting to MySQL using a blank password. The &amp;#39;validate_password&amp;#39; plugin is installed on the server.</description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Git on 欣菜团</title>
-    <link>http://localhost:1313/tags/git/</link>
+    <link>https://lbzzyz.github.io/tags/git/</link>
     <description>Recent content in Git on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 23 May 2021 00:20:13 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Git</title>
-      <link>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/git/</link>
+      <link>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/git/</link>
       <pubDate>Sun, 23 May 2021 00:20:13 +0000</pubDate>
-      <guid>http://localhost:1313/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/git/</guid>
+      <guid>https://lbzzyz.github.io/posts/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/git/</guid>
       <description>安装/更新 CentOS 7 CentOS 7 内置了 Git 1.8.3，首先将其卸载。&#xA;yum remove git 由于官方源没有最新版本的 Git，所以需要增加第三方源，这里采用 ius&#xA;yum install \ https://repo.ius.io/ius-release-el7.rpm \ https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 在仓库列表中看到名为 git236 的库，因此使用 yum 安装。&#xA;yum install git236 安装完成后确认版本&#xA;git version console:/ # git version 2.36.6 Ubuntu 18.04 apt install git 创建空仓库 git init --bare repo.git 添加远端仓库 git remote add origin &amp;lt;url&amp;gt; 拉取代码到指定目录 git clone project-url /path/to/dir 分支 创建分支 git branch &amp;lt;branch-name&amp;gt; 切换分支(不存在则自动创建) git branch -b &amp;lt;branch-name&amp;gt; 修改分支名称 git branch -m &amp;lt;old-name&amp;gt; &amp;lt;new-name&amp;gt; git branch -m &amp;lt;new-name&amp;gt; # 修改当前分支名称 拉取指定分支 git clone -b &amp;lt;branch-name&amp;gt; 你的远端地址 推送分支到远端 git push origin &amp;lt;local branch&amp;gt;:&amp;lt;remote branch&amp;gt; #remote branch不存在则自动创建 删除本地分支 git branch -d &amp;lt;branch-name&amp;gt; 删除远端分支 git push origin --delete &amp;lt;branch-name&amp;gt; 更新远程分支 git remote update origin --prune or git remote update origin -p 分支命名规范 master（主分支，永远是可用的、稳定的、可直接发布的版本，不能直接在该分支上开发） develop（开发主分支，代码永远是最新，所有新功能以这个分支来创建自己的开发分支，该分支只做只合并操作，不能直接在该分支上开发） feature-xxx（功能开发分支，在develop上创建分支，以自己开发功能模块命名，功能测试正常后合并到develop分支）。如 feature/add-new-feature-20240119 release（预发布分支，在合并好feature分支的develop分支上创建，主要是用来提测的分支，修改好bug并确定稳定之后合并到develop和master分支，然后发布master分支） release-fix（功能bug修复分支，在release上创建分支修复，修复好提测的bug之后合并回release分支。） hotfix-xxx（紧急bug修改分支，项目上线之后可以会遇到一些环境问题需要紧急修复，在对应版本的release分支上创建，流程跟release分支相似，修复完成后合并release分支，根据情况判断需不需要再合并到develop和master分支） fast-forward 快进（Fast-forward）是指将当前分支直接移动到远程追踪分支的最新提交的操作。它是一种合并（merge）策略，不会创建新的提交。</description>
     </item>
   </channel>

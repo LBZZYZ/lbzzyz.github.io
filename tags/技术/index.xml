@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>技术 on 欣菜团</title>
-    <link>http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/</link>
+    <link>https://lbzzyz.github.io/tags/%E6%8A%80%E6%9C%AF/</link>
     <description>Recent content in 技术 on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>eslint-plugin-vue</title>
-      <link>http://localhost:1313/posts/eslint-plugin-vue/</link>
+      <link>https://lbzzyz.github.io/posts/eslint-plugin-vue/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/eslint-plugin-vue/</guid>
+      <guid>https://lbzzyz.github.io/posts/eslint-plugin-vue/</guid>
       <description>Vue.js 官方 [[ESLint]] 代码检查插件。&#xA;检查范围：&#xA;.vue 后缀文件中的 &amp;lt;templete&amp;gt; 和 &amp;lt;script&amp;gt; 标签。 .js 文件中的 vue 代码。 检查内容：&#xA;语法错误 违反 Vue 官方风格指导的写法 错误使用 官方内置指令 命令行检查：&#xA;npx eslint src https://eslint.vuejs.org/ https://github.com/vuejs/eslint-plugin-vue</description>
     </item>
     <item>
       <title>npm 常用指令</title>
-      <link>http://localhost:1313/posts/npm-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</link>
+      <link>https://lbzzyz.github.io/posts/npm-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/npm-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</guid>
+      <guid>https://lbzzyz.github.io/posts/npm-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</guid>
       <description>获取全局安装包 npm ls -g 查看全局包位置 npm config get prefix 更换源 # 设置 npm config set registry https://registry.npmjs.org/ # 读取 npm config get registry 全局安装/删除 # 安装 npm install -g &amp;lt;pkg-name&amp;gt; npm i -g &amp;lt;pkg-name&amp;gt; # 删除 npm uninstall -g &amp;lt;pkg-name&amp;gt; npm r -g &amp;lt;pkg-name&amp;gt; # r 代表 remove 查看包最新版本 npm view &amp;lt;pkg-name&amp;gt; version &amp;ndash;save &amp;ndash;dev &amp;ndash;save-dev --save = -S # 保存配置信息到 package.json 的 dependencies 节点 -dev # 保存配置信息到 devDependencies 节点 --save-dev = -D # 保存配置信息到 package.</description>
     </item>
   </channel>

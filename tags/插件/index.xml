@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>插件 on 欣菜团</title>
-    <link>http://localhost:1313/tags/%E6%8F%92%E4%BB%B6/</link>
+    <link>https://lbzzyz.github.io/tags/%E6%8F%92%E4%BB%B6/</link>
     <description>Recent content in 插件 on 欣菜团</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/tags/%E6%8F%92%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lbzzyz.github.io/tags/%E6%8F%92%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>eslint-plugin-vue</title>
-      <link>http://localhost:1313/posts/eslint-plugin-vue/</link>
+      <link>https://lbzzyz.github.io/posts/eslint-plugin-vue/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/eslint-plugin-vue/</guid>
+      <guid>https://lbzzyz.github.io/posts/eslint-plugin-vue/</guid>
       <description>Vue.js 官方 [[ESLint]] 代码检查插件。&#xA;检查范围：&#xA;.vue 后缀文件中的 &amp;lt;templete&amp;gt; 和 &amp;lt;script&amp;gt; 标签。 .js 文件中的 vue 代码。 检查内容：&#xA;语法错误 违反 Vue 官方风格指导的写法 错误使用 官方内置指令 命令行检查：&#xA;npx eslint src https://eslint.vuejs.org/ https://github.com/vuejs/eslint-plugin-vue</description>
     </item>
   </channel>
